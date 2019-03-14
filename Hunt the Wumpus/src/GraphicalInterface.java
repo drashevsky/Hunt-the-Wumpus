@@ -18,7 +18,7 @@ public class GraphicalInterface {
 	//toString
 	public String toString()
 	{
-		return "Graphical Interface";
+		return "Graphical Interfacel";
 	}
 	
 	//draw cave- taking a param of the starting room
