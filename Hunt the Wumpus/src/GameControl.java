@@ -2,11 +2,14 @@
  * 
  * @author Eric Anderson
  * Date: 3/13/19
- * Version 1.0
+ * Version 1.1
  * Comments: 
  * 	V1.0
  * 		- Added main method
  * 		- Created instantiations of each object
+ *	V1.1
+ *		- Created stubbed classes
+ *		- Added comments
  */
 public class GameControl {
 	public static void main(String[] args) {
