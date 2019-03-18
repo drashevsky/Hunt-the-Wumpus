@@ -1,7 +1,7 @@
-/* Author: Daniel Rashevsky
+/**
+ * @author Daniel Rashevsky
  * Class Name: Cave
  * Description: Stores and updates the game map in memory
- * 
  * Rev. History: (Date - Revision)
  * 
  * 3/12/2019 - Added dummy methods 
