@@ -9,7 +9,7 @@
  */
 
 public class Cave {
-	String[][] caveMap;
+	private String[][] caveMap;
 	
 	public Cave(String[][] map) {
 		caveMap = map;
@@ -64,6 +64,33 @@ public class Cave {
 		return row * caveMap[0].length + column + 1; //converts to 1d index and adds one for room number
 	}
 	
+	/** Returns the rooms to the immediate left and right of room
+	 * 
+	 * @param room - The room to find the left and right of
+	 * @param roomRow - The room's column in the map array
+	 * @param roomCol - The room's row in the map array
+	 * @return An array containing the numbers of the rooms to the immediate left and right of the selected room
+	 * Precondition: room must exist, indexes correct
+	 */
+	private int[] adjacentRoomHelper(int room, int roomRow, int roomCol) {
+		int[] rooms = new int[2];
+		
+		//Finds room to the immediate left
+		if (roomCol == 0) {
+			rooms[0] = vectorIndexToRoom(roomRow, caveMap[0].length - 1); //wrap around to last room
+		} else {
+			rooms[0] = room - 1;
+		}
+		
+		//Finds room to the immediate right
+		if (roomCol == caveMap[0].length) {
+			rooms[1] = vectorIndexToRoom(roomRow, 0); //wrap around to first room
+		} else {
+			rooms[1] = room + 1;
+		}
+		return rooms;
+	}
+	
 	/** Returns an array of the rooms which are adjacent to a select room 
 	 * 
 	 * @param room - the room number to look around
@@ -75,19 +102,31 @@ public class Cave {
 		int roomRow = roomRow(room) + 1;
 		int roomCol = roomCol(room) + 1;
 		
-		if (roomCol == 0) {
-			rooms[0] = vectorIndexToRoom(roomRow, caveMap[0].length - 1);
-		} else if (roomCol == caveMap[0].length) {
-			//rooms[0] = vectorIndexToRoom
-			//fix
+		rooms[0] = adjacentRoomHelper(room, roomRow, roomCol)[0];
+		rooms[1] = adjacentRoomHelper(room, roomRow, roomCol)[1];
+		
+		//Finding room above current room
+		if (roomRow == 0) {
+			rooms[2] = vectorIndexToRoom(caveMap.length - 1, roomCol); //wrap around to bottom room
 		} else {
-			
+			rooms[2] = room - caveMap[0].length;
+		}
+		
+		//Finding room below current room
+		if (roomRow == caveMap.length) {
+			rooms[3] = vectorIndexToRoom(0, roomCol); //wrap around to top room
+		} else {
+			rooms[3] = room + caveMap[0].length;
 		}
 		
 		if (room % 2 == 0) {
-			
+			int ref = rooms[3];
+			rooms[4] = adjacentRoomHelper(ref, roomRow(ref), roomCol(ref))[0];
+			rooms[5] = adjacentRoomHelper(ref, roomRow(ref), roomCol(ref))[1];
 		} else {
-			
+			int ref = rooms[2];
+			rooms[4] = adjacentRoomHelper(ref, roomRow(ref), roomCol(ref))[0];
+			rooms[5] = adjacentRoomHelper(ref, roomRow(ref), roomCol(ref))[1];
 		}
 		return rooms;
 	}
