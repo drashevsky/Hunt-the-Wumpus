@@ -3,23 +3,24 @@
  * @author Eric Anderson
  * Date: 3/13/19
  * Version 1.1
- * Comments: 
+ * Rev. History: 
  * 	V1.0
  * 		- Added main method
  * 		- Created instantiations of each object
- *	V1.1
+ *	V1.1 - 3/13/19
  *		- Created stubbed classes
  *		- Added comments
  */
 public class GameControl {
 	public static void main(String[] args) {
 		// Create an instance of each Object
-		Cave cave = new Cave();
+		Cave cave = new Cave(new String[5][6]);
 		GameLocations gameLocations = new GameLocations();
 		GraphicalInterface gui = new GraphicalInterface();
 		HighScore highscore = new HighScore();
 		Player player = new Player();
 		Trivia trivia = new Trivia();
+		System.out.println(cave);
 	}
 	
 	// Determines the keystrokes of the player and validates the input
