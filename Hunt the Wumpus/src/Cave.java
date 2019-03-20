@@ -99,34 +99,40 @@ public class Cave {
 	 */
 	public int[] adjacentRooms(int room) {
 		int[] rooms = new int[6];
+		
+		//Get room indexes in 2d array
 		int roomRow = roomRow(room) + 1;
 		int roomCol = roomCol(room) + 1;
 		
+		//Finding room to immediate left
 		rooms[0] = adjacentRoomHelper(room, roomRow, roomCol)[0];
+		
+		//Finding room to immediate right
 		rooms[1] = adjacentRoomHelper(room, roomRow, roomCol)[1];
 		
 		//Finding room above current room
 		if (roomRow == 0) {
-			rooms[2] = vectorIndexToRoom(caveMap.length - 1, roomCol); //wrap around to bottom room
+			rooms[2] = vectorIndexToRoom(caveMap.length - 1, roomCol); //Wrap around to bottom room
 		} else {
 			rooms[2] = room - caveMap[0].length;
 		}
 		
 		//Finding room below current room
 		if (roomRow == caveMap.length) {
-			rooms[3] = vectorIndexToRoom(0, roomCol); //wrap around to top room
+			rooms[3] = vectorIndexToRoom(0, roomCol); //Wrap around to top room
 		} else {
 			rooms[3] = room + caveMap[0].length;
 		}
 		
+		//Determine whether the last two adjacent rooms are above or below
 		if (room % 2 == 0) {
 			int ref = rooms[3];
-			rooms[4] = adjacentRoomHelper(ref, roomRow(ref), roomCol(ref))[0];
-			rooms[5] = adjacentRoomHelper(ref, roomRow(ref), roomCol(ref))[1];
+			rooms[4] = adjacentRoomHelper(ref, roomRow(ref), roomCol(ref))[0];	//Below-to-the-left room
+			rooms[5] = adjacentRoomHelper(ref, roomRow(ref), roomCol(ref))[1];	//Below-to-the-right room
 		} else {
 			int ref = rooms[2];
-			rooms[4] = adjacentRoomHelper(ref, roomRow(ref), roomCol(ref))[0];
-			rooms[5] = adjacentRoomHelper(ref, roomRow(ref), roomCol(ref))[1];
+			rooms[4] = adjacentRoomHelper(ref, roomRow(ref), roomCol(ref))[0]; //Above-to-the-left room
+			rooms[5] = adjacentRoomHelper(ref, roomRow(ref), roomCol(ref))[1]; //Above-to-the-right room
 		}
 		return rooms;
 	}
