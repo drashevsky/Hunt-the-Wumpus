@@ -7,9 +7,11 @@
  * 	V1.0
  * 		- Added main method
  * 		- Created instantiations of each object
- *	V1.1 - 3/13/19
+ *	V1.01 - 3/13/19
  *		- Created stubbed classes
  *		- Added comments
+ *	V1.02 - 3/20/19
+ *		- Changed constructor info for cave object
  */
 public class GameControl {
 	public static void main(String[] args) {
