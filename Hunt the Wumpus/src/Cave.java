@@ -13,6 +13,28 @@ public class Cave {
 	
 	public Cave(String[][] map) {
 		caveMap = map;
+		tester();
+	}
+	
+	public void tester() {
+		System.out.println("Testing 1D -> 2D index conversion:");
+		for (int i = 1; i <= 30; i++) {
+			System.out.print("[ " + roomRow(i) + ", " + roomCol(i) + " ]" );
+			if (i % caveMap[0].length == 0) {
+				System.out.println();
+			}
+		}
+		
+		System.out.println("\nTesting 2D -> 1D index conversion:");
+		for (int i = 0; i < caveMap.length; i++) {
+			for (int j = 0; j < caveMap[0].length; j++) {
+				System.out.print("[");
+				if (vectorIndexToRoom(i, j) < 10)
+					System.out.print(" ");
+				System.out.print(vectorIndexToRoom(i, j) + "] ");
+			}
+			System.out.println();
+		}
 	}
 	
 	/** Returns entire map of cave
