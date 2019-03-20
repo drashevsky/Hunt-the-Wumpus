@@ -22,7 +22,11 @@ public class GameControl {
 		HighScore highscore = new HighScore();
 		Player player = new Player();
 		Trivia trivia = new Trivia();
-		System.out.println(cave);
+		
+		Object[] objects = new Object[] {cave, gameLocations, gui, highscore, player, trivia};
+		for(Object o : objects) {
+			System.out.println(o);
+		}
 	}
 	
 	// Determines the keystrokes of the player and validates the input
