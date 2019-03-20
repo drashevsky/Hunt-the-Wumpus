@@ -74,7 +74,18 @@ public class Cave {
 		int[] rooms = new int[6];
 		int roomRow = roomRow(room) + 1;
 		int roomCol = roomCol(room) + 1;
+		
+		if (roomCol == 0) {
+			rooms[0] = vectorIndexToRoom(roomRow, caveMap[0].length - 1);
+		} else if (roomCol == caveMap[0].length) {
+			//rooms[0] = vectorIndexToRoom
+			//fix
+		} else {
+			
+		}
+		
 		if (room % 2 == 0) {
+			
 		} else {
 			
 		}
