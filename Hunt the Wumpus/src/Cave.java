@@ -8,6 +8,8 @@
  * 3/19/2019 - Wrote 3 helper methods to convert between 1d and 2d arrays
  */
 
+import java.util.Arrays;
+
 public class Cave {
 	private String[][] caveMap;
 	
@@ -16,6 +18,9 @@ public class Cave {
 		tester();
 	}
 	
+	/** Tests all the other methods
+	 * 
+	 */
 	public void tester() {
 		System.out.println("Testing 1D -> 2D index conversion:");
 		for (int i = 1; i <= 30; i++) {
@@ -35,6 +40,9 @@ public class Cave {
 			}
 			System.out.println();
 		}
+		
+		for (int i = 0; i < 6; i++)
+			System.out.println(adjacentRooms(3)[i]);
 	}
 	
 	/** Returns entire map of cave
@@ -105,13 +113,14 @@ public class Cave {
 		}
 		
 		//Finds room to the immediate right
-		if (roomCol == caveMap[0].length) {
+		if (roomCol == caveMap[0].length - 1) {
 			rooms[1] = vectorIndexToRoom(roomRow, 0); //wrap around to first room
 		} else {
 			rooms[1] = room + 1;
 		}
 		return rooms;
 	}
+	
 	
 	/** Returns an array of the rooms which are adjacent to a select room 
 	 * 
@@ -123,8 +132,8 @@ public class Cave {
 		int[] rooms = new int[6];
 		
 		//Get room indexes in 2d array
-		int roomRow = roomRow(room) + 1;
-		int roomCol = roomCol(room) + 1;
+		int roomRow = roomRow(room);
+		int roomCol = roomCol(room);
 		
 		//Finding room to immediate left
 		rooms[0] = adjacentRoomHelper(room, roomRow, roomCol)[0];
@@ -140,7 +149,7 @@ public class Cave {
 		}
 		
 		//Finding room below current room
-		if (roomRow == caveMap.length) {
+		if (roomRow == caveMap.length - 1) {
 			rooms[3] = vectorIndexToRoom(0, roomCol); //Wrap around to top room
 		} else {
 			rooms[3] = room + caveMap[0].length;
@@ -156,8 +165,11 @@ public class Cave {
 			rooms[4] = adjacentRoomHelper(ref, roomRow(ref), roomCol(ref))[0]; //Above-to-the-left room
 			rooms[5] = adjacentRoomHelper(ref, roomRow(ref), roomCol(ref))[1]; //Above-to-the-right room
 		}
+		
+		Arrays.sort(rooms);
 		return rooms;
 	}
+	
 	
 	/** Returns a list of rooms containing the specified property
 	 * 
@@ -171,6 +183,7 @@ public class Cave {
 		return rooms;
 	}
 	
+	
 	/** Returns the room # with the wumpus in it
 	 * 
 	 * @return The room with the wumpus
@@ -179,6 +192,7 @@ public class Cave {
 	public int wumpusRoom() {
 		return 0;
 	}
+	
 	
 	public String toString() {
 		return "Cave Object";
