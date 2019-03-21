@@ -13,6 +13,8 @@
  *	V1.02 - 3/20/19
  *		- Changed constructor info for cave object
  */
+
+// Changed
 public class GameControl {
 	public static void main(String[] args) {
 		// Create an instance of each Object
