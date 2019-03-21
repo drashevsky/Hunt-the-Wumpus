@@ -113,7 +113,7 @@ public class Cave {
 		return rooms;
 	}
 	
-	/** Returns an array of the rooms which are adjacent to select room 
+	/** Returns an array of the rooms which are adjacent to a select room 
 	 * 
 	 * @param room - the room number to look around
 	 * @return the integer array of adjacent rooms
