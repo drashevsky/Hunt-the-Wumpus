@@ -15,7 +15,7 @@ public class GraphicalInterface {
 		
 	}
 	
-	//toString method
+	//toString
 	public String toString()
 	{
 		return "Graphical Interface";
