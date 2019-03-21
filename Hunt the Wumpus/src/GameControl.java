@@ -14,7 +14,7 @@
  *		- Changed constructor info for cave object
  */
 
-// Changed
+// Changed again
 public class GameControl {
 	public static void main(String[] args) {
 		// Create an instance of each Object
