@@ -24,7 +24,7 @@ public class GraphicalInterface {
 	//draw cave- taking a param of the starting room
 	public void drawCave(int room)
 	{
-		System.out.println(room);
+		System.out.print(room);
 	}
 	
 	//display the Player score (param - score)
