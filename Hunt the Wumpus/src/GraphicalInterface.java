@@ -10,6 +10,8 @@ public class GraphicalInterface {
 	//and getting resources from other classes
 	
 	//constructor
+
+	import javax.swing.JFrame;
 	public GraphicalInterface()
 	{
 		
