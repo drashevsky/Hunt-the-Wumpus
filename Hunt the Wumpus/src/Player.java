@@ -8,7 +8,7 @@ public Player() {
 	secrets = 0;
 	goldCoins = 0;
 }
-// Returns string of the player
+// Returns string the player
 public String toString()
 {
 	return "Player";
