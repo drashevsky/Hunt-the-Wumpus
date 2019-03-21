@@ -9,13 +9,13 @@ public class GraphicalInterface {
 	//no fields as of right now due to only displaying
 	//and getting resources from other classes
 	
-	//constructor
+	//constructor test 2
 	public GraphicalInterface()
 	{
 		
 	}
 	
-	//toString
+	//toString test 2
 	public String toString()
 	{
 		return "Graphical Interface";
