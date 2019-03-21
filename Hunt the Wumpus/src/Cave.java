@@ -6,6 +6,7 @@
  * 
  * 3/12/2019 - Added dummy methods 
  * 3/19/2019 - Wrote 3 helper methods to convert between 1d and 2d arrays
+ * 3/21/2019 - Finished up the first working draft of adjacentRooms
  */
 
 import java.util.Arrays;
@@ -42,7 +43,7 @@ public class Cave {
 		}
 		
 		for (int i = 0; i < 6; i++)
-			System.out.println(adjacentRooms(3)[i]);
+			System.out.println(adjacentRooms(6)[i]);
 	}
 	
 	/** Returns entire map of cave
