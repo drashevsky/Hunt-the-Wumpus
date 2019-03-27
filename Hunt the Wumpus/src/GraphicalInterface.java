@@ -33,7 +33,7 @@ public class GraphicalInterface implements ActionListener {
 	    f.add(bu);
 
 	    bu2.setVisible(true);
-	    bu2.setSize(100,100);
+	    bu2.setSize(50,50);
 	    bu2.setText("Play");
 	    f.add(bu2);
 	    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
