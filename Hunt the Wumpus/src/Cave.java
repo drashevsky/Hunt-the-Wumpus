@@ -53,7 +53,17 @@ public class Cave {
 		return caveMap;
 	}
 	
-	/** Tests all the other methods */
+	/** Returns a single room from the map
+	 * 
+	 * @param room - room # between 1 - 30
+	 * @return the requested room
+	 * Precondition: the room exists
+	 */
+	public static Room getRoom(int room) {
+		return caveMap[roomRow(room)][roomCol(room)];
+	}
+	
+ 	/** Tests all the other methods */
 	public void tester() {
 		System.out.println("Testing 1D -> 2D index conversion:");
 		for (int i = 1; i <= 30; i++) {
