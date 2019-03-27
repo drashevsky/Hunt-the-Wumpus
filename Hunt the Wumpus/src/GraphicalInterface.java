@@ -33,7 +33,7 @@ public class GraphicalInterface implements ActionListener {
 	    bu.setVisible(true);
 	    f.add(bu);
 
-	    bu2.setLocation(50, 0);
+	    bu.setLocation(50, 0);
 	    bu2.setSize(50,50);
 	    bu2.setText("Play");
 	    bu2.setVisible(true);
