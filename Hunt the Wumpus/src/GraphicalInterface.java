@@ -29,15 +29,11 @@ public class GraphicalInterface implements ActionListener {
 	    f.setSize(500,500);
 	    
 	    bu.setSize(50,50);
-	    bu.setText("Settings");
+	    bu.setText("Play");
 	    bu.setVisible(true);
 	    f.add(bu);
 
-	    bu.setLocation(50, 0);
-	    bu2.setSize(50,50);
-	    bu2.setText("Play");
-	    bu2.setVisible(true);
-	    f.add(bu2);
+
 	    
 	    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    JMenuBar jmb = new JMenuBar();
