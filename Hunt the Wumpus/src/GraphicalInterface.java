@@ -27,11 +27,13 @@ public class GraphicalInterface implements ActionListener {
 		JButton bu2 = new JButton();
 		
 	    f.setSize(500,500);
-	    bu.setVisible(true);
+	    
 	    bu.setSize(50,50);
 	    bu.setText("Settings");
+	    bu.setVisible(true);
 	    f.add(bu);
 
+	    bu2.setLocation(50, 0);
 	    bu2.setSize(50,50);
 	    bu2.setText("Play");
 	    bu2.setVisible(true);
