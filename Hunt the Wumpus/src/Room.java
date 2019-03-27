@@ -7,7 +7,7 @@
  * 3/26/2019 - Added functionality to allow each room to point to three adjacent rooms
  */
 
-//NOTE: For connected rooms, the int can be either 0 or 1 - 30: if 0, that pathway isn't used
+//NOTE: For connected rooms, the int can be either 0 or 1 - 30: if 0, that pathway isn't used 
 
 public class Room {
 	private int[] connectedRooms = new int[3];	//Allow a room to point to a maximum of 3 others, use 0 to indicate an unused pointer

@@ -53,7 +53,7 @@ public class Cave {
 		return caveMap;
 	}
 	
-	/** Returns a single room from the map
+	/** Returns a single room from the map 
 	 * 
 	 * @param room - room # between 1 - 30
 	 * @return the requested room
