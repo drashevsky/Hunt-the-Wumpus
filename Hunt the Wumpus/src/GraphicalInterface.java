@@ -28,7 +28,7 @@ public class GraphicalInterface implements ActionListener {
 		
 	    f.setSize(500,500);
 	    bu.setVisible(true);
-	    bu.setSize(100,100);
+	    bu.setSize(20,20);
 	    bu.setText("Settings");
 	    f.add(bu);
 
