@@ -2,6 +2,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JButton;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -22,11 +23,15 @@ public class GraphicalInterface implements ActionListener {
 	public GraphicalInterface()
 	{
 		JFrame f = new JFrame("Menu Demo");
-	    f.setSize(220, 200);
-
+		JButton b = new JButton();
+	    f.setSize(500,500);     
+	    b.setSize(400,400);
+	    b.setVisible(true);
+	    b.setText("Play");
+	    f.add(b);
 	    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    JMenuBar jmb = new JMenuBar();
-
+	    
 	    JMenu jmFile = new JMenu("File");
 	    JMenuItem jmiOpen = new JMenuItem("Open");
 	    JMenuItem jmiClose = new JMenuItem("Close");
@@ -111,7 +116,7 @@ public class GraphicalInterface implements ActionListener {
 		    String comStr = ae.getActionCommand();
 		    System.out.println(comStr + " Selected");
 		  }
-		  public static void main(String args[]) {
+	 public static void main(String args[]) {
 		    new GraphicalInterface();
 		  }
 	
