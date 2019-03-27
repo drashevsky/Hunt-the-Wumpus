@@ -7,21 +7,53 @@
  * 3/12/2019 - Added dummy methods 
  * 3/19/2019 - Wrote 3 helper methods to convert between 1d and 2d arrays
  * 3/21/2019 - Finished up the first working draft of adjacentRooms
+ * 3/26/2019 - Removed methods supposed to be in GameLocations
+ *             Added Room object as the core element of 2d array
+ *             Implemented reading map files, untested
+ *             Reorganized class, determined public/private/static
  */
 
-import java.util.Arrays;
+import java.util.*;
+import java.io.*;
 
 public class Cave {
-	private String[][] caveMap;
+	private static Room[][] caveMap;
 	
-	public Cave(String[][] map) {
-		caveMap = map;
+	public Cave(String mapFile) throws FileNotFoundException {
+		caveMap = loadMap(mapFile);
 		tester();
 	}
 	
-	/** Tests all the other methods
+	/** Reads from a map file following a specific format
 	 * 
+	 * @param mapFile - the location of the map file
+	 * @return - a finished map
+	 * @throws FileNotFoundException
+	 * Preconditions: file exists, correct format specified in method
 	 */
+	private static Room[][] loadMap(String mapFile) throws FileNotFoundException {
+		Scanner src = new Scanner(new File("./input/" + mapFile));						//Read from this map file
+		Room[][] map = new Room[src.nextInt()][src.nextInt()];							//First line contains two ints with 2d array size
+		src.nextLine();																	//Force next line
+		
+		for (int i = 1; src.hasNextLine() && i <= map.length * map[0].length; i++) {	//Each room's properties take up one line
+			Room newRoom = new Room(src.nextInt(), src.nextInt(), src.nextInt());		//First 3 ints are connected rooms
+			map[roomRow(i)][roomCol(i)] = newRoom;
+			src.nextLine();																//Force next line
+		}
+		
+		src.close();
+		return map;
+	}
+	
+	/** Returns entire map of cave
+	 * @return the entire map
+	 */
+	public static Room[][] fullMap() {
+		return caveMap;
+	}
+	
+	/** Tests all the other methods */
 	public void tester() {
 		System.out.println("Testing 1D -> 2D index conversion:");
 		for (int i = 1; i <= 30; i++) {
@@ -45,83 +77,12 @@ public class Cave {
 		for (int i = 0; i < 6; i++)
 			System.out.println(adjacentRooms(6)[i]);
 	}
-	
-	/** Returns entire map of cave
-	 * @return the entire map
-	 */
-	public String[][] fullMap() {
-		return caveMap;
+
+	public String toString() {
+		return "Cave Object";
 	}
 	
-	/** Returns the properties (represented as a String) of a single room
-	 * 
-	 * @param room - the room # whose properties you want to access
-	 * @return the String representing the properties
-	 * Precondition: room must exist
-	 */
-	public String roomProperties(int room) {
-		return "";
-	}
-	
-	/** Returns the row number of a room
-	 * 
-	 * @param room - The room to find the row of
-	 * @return The row number of the room
-	 * Precondition: the room exists
-	 */
-	private int roomRow(int room) {
-		int row = room / caveMap[0].length;
-		return (room % caveMap[0].length == 0) ? row - 1 : row; //all the multiples of the row length must be reduced by one
-	}
-	
-	/** Returns the column number of a room
-	 * 
-	 * @param room - The room to find the column of
-	 * @return The column number of the room
-	 * Precondition: the room exists
-	 */
-	private int roomCol(int room) {
-		return room - (roomRow(room) * caveMap[0].length) - 1;	//Converts room to a number from the first row, then subtracts 1
-	}
-	
-	/** Returns the room number given a 2d index
-	 * 
-	 * @param column
-	 * @param row
-	 * @return The room number from the column and row as an int
-	 * Precondition: the room exists
-	 */
-	private int vectorIndexToRoom(int row, int column) {
-		return row * caveMap[0].length + column + 1; //converts to 1d index and adds one for room number
-	}
-	
-	/** Returns the rooms to the immediate left and right of room
-	 * 
-	 * @param room - The room to find the left and right of
-	 * @param roomRow - The room's column in the map array
-	 * @param roomCol - The room's row in the map array
-	 * @return An array containing the numbers of the rooms to the immediate left and right of the selected room
-	 * Precondition: room must exist, indexes correct
-	 */
-	private int[] adjacentRoomHelper(int room, int roomRow, int roomCol) {
-		int[] rooms = new int[2];
-		
-		//Finds room to the immediate left
-		if (roomCol == 0) {
-			rooms[0] = vectorIndexToRoom(roomRow, caveMap[0].length - 1); //wrap around to last room
-		} else {
-			rooms[0] = room - 1;
-		}
-		
-		//Finds room to the immediate right
-		if (roomCol == caveMap[0].length - 1) {
-			rooms[1] = vectorIndexToRoom(roomRow, 0); //wrap around to first room
-		} else {
-			rooms[1] = room + 1;
-		}
-		return rooms;
-	}
-	
+	//------------------------------------------------------------------------Adjacent Rooms Methods------------------------------------------------------------------------//
 	
 	/** Returns an array of the rooms which are adjacent to a select room 
 	 * 
@@ -129,7 +90,7 @@ public class Cave {
 	 * @return the integer array of adjacent rooms
 	 * Precondition: room must exist
 	 */
-	public int[] adjacentRooms(int room) {
+	public static int[] adjacentRooms(int room) {
 		int[] rooms = new int[6];
 		
 		//Get room indexes in 2d array
@@ -171,31 +132,62 @@ public class Cave {
 		return rooms;
 	}
 	
-	
-	/** Returns a list of rooms containing the specified property
+	/** Returns the rooms to the immediate left and right of room
 	 * 
-	 * @param room - The current room the player is in
-	 * @param property - A specified property to look for, like hazards: if "" the adjacent rooms to room are returned
-	 * @return An array of room numbers containing the property
-	 * Calls roomProperties
+	 * @param room - The room to find the left and right of
+	 * @param roomRow - The room's column in the map array
+	 * @param roomCol - The room's row in the map array
+	 * @return An array containing the numbers of the rooms to the immediate left and right of the selected room
+	 * Precondition: room must exist, indexes correct
 	 */
-	public int[] selectRoomsByProperty(int room, String property) {
-		int[] rooms = {0, 0, 0};
+	private static int[] adjacentRoomHelper(int room, int roomRow, int roomCol) {
+		int[] rooms = new int[2];
+		
+		//Finds room to the immediate left
+		if (roomCol == 0) {
+			rooms[0] = vectorIndexToRoom(roomRow, caveMap[0].length - 1); //wrap around to last room
+		} else {
+			rooms[0] = room - 1;
+		}
+		
+		//Finds room to the immediate right
+		if (roomCol == caveMap[0].length - 1) {
+			rooms[1] = vectorIndexToRoom(roomRow, 0); //wrap around to first room
+		} else {
+			rooms[1] = room + 1;
+		}
 		return rooms;
 	}
 	
-	
-	/** Returns the room # with the wumpus in it
+	/** Returns the row number of a room
 	 * 
-	 * @return The room with the wumpus
-	 * Calls roomProperties
+	 * @param room - The room to find the row of (1 - 30)
+	 * @return The row number of the room
+	 * Precondition: the room exists
 	 */
-	public int wumpusRoom() {
-		return 0;
+	private static int roomRow(int room) {
+		int row = room / caveMap[0].length;
+		return (room % caveMap[0].length == 0) ? row - 1 : row; //all the multiples of the row length must be reduced by one
 	}
 	
+	/** Returns the column number of a room
+	 * 
+	 * @param room - The room to find the column of (1 - 30)
+	 * @return The column number of the room
+	 * Precondition: the room exists
+	 */
+	private static int roomCol(int room) {
+		return room - (roomRow(room) * caveMap[0].length) - 1;	//Converts room to a number from the first row, then subtracts 1
+	}
 	
-	public String toString() {
-		return "Cave Object";
+	/** Returns the room number given a 2d index
+	 * 
+	 * @param column
+	 * @param row
+	 * @return The room number from the column and row as an int
+	 * Precondition: the room exists
+	 */
+	private static int vectorIndexToRoom(int row, int column) {
+		return row * caveMap[0].length + column + 1; //converts to 1d index and adds one for room number
 	}
 }
