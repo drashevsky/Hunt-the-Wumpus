@@ -20,30 +20,29 @@ public class Cave {
 	private static Room[][] caveMap;
 	
 	public Cave(String mapFile) throws FileNotFoundException {
-		caveMap = loadMap(mapFile);
+		loadMap(mapFile);
 		tester();
 	}
 	
-	/** Reads from a map file following a specific format
+	/** Reads from a map file into caveMap following a specific format
 	 * 
 	 * @param mapFile - the location of the map file
-	 * @return - a finished map
 	 * @throws FileNotFoundException
 	 * Preconditions: file exists, correct format specified in method
 	 */
-	private static Room[][] loadMap(String mapFile) throws FileNotFoundException {
+	private static void loadMap(String mapFile) throws FileNotFoundException {
 		Scanner src = new Scanner(new File("./input/" + mapFile));						//Read from this map file
-		Room[][] map = new Room[src.nextInt()][src.nextInt()];							//First line contains two ints with 2d array size
+		caveMap = new Room[src.nextInt()][src.nextInt()];								//First line contains two ints with 2d array size
 		src.nextLine();																	//Force next line
 		
-		for (int i = 1; src.hasNextLine() && i <= map.length * map[0].length; i++) {	//Each room's properties take up one line
-			Room newRoom = new Room(src.nextInt(), src.nextInt(), src.nextInt());		//First 3 ints are connected rooms
-			map[roomRow(i)][roomCol(i)] = newRoom;
-			src.nextLine();																//Force next line
+		for (int i = 1; src.hasNextLine() && i <= caveMap.length * caveMap[0].length; i++) {	//Each room's properties take up one line
+			Room newRoom = new Room(src.nextInt(), src.nextInt(), src.nextInt());				//First 3 ints are connected rooms
+			caveMap[roomRow(i)][roomCol(i)] = newRoom;
+			if (src.hasNextLine())
+				src.nextLine();																//Force next line
 		}
 		
 		src.close();
-		return map;
 	}
 	
 	/** Returns entire map of cave
