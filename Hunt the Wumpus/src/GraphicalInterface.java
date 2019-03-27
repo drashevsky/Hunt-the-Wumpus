@@ -24,7 +24,6 @@ public class GraphicalInterface implements ActionListener {
 	{
 		JFrame f = new JFrame("Menu Demo");
 		JButton bu = new JButton();
-		JButton bu2 = new JButton();
 		
 	    f.setSize(500,500);
 	    
