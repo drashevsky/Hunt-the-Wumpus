@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException;
+
 /**
  * 
  * @author Eric Anderson
@@ -13,12 +15,10 @@
  *	V1.02 - 3/20/19
  *		- Changed constructor info for cave object
  */
-
-// Changed again
 public class GameControl {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		// Create an instance of each Object
-		Cave cave = new Cave(new String[5][6]);
+		Cave cave = new Cave("map.txt");
 		GameLocations gameLocations = new GameLocations();
 		GraphicalInterface gui = new GraphicalInterface();
 		HighScore highscore = new HighScore();
