@@ -85,6 +85,8 @@ public class Cave {
 		
 		for (int i = 0; i < 6; i++)
 			System.out.println(adjacentRooms(6)[i]);
+		
+		System.out.println("File read test: " + caveMap.length + " " + caveMap[0].length);
 	}
 
 	public String toString() {
