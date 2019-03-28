@@ -16,14 +16,31 @@ import java.io.FileNotFoundException;
  *		- Changed constructor info for cave object
  */
 public class GameControl {
-	public static void main(String[] args) throws FileNotFoundException {
-		// Create an instance of each Object
-		Cave cave = new Cave("map.txt");
-		GameLocations gameLocations = new GameLocations();
-		GraphicalInterface gui = new GraphicalInterface();
-		HighScore highscore = new HighScore();
-		Player player = new Player();
-		Trivia trivia = new Trivia();
+	private Cave cave;
+	private GameLocations gameLocations;
+	private GraphicalInterface gui;
+	private HighScore highscore;
+	private Player player;
+	private Trivia trivia;
+	public GameControl() {
+		try {
+			cave = new Cave("map.txt");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		gameLocations = new GameLocations(cave);
+		gui = new GraphicalInterface();
+		highscore = new HighScore();
+		player = new Player();
+		trivia = new Trivia();
+	}
+	public static void main(String[] args) {
+		// Create an instance of GameControl
+		GameControl gameControl = new GameControl();
+		
+		
+		
 		
 		Object[] objects = new Object[] {cave, gameLocations, gui, highscore, player, trivia};
 		for(Object o : objects) {
