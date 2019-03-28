@@ -24,13 +24,18 @@ public class GraphicalInterface implements ActionListener {
 	{
 		JFrame f = new JFrame("Menu Demo");
 		JButton bu = new JButton();
+		JButton bu2 = new JButton();
 		
 	    f.setSize(500,500);
 	    
 	    bu.setSize(50,50);
 	    bu.setText("Play");
 	    bu.setVisible(true);
-	    f.add(bu);
+	    f.add(bu);	    
+	    bu2.setSize(50,50);
+	    bu2.setText("Settings");
+	    bu2.setVisible(true);
+	    f.add(bu2);
 	   
 	    
 	    
@@ -123,8 +128,10 @@ public class GraphicalInterface implements ActionListener {
 	 public void actionPerformed(ActionEvent ae) {
 		    String comStr = ae.getActionCommand();
 		    System.out.println(comStr + " Selected");
-		  }
-
-	
+	}
+	public static void main(String[] args)
+	{
+		new GraphicalInterface();
+	}
 
 }

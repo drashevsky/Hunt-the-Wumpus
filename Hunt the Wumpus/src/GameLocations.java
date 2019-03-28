@@ -15,7 +15,7 @@ public class GameLocations {
 	private int player;
 	private int wumpus;
 	private Room[] Hazards = new Room[4];
-public GameLocations() {
+public GameLocations(Cave c) {
 	map = Cave.fullMap();
 	Hazards[0] = new Room(3, 4, 5);
 	Hazards[1] = new Room(7, 8, 9);
