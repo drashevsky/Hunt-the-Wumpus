@@ -46,11 +46,11 @@ public class GraphicalInterface extends JFrame implements ActionListener {
 	                (int)(buttonSize.getHeight() * 3.5)+maxGap * 2));
 	         
 	        //Add buttons to experiment with Grid Layout
-	        compsToExperiment.add(new JButton("Button 1"));
-	        compsToExperiment.add(new JButton("Button 2"));
-	        compsToExperiment.add(new JButton("Button 3"));
-	        compsToExperiment.add(new JButton("Long-Named Button 4"));
-	        compsToExperiment.add(new JButton("5"));
+	        compsToExperiment.add(new JButton("Play"));
+	        compsToExperiment.add(new JButton("Settings"));
+	        compsToExperiment.add(new JButton("About"));
+	        compsToExperiment.add(new JButton("High Score++"));
+	        compsToExperiment.add(new JButton("Test"));
 	         
 	        //Add controls to set up horizontal and vertical gaps
 	        controls.add(new Label("Horizontal gap:"));
