@@ -3,15 +3,26 @@ public class Player {
 int arrows;
 int secrets;
 int goldCoins;
+private GameLocations location;
 public Player() {
 	arrows = 0;
 	secrets = 0;
 	goldCoins = 0;
+	GameLocations location = new GameLocations();
 }
 // Returns string the player
 public String toString()
 {
 	return "Player";
+}
+public void move() {
+	int x = location.trackPlayer();
+	Room y = Cave.getRoom(x);
+	int[] z = y.getConnectedRooms();
+	
+}
+public int getGoldCoins() {
+	return goldCoins;
 }
 //Purchases arrow based on the number of questions answered, will probably call Trivia method for parameter
 public boolean purchaseArrows(int questionsAnswered)
@@ -35,4 +46,5 @@ public boolean purchaseSecrets(int questionsAnswered)
 	}
 	return false;
 }
+
 }
