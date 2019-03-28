@@ -11,11 +11,16 @@
 
 
 public class GameLocations {
-	private int[][] map;
+	private Room[][] map;
 	private int player;
 	private int wumpus;
+	private Room[] Hazards = new Room[4];
 public GameLocations() {
-	map = new int[5][6];
+	map = Cave.fullMap();
+	Hazards[0] = new Room(3, 4, 5);
+	Hazards[1] = new Room(7, 8, 9);
+	Hazards[2] = new Room(12, 13, 14);
+	Hazards[3] = new Room(21, 22, 23);
 	int player = (int)(Math.random()*30) + 1;
 	int wumpus = (int)(Math.random()*30) + 1;
 	while (wumpus == player) {
@@ -32,8 +37,9 @@ public int trackWumpus() {
 	{
 		for (int y = 0; y < map[x].length; y++)
 		{
-			if (x+y == wumpus) {
+			if (x + y == wumpus) {
 				return x+y;
+				//s
 			}
 		}
 	}
@@ -45,7 +51,7 @@ public int trackPlayer() {
 	{
 		for (int y = 0; y < map[x].length; y++)
 		{
-			if (x+y == player) {
+			if (x + y == player) {
 				return x+y;
 			}
 		}
