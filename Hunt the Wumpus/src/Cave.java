@@ -24,6 +24,27 @@ public class Cave {
 		tester();
 	}
 	
+	/** Returns entire map of cave
+	 * @return the entire map
+	 */
+	public Room[][] fullMap() {
+		return caveMap;
+	}
+	
+	/** Returns a single room from the map 
+	 * 
+	 * @param room - room # between 1 - 30
+	 * @return the requested room
+	 * Precondition: the room exists
+	 */
+	public Room getRoom(int room) {
+		return caveMap[roomRow(room)][roomCol(room)];
+	}
+	
+	public String toString() {
+		return "Cave Object";
+	}
+	
 	/** Reads from a map file into caveMap following a specific format
 	 * 
 	 * @param mapFile - the location of the map file
@@ -45,25 +66,8 @@ public class Cave {
 		src.close();
 	}
 	
-	/** Returns entire map of cave
-	 * @return the entire map
-	 */
-	public Room[][] fullMap() {
-		return caveMap;
-	}
-	
-	/** Returns a single room from the map 
-	 * 
-	 * @param room - room # between 1 - 30
-	 * @return the requested room
-	 * Precondition: the room exists
-	 */
-	public Room getRoom(int room) {
-		return caveMap[roomRow(room)][roomCol(room)];
-	}
-	
  	/** Tests all the other methods */
-	public void tester() {
+	private void tester() {
 		System.out.println("Testing 1D -> 2D index conversion:");
 		for (int i = 1; i <= 30; i++) {
 			System.out.print("[ " + roomRow(i) + ", " + roomCol(i) + " ]" );
@@ -87,10 +91,6 @@ public class Cave {
 			System.out.println(adjacentRooms(6)[i]);
 		
 		System.out.println("File read test: " + caveMap.length + " " + caveMap[0].length);
-	}
-
-	public String toString() {
-		return "Cave Object";
 	}
 	
 	//------------------------------------------------------------------------Adjacent Rooms Methods------------------------------------------------------------------------//
