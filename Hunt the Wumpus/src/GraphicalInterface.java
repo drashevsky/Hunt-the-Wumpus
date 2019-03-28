@@ -124,9 +124,7 @@ public class GraphicalInterface implements ActionListener {
 		    String comStr = ae.getActionCommand();
 		    System.out.println(comStr + " Selected");
 		  }
-	 public static void main(String args[]) {
-		    new GraphicalInterface();
-		  }
+
 	
 
 }
