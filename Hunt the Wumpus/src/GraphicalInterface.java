@@ -31,7 +31,9 @@ public class GraphicalInterface implements ActionListener {
 	    bu.setText("Play");
 	    bu.setVisible(true);
 	    f.add(bu);
-
+	   
+	    
+	    
 
 	    
 	    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,6 +77,7 @@ public class GraphicalInterface implements ActionListener {
 	    jmiClose.addActionListener(this);
 	    jmiSave.addActionListener(this);
 	    jmiExit.addActionListener(this);
+	    bu.addActionListener(this);
 	    b.addActionListener(this);
 	    c.addActionListener(this);
 	    d.addActionListener(this);
@@ -121,9 +124,7 @@ public class GraphicalInterface implements ActionListener {
 		    String comStr = ae.getActionCommand();
 		    System.out.println(comStr + " Selected");
 		  }
-	 public static void main(String args[]) {
-		    new GraphicalInterface();
-		  }
+
 	
 
 }
