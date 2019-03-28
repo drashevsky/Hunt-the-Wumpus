@@ -17,7 +17,7 @@ import java.util.*;
 import java.io.*;
 
 public class Cave {
-	private static Room[][] caveMap;
+	private Room[][] caveMap;
 	
 	public Cave(String mapFile) throws FileNotFoundException {
 		loadMap(mapFile);
@@ -30,7 +30,7 @@ public class Cave {
 	 * @throws FileNotFoundException
 	 * Preconditions: file exists, correct format specified in method
 	 */
-	private static void loadMap(String mapFile) throws FileNotFoundException {
+	private void loadMap(String mapFile) throws FileNotFoundException {
 		Scanner src = new Scanner(new File("./input/" + mapFile));						//Read from this map file
 		caveMap = new Room[src.nextInt()][src.nextInt()];								//First line contains two ints with 2d array size
 		src.nextLine();																	//Force next line
@@ -48,7 +48,7 @@ public class Cave {
 	/** Returns entire map of cave
 	 * @return the entire map
 	 */
-	public static Room[][] fullMap() {
+	public Room[][] fullMap() {
 		return caveMap;
 	}
 	
@@ -58,7 +58,7 @@ public class Cave {
 	 * @return the requested room
 	 * Precondition: the room exists
 	 */
-	public static Room getRoom(int room) {
+	public Room getRoom(int room) {
 		return caveMap[roomRow(room)][roomCol(room)];
 	}
 	
@@ -101,7 +101,7 @@ public class Cave {
 	 * @return the integer array of adjacent rooms
 	 * Precondition: room must exist
 	 */
-	public static int[] adjacentRooms(int room) {
+	public int[] adjacentRooms(int room) {
 		int[] rooms = new int[6];
 		
 		//Get room indexes in 2d array
@@ -151,7 +151,7 @@ public class Cave {
 	 * @return An array containing the numbers of the rooms to the immediate left and right of the selected room
 	 * Precondition: room must exist, indexes correct
 	 */
-	private static int[] adjacentRoomHelper(int room, int roomRow, int roomCol) {
+	private int[] adjacentRoomHelper(int room, int roomRow, int roomCol) {
 		int[] rooms = new int[2];
 		
 		//Finds room to the immediate left
@@ -176,7 +176,7 @@ public class Cave {
 	 * @return The row number of the room
 	 * Precondition: the room exists
 	 */
-	private static int roomRow(int room) {
+	private int roomRow(int room) {
 		int row = room / caveMap[0].length;
 		return (room % caveMap[0].length == 0) ? row - 1 : row; //all the multiples of the row length must be reduced by one
 	}
@@ -187,7 +187,7 @@ public class Cave {
 	 * @return The column number of the room
 	 * Precondition: the room exists
 	 */
-	private static int roomCol(int room) {
+	private int roomCol(int room) {
 		return room - (roomRow(room) * caveMap[0].length) - 1;	//Converts room to a number from the first row, then subtracts 1
 	}
 	
@@ -198,7 +198,7 @@ public class Cave {
 	 * @return The room number from the column and row as an int
 	 * Precondition: the room exists
 	 */
-	private static int vectorIndexToRoom(int row, int column) {
+	private int vectorIndexToRoom(int row, int column) {
 		return row * caveMap[0].length + column + 1; //converts to 1d index and adds one for room number
 	}
 }
