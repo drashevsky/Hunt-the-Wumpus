@@ -4,11 +4,11 @@ int arrows;
 int secrets;
 int goldCoins;
 private GameLocations location;
-public Player() {
+public Player(GameLocations location) {
 	arrows = 0;
 	secrets = 0;
 	goldCoins = 0;
-	GameLocations location = new GameLocations();
+	
 }
 // Returns string the player
 public String toString()
