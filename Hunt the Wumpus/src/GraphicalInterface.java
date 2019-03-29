@@ -53,12 +53,12 @@ public class GraphicalInterface extends JFrame implements ActionListener {
 	        compsToExperiment.add(new JButton("Test"));
 	         
 	        //Add controls to set up horizontal and vertical gaps
-	        controls.add(new Label("Horizontal gap:"));
+	        /*controls.add(new Label("Horizontal gap:"));
 	        controls.add(new Label("Vertical gap:"));
 	        controls.add(new Label(" "));
 	        controls.add(horGapComboBox);
 	        controls.add(verGapComboBox);
-	        controls.add(applyButton);
+	        controls.add(applyButton);*/
 	         
 	        //Process the Apply gaps button press
 	        applyButton.addActionListener(new ActionListener(){
