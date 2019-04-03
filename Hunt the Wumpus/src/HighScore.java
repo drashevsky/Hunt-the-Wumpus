@@ -67,11 +67,7 @@ public class HighScore {
 	
 	//Returns the High Score at the given index. The integer paramter represents the index of the High Score.
 	private int getHighScore(int index) {
-<<<<<<< HEAD
 		return highScores[index];
-=======
-		highScores[index];
->>>>>>> master
 	}
 	
 	//Adds the score given as an integer parameter to the highScores array at the appropriate positions.
