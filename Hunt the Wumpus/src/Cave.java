@@ -2,6 +2,7 @@
  * @author Daniel Rashevsky
  * Class Name: Cave
  * Description: Stores and updates the game map in memory
+ * Useful Methods: fullMap(), getRoom(), toString(), adjacentRooms()
  * Rev. History: (Date - Revision)
  * 
  * 3/12/2019 - Added dummy methods 
@@ -11,6 +12,7 @@
  *             Added Room object as the core element of 2d array
  *             Implemented reading map files, untested
  *             Reorganized class, determined public/private/static
+ * 4/02/2019 - Wrote some new tests, updated documentation/some methods
  */
 
 import java.util.*;
@@ -18,8 +20,10 @@ import java.io.*;
 
 public class Cave {
 	private Room[][] caveMap;
+	private String mapFile;
 	
-	public Cave(String mapFile) throws FileNotFoundException {
+	public Cave(String mapFile) {
+		this.mapFile = mapFile;
 		loadMap(mapFile);
 		tester();
 	}
@@ -42,17 +46,28 @@ public class Cave {
 	}
 	
 	public String toString() {
-		return "Cave Object";
+		return "Cave Object: " + caveMap.length + " x " + caveMap[0].length + ", " + this.mapFile;
 	}
 	
-	/** Reads from a map file into caveMap following a specific format
+	/** Reads from a map file into caveMap following a specific format: 
+	 *  first line contains two ints with 2d array size (e.g. 6 5),
+	 *  followed by each room's properties occupying their own line (e.g. 1 4 5).
+	 *  Only property so far is connected rooms, 3 ints ----------------^
 	 * 
 	 * @param mapFile - the location of the map file
 	 * @throws FileNotFoundException
 	 * Preconditions: file exists, correct format specified in method
 	 */
-	private void loadMap(String mapFile) throws FileNotFoundException {
-		Scanner src = new Scanner(new File("./input/" + mapFile));						//Read from this map file
+	private void loadMap(String mapFile) {
+		Scanner src;
+		
+		try {
+			src = new Scanner(new File("./input/" + mapFile));						//Read from this map file, or give error message
+		} catch (FileNotFoundException e) {
+			System.out.println("Could not access \"" + mapFile + "\".");
+			return;
+		}
+		
 		caveMap = new Room[src.nextInt()][src.nextInt()];								//First line contains two ints with 2d array size
 		src.nextLine();																	//Force next line
 		
@@ -87,12 +102,27 @@ public class Cave {
 			System.out.println();
 		}
 		
-		for (int i = 0; i < 6; i++)
-			System.out.println(adjacentRooms(6)[i]);
+		System.out.println("\nTesting adjacent rooms:");
+		for (int i = 0; i < 6; i++) {
+			for (int j = 1; j <= 30; j++)
+				System.out.print(adjacentRooms(j)[i] + " ");
+			System.out.println();
+		}
+		
+		System.out.println("\nTesting getRoom:");
+		for (int i = 0; i < 3; i++) {
+			for (int j = 1; j <= 30; j++)
+				System.out.print(getRoom(j).getConnectedRooms()[i] + " ");
+			System.out.println();
+		}
 		
 		System.out.println("File read test: " + caveMap.length + " " + caveMap[0].length);
+		System.out.println(this); //toString test
 	}
 	
+	//------------------------------------------------------------------------Adjacent Rooms Methods------------------------------------------------------------------------//
+	
+
 	//------------------------------------------------------------------------Adjacent Rooms Methods------------------------------------------------------------------------//
 	
 	/** Returns an array of the rooms which are adjacent to a select room 
@@ -143,6 +173,7 @@ public class Cave {
 		return rooms;
 	}
 	
+	
 	/** Returns the rooms to the immediate left and right of room
 	 * 
 	 * @param room - The room to find the left and right of
@@ -170,6 +201,7 @@ public class Cave {
 		return rooms;
 	}
 	
+	
 	/** Returns the row number of a room
 	 * 
 	 * @param room - The room to find the row of (1 - 30)
@@ -181,6 +213,7 @@ public class Cave {
 		return (room % caveMap[0].length == 0) ? row - 1 : row; //all the multiples of the row length must be reduced by one
 	}
 	
+	
 	/** Returns the column number of a room
 	 * 
 	 * @param room - The room to find the column of (1 - 30)
@@ -190,6 +223,7 @@ public class Cave {
 	private int roomCol(int room) {
 		return room - (roomRow(room) * caveMap[0].length) - 1;	//Converts room to a number from the first row, then subtracts 1
 	}
+	
 	
 	/** Returns the room number given a 2d index
 	 * 
