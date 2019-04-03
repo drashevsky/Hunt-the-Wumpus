@@ -104,8 +104,11 @@ public class Cave {
 		
 		System.out.println("\nTesting adjacent rooms:");
 		for (int i = 0; i < 6; i++) {
-			for (int j = 1; j <= 30; j++)
+			for (int j = 1; j <= 30; j++) {
+				if (adjacentRooms(j)[i] < 10)
+					System.out.print(" ");
 				System.out.print(adjacentRooms(j)[i] + " ");
+			}
 			System.out.println();
 		}
 		
@@ -116,7 +119,7 @@ public class Cave {
 			System.out.println();
 		}
 		
-		System.out.println("File read test: " + caveMap.length + " " + caveMap[0].length);
+		System.out.println("\nFile read test: " + caveMap.length + " " + caveMap[0].length);
 		System.out.println(this); //toString test
 	}
 	
