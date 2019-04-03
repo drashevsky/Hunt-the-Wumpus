@@ -40,30 +40,34 @@ public class GraphicalInterface extends JFrame implements ActionListener {
 	        controls.setLayout(new GridLayout(2,3));
 	         
 	        //Set up components preferred size
-	        JButton b = new JButton("Just fake button");
+	        JButton b = new JButton("Play");
 	        Dimension buttonSize = b.getPreferredSize();
 	        compsToExperiment.setPreferredSize(new Dimension((int)(buttonSize.getWidth() * 2.5)+maxGap,
 	                (int)(buttonSize.getHeight() * 3.5)+maxGap * 2));
 	         
 	        //Add buttons to experiment with Grid Layout
-	        compsToExperiment.add(new JButton("Play"));
+	        compsToExperiment.add(b);
 	        compsToExperiment.add(new JButton("Settings"));
 	        compsToExperiment.add(new JButton("About"));
 	        compsToExperiment.add(new JButton("High Score++"));
-	        compsToExperiment.add(new JButton("Test"));
+	        compsToExperiment.add(new JButton("Print Room"));
+	        compsToExperiment.add(new JButton("High Scores"));
 	         
 	        //Add controls to set up horizontal and vertical gaps
-	        /*controls.add(new Label("Horizontal gap:"));
+	        controls.add(new Label("Horizontal gap:"));
 	        controls.add(new Label("Vertical gap:"));
 	        controls.add(new Label(" "));
 	        controls.add(horGapComboBox);
 	        controls.add(verGapComboBox);
-	        controls.add(applyButton);*/
+	        controls.add(applyButton);
 	         
 	        //Process the Apply gaps button press
-	        applyButton.addActionListener(new ActionListener(){
+	        
+	        b.addActionListener(new ActionListener(){
 	            public void actionPerformed(ActionEvent e){
 	                //Get the horizontal gap value
+	            	System.out.println("1");
+	        
 	                String horGap = (String)horGapComboBox.getSelectedItem();
 	                //Get the vertical gap value
 	                String verGap = (String)verGapComboBox.getSelectedItem();
