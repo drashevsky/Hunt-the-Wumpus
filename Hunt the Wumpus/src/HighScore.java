@@ -10,9 +10,9 @@ public class HighScore {
 
 	public HighScore() {
 
-		highScoresFile = new File("HighScoresFile.txt);
+		highScoresFile = new File("HighScoresFile.txt");
 
-		retrieveHighScores;
+		retrieveHighScores();
 		
 	}
 	
@@ -20,7 +20,14 @@ public class HighScore {
 	private int[] retrieveHighScores() {
 		int counter = 0;
 
-		Scanner textCounter = new Scanner(highScoresFile);
+		Scanner textCounter;
+		try {
+			textCounter = new Scanner(highScoresFile);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 
 		while(textCounter.hasNextLine()){
 
@@ -31,7 +38,14 @@ public class HighScore {
 
 		textCounter.close();
 		
-		Scanner textReader = new Scanner(highScoresFile);
+		Scanner textReader;
+		try {
+			textReader = new Scanner(highScoresFile);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 		highScores = new int[counter];
 
 		for(int i = 0; i < counter; i++){
@@ -53,7 +67,7 @@ public class HighScore {
 	
 	//Returns the High Score at the given index. The integer paramter represents the index of the High Score.
 	private int getHighScore(int index) {
-		highScores[i];
+		return highScores[index];
 	}
 	
 	//Adds the score given as an integer parameter to the highScores array at the appropriate positions.
