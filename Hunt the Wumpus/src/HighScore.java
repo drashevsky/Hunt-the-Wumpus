@@ -7,13 +7,17 @@ public class HighScore {
 
 	private int[] highScores;
 	private String[] highScorePlayers;
+	
+	private static final String highScoresPath = "./input/HighScoresFile.txt";
+	private static final String highScorePlayersPath = "./input/HighScorePlayers.txt";
+	
 	private File highScoresFile;	
 	private File highScorePlayersFile;
 
 	public HighScore() {
 
-		highScoresFile = new File("./input/" + "HighScoresFile.txt");
-		highScorePlayersFile = new File("./input/" + "HighScorePlayers.txt");
+		highScoresFile = new File(highScoresPath);
+		highScorePlayersFile = new File(highScorePlayersPath);
 		
 		retrieveHighScores();
 		retrievePlayers();		
@@ -23,6 +27,12 @@ public class HighScore {
 	private int[] retrieveHighScores() {
 		int counter = 0;
 
+		try {
+			highScoresFile.createNewFile();
+		} catch (IOException e1) {
+			
+		}
+		
 		Scanner textCounter;
 		try {
 			textCounter = new Scanner(highScoresFile);
@@ -130,7 +140,62 @@ public class HighScore {
 	//Adds the score given as an integer parameter to the highScores array at the appropriate positions.
 	//Returns an boolean representing whether the score is a High Score
 	private boolean addScore(int score, String player) {
+		
 		return false;
+	}
+	
+	//Writes High Score values and Player values. Returns true if successful and false if unsuccessful
+	private boolean writeHighScoreToFile() {
+		highScoresFile.delete();
+		
+		try {
+			highScoresFile.createNewFile();
+		} catch (IOException e1) {
+			return false;
+		}
+		
+		FileWriter writerScore;
+		PrintWriter printerScore;
+		try {
+			writerScore = new FileWriter(highScoresPath, false);
+			printerScore = new PrintWriter(writerScore);
+			
+			for(int score : highScores) {
+				printerScore.println(score);
+			}
+			
+			writerScore.close();
+			printerScore.close();
+			
+		} catch (IOException e) {
+			return false;
+		}
+
+		try {
+			highScorePlayersFile.createNewFile();
+		} catch (IOException e1) {
+			return false;
+		}
+		
+		FileWriter writerPlayer;
+		PrintWriter printerPlayer;
+		try {
+			writerPlayer = new FileWriter(highScorePlayersPath, false);
+			printerPlayer = new PrintWriter(writerPlayer);
+			
+			for(int score : highScores) {
+				printerPlayer.println(score);
+			}
+			
+			writerPlayer.close();
+			printerPlayer.close();
+			
+		} catch (IOException e) {
+			return false;
+		}
+		
+		return true;
+		
 	}
 	
 	public String toString() {
