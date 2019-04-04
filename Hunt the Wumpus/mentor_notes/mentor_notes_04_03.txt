@@ -1,0 +1,16 @@
+GameControl
+ - Compile errors?
+ - GameControl object needs to be saved to static variable.
+ 
+Cave
+ - Array out of bounds exception from getRoom call from GameLocations
+ 
+HighScore
+  - HighScoreFile.txt not found.
+  - After fixing that retrievePlayers crashes...
+  
+GraphicalInterface
+ - Still has its own main function. 
+ - Looks better than last time. Play button seems to resize things instead of the Apply button
+ 
+Other classes seem mostly unchanged...
