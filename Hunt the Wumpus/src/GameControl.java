@@ -1,5 +1,3 @@
-import java.io.FileNotFoundException;
-
 /**
  * 
  * @author Eric Anderson
@@ -14,8 +12,11 @@ import java.io.FileNotFoundException;
  *		- Added comments
  *	V1.02 - 3/20/19
  *		- Changed constructor info for cave object
+ *	V.03 - 4/4/19
+ *		- Cleaned up class constructors
  */
 public class GameControl {
+	public static GameControl gameControl;
 	private Cave cave;
 	private GameLocations gameLocations;
 	private GraphicalInterface gui;
@@ -23,34 +24,21 @@ public class GameControl {
 	private Player player;
 	private Trivia trivia;
 	public GameControl() {
-		try {
-			cave = new Cave("map.txt");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		cave = new Cave("map.txt");
 		gameLocations = new GameLocations(cave);
-		gui = new GraphicalInterface();
+		gui = new GraphicalInterface("GUI");
 		highscore = new HighScore();
-		player = new Player();
+		player = new Player(gameLocations, "temp_name");
 		trivia = new Trivia();
 	}
 	public static void main(String[] args) {
 		// Create an instance of GameControl
-		GameControl gameControl = new GameControl();
-		
-		
-		
-		
-		Object[] objects = new Object[] {cave, gameLocations, gui, highscore, player, trivia};
-		for(Object o : objects) {
-			System.out.println(o);
-		}
+		gameControl = new GameControl();
 	}
 	
 	// Determines the keystrokes of the player and validates the input
 	// Returns false if invalid
-	public static boolean userInput(Player player) {
+	public boolean userInput(Player player) {
 		return true;
 	}
 	
