@@ -22,10 +22,10 @@ public class Trivia {
 		this.incorrectAnswersOne = new ArrayList<String>();
 		this.incorrectAnswersTwo = new ArrayList<String>();
 		
-		Scanner questionsScanner = new Scanner(questions);
-		Scanner correctAnswersScanner = new Scanner(correctAnswers);
-		Scanner incorrectAnswersOneScanner = new Scanner(incorrectAnswersOne);
-		Scanner incorrectAnswersTwoScanner = new Scanner(incorrectAnswersTwo);
+		Scanner questionsScanner = new Scanner("./input/" + questions);
+		Scanner correctAnswersScanner = new Scanner("./input/" + correctAnswers);
+		Scanner incorrectAnswersOneScanner = new Scanner("./input/" + incorrectAnswersOne);
+		Scanner incorrectAnswersTwoScanner = new Scanner("./input/" + incorrectAnswersTwo);
 		
 		while(questionsScanner.hasNextLine()) {
 			this.questions.add(questionsScanner.nextLine());

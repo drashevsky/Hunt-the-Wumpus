@@ -12,8 +12,9 @@ public class HighScore {
 
 	public HighScore() {
 
-		highScoresFile = new File("HighScoresFile.txt");
-
+		highScoresFile = new File("./input/" + "HighScoresFile.txt");
+		highScorePlayersFile = new File("./input/" + "HighScorePlayers.txt");
+		
 		retrieveHighScores();
 		retrievePlayers();		
 	}
