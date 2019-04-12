@@ -28,36 +28,25 @@ public class Cave {
 		tester();
 	}
 	
-	/** Returns entire map of cave
-	 * @return the entire map
-	 */
+	//Returns entire map of cave
 	public Room[][] fullMap() {
 		return caveMap;
 	}
 	
-	/** Returns a single room from the map 
-	 * 
-	 * @param room - room # between 1 - 30
-	 * @return the requested room
-	 * Precondition: the room exists
-	 */
+	//Returns a single room object from the map given its number (1 - 30)
 	public Room getRoom(int room) {
 		return caveMap[roomRow(room)][roomCol(room)];
 	}
 	
+	//Returns a string containing information about the Cave object
 	public String toString() {
 		return "Cave Object: " + caveMap.length + " x " + caveMap[0].length + ", " + this.mapFile;
 	}
 	
-	/** Reads from a map file into caveMap following a specific format: 
-	 *  first line contains two ints with 2d array size (e.g. 6 5),
-	 *  followed by each room's properties occupying their own line (e.g. 1 4 5).
-	 *  Only property so far is connected rooms, 3 ints ----------------^
-	 * 
-	 * @param mapFile - the location of the map file
-	 * @throws FileNotFoundException
-	 * Preconditions: file exists, correct format specified in method
-	 */
+	//Reads from a map file into caveMap following a specific format: 
+	// * First line contains two ints with 2d array size (e.g. 6 5),
+	// * Followed by each room's properties occupying their own line (e.g. 1 4 5).
+	// * Only property so far is connected rooms, 3 ints ----------------^
 	private void loadMap(String mapFile) {
 		Scanner src;
 		
@@ -81,7 +70,7 @@ public class Cave {
 		src.close();
 	}
 	
- 	/** Tests all the other methods */
+ 	//Tests all the other methods
 	private void tester() {
 		System.out.println("Testing 1D -> 2D index conversion:");
 		for (int i = 1; i <= 30; i++) {
@@ -123,17 +112,9 @@ public class Cave {
 		System.out.println(this); //toString test
 	}
 	
-	//------------------------------------------------------------------------Adjacent Rooms Methods------------------------------------------------------------------------//
+	//-------------------------------------------------------------------Adjacent Rooms Methods-------------------------------------------------------------------//
 	
-
-	//------------------------------------------------------------------------Adjacent Rooms Methods------------------------------------------------------------------------//
-	
-	/** Returns an array of the rooms which are adjacent to a select room 
-	 * 
-	 * @param room - the room number to look around
-	 * @return the integer array of adjacent rooms
-	 * Precondition: room must exist
-	 */
+	//Returns an array of the rooms which are adjacent to a select room (restricted to 1 - 30)
 	public int[] adjacentRooms(int room) {
 		int[] rooms = new int[6];
 		
@@ -177,14 +158,8 @@ public class Cave {
 	}
 	
 	
-	/** Returns the rooms to the immediate left and right of room
-	 * 
-	 * @param room - The room to find the left and right of
-	 * @param roomRow - The room's column in the map array
-	 * @param roomCol - The room's row in the map array
-	 * @return An array containing the numbers of the rooms to the immediate left and right of the selected room
-	 * Precondition: room must exist, indexes correct
-	 */
+	//Returns the numbers of the rooms to the immediate left and right of a select room (1 - 30)
+	//roomRow and roomCol are the room's indexes in the 2d array
 	private int[] adjacentRoomHelper(int room, int roomRow, int roomCol) {
 		int[] rooms = new int[2];
 		
@@ -205,36 +180,20 @@ public class Cave {
 	}
 	
 	
-	/** Returns the row number of a room
-	 * 
-	 * @param room - The room to find the row of (1 - 30)
-	 * @return The row number of the room
-	 * Precondition: the room exists
-	 */
+	//Returns the row number of a room (restricted to 1 - 30)
 	private int roomRow(int room) {
 		int row = room / caveMap[0].length;
 		return (room % caveMap[0].length == 0) ? row - 1 : row; //all the multiples of the row length must be reduced by one
 	}
 	
 	
-	/** Returns the column number of a room
-	 * 
-	 * @param room - The room to find the column of (1 - 30)
-	 * @return The column number of the room
-	 * Precondition: the room exists
-	 */
+	//Returns the column number of a room (restricted to 1 - 30)
 	private int roomCol(int room) {
 		return room - (roomRow(room) * caveMap[0].length) - 1;	//Converts room to a number from the first row, then subtracts 1
 	}
 	
 	
-	/** Returns the room number given a 2d index
-	 * 
-	 * @param column
-	 * @param row
-	 * @return The room number from the column and row as an int
-	 * Precondition: the room exists
-	 */
+	//Returns the room number given a 2d index
 	private int vectorIndexToRoom(int row, int column) {
 		return row * caveMap[0].length + column + 1; //converts to 1d index and adds one for room number
 	}
