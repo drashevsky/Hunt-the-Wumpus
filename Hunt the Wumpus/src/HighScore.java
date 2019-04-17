@@ -9,7 +9,7 @@ public class HighScore {
 	private String[] highScorePlayers;
 	
 	private static final String highScoresPath = "./input/HighScoresFile.txt";
-	private static final String highScorePlayersPath = "./input/HighScorePlayers.txt";
+	private static final String highScorePlayersPath = "./input/HighScorePlayersFile.txt";
 	
 	private File highScoresFile;	
 	private File highScorePlayersFile;
@@ -183,8 +183,8 @@ public class HighScore {
 			writerPlayer = new FileWriter(highScorePlayersPath, false);
 			printerPlayer = new PrintWriter(writerPlayer);
 			
-			for(int score : highScores) {
-				printerPlayer.println(score);
+			for(String player : highScorePlayers) {
+				printerPlayer.println(player);
 			}
 			
 			writerPlayer.close();
@@ -196,6 +196,74 @@ public class HighScore {
 		
 		return true;
 		
+	}
+	
+	// Adds the high score and player to file if they are in the top 10
+	// Returns an int from 0-9 if the player is in the top 10, representing the ranking
+	// Returns -1 if the score is not in the top 10
+	public int addScore(int score, String player) {
+		
+		int[] highScoresTemp = new int[highScores.length + 1];
+		for(int i = 0; i < highScores.length; i++) {
+			highScoresTemp[i] = highScores[i];
+		}
+		
+		String[] highScorePlayersTemp = new String[highScorePlayers.length + 1];
+		for(int i = 0; i < highScorePlayers.length; i++) {
+			highScorePlayersTemp[i] = highScorePlayers[i];
+		}
+	
+		for(int i = 0; i < highScoresTemp.length - 1; i++) {
+			
+			if(highScoresTemp[i] < score) {
+				
+				for(int j = highScoresTemp.length - 1; j > i; j--) {
+					highScoresTemp[j] = highScoresTemp[j - 1];
+					highScorePlayersTemp[j] = highScorePlayersTemp[j - 1];
+				}
+				
+				highScoresTemp[i] = score;
+				highScorePlayersTemp[i] = player;
+				
+				if(highScoresTemp.length <= 10) {
+					
+					highScores = highScoresTemp;
+					highScorePlayers = highScorePlayersTemp;
+					
+					writeHighScoreToFile();
+					
+					return i;
+					
+				} else {
+					
+					for(int k = 0; k < highScores.length; k++) {
+						
+						highScores[k] = highScoresTemp[k];
+						highScorePlayers[k] = highScorePlayersTemp[k];
+						
+						writeHighScoreToFile();
+						
+						return i;
+						
+					}
+					
+				}
+					
+			}
+			
+		}
+		
+		if(highScoresTemp.length > 10)
+			return -1;
+		
+		highScores = highScoresTemp;
+		highScores[highScores.length - 1] = score;
+		highScorePlayers = highScorePlayersTemp;
+		highScorePlayers[highScorePlayers.length - 1] = player;
+		
+		writeHighScoreToFile();
+			return highScores.length - 1;
+	
 	}
 	
 	public String toString() {
