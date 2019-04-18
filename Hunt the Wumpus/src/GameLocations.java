@@ -22,7 +22,7 @@ public class GameLocations {
 		this.c = c;
 		int x = 1;
 		turns = 0;
-		player = c.getRoom(0);
+		player = c.getRoom(1);
 		wumpus = c.getRoom((int)(Math.random()*30) + 1);
 		while (wumpus == player) {
 			wumpus = c.getRoom((int)(Math.random()*30) + 1);
