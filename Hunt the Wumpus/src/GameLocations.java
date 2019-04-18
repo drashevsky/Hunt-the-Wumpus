@@ -32,11 +32,11 @@ public class GameLocations {
 		Hazards[1] = c.getRoom((int)(Math.random()*30) + 1);
 		Hazards[2] = c.getRoom((int)(Math.random()*30) + 1);
 		Hazards[3] = c.getRoom((int)(Math.random()*30) + 1);
-		while (Hazards[x] == Hazards[x-1] && x < Hazards.length) {
+		while (x < Hazards.length && Hazards[x] == Hazards[x-1]) {
 			Hazards[x] = c.getRoom((int)(Math.random()*30) + 1);
 			x++;
 		}
-		}
+	}
 
 	
 	// returns the name of the object
