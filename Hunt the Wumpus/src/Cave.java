@@ -13,6 +13,7 @@
  *             Implemented reading map files, untested
  *             Reorganized class, determined public/private/static
  * 4/02/2019 - Wrote some new tests, updated documentation/some methods
+ * 4/12/2019 - Updated documentation, removed bulky javadoc
  */
 
 import java.util.*;
