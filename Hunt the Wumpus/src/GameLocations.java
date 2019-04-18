@@ -15,52 +15,50 @@ public class GameLocations {
 	private Room wumpus;
 	private Room[] Hazards;
 	private Cave c; 
-	private Room[][] map;
+	private int turns;
+
 	
 	public GameLocations(Cave c) {
 		this.c = c;
-		map = c.fullMap();
+		int x = 1;
+		turns = 0;
 		player = c.getRoom(0);
 		wumpus = c.getRoom((int)(Math.random()*30) + 1);
 		while (wumpus == player) {
 			wumpus = c.getRoom((int)(Math.random()*30) + 1);
+		}
 		Hazards = new Room[4];
 		Hazards[0] = c.getRoom((int)(Math.random()*30) + 1);
 		Hazards[1] = c.getRoom((int)(Math.random()*30) + 1);
 		Hazards[2] = c.getRoom((int)(Math.random()*30) + 1);
 		Hazards[3] = c.getRoom((int)(Math.random()*30) + 1);
+		while (Hazards[x] == Hazards[x-1] && x < Hazards.length) {
+			Hazards[x] = c.getRoom((int)(Math.random()*30) + 1);
+			x++;
 		}
-	}
+		}
+
 	
 	// returns the name of the object
 	public String toString() {
 		return "GameLocations";
 	}
-	
-	public int trackWumpus() {
-		for (int x = 0; x < map.length; x++)
-		{
-			for (int y = 0; y < map[x].length; y++)
-			{
-				if (map[x][y] == wumpus) {
-					return x+y;
-				}
-			}
-		}
-		return 0;
+	public int numberOfTurns() {
+		return turns;
 	}
 	
-	public int trackPlayer() {
-		for (int x = 0; x < map.length; x++)
-		{
-			for (int y = 0; y < map[x].length; y++)
-			{
-				if (map[x][y] == player) {
-					return x+y;
-				}
-			}
-		}
-		return 0;
+	public void movePlayer(Room c)
+	{
+		player = c;
+		turns++;
+		
+	}
+	
+	public Room trackWumpus() {
+		return wumpus;
+	}
+	public Room trackPlayer() {
+		return player;
 	}
 }
 

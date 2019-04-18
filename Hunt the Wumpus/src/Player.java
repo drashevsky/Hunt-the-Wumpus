@@ -11,15 +11,17 @@ public class Player {
 	int arrows;
 	int secrets;
 	int goldCoins;
+	boolean killedWumpus;
 	String name;
 	private GameLocations location;
 	
 	public Player(GameLocations location, String name) {
-		arrows = 0;
+		arrows = 3;
 		secrets = 0;
 		goldCoins = 0;
 		this.location = location;
 		this.name = name;
+		killedWumpus = false;
 	}
 	
 	// Returns string the player
@@ -37,6 +39,13 @@ public class Player {
 	
 	public int getGoldCoins() {
 		return goldCoins;
+	}
+	public int computeScore() {
+		if (killedWumpus == false)
+		{
+			return 100-location.numberOfTurns()+goldCoins+arrows;
+		}
+		return 100-location.numberOfTurns()+goldCoins+arrows+ 50;
 	}
 	
 	public String name() {
