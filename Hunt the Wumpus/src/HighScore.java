@@ -137,13 +137,6 @@ public class HighScore {
 		return highScorePlayers[index];
 	}
 	
-	//Adds the score given as an integer parameter to the highScores array at the appropriate positions.
-	//Returns an boolean representing whether the score is a High Score
-	private boolean addScore(int score, String player) {
-		
-		return false;
-	}
-	
 	//Writes High Score values and Player values. Returns true if successful and false if unsuccessful
 	private boolean writeHighScoreToFile() {
 		highScoresFile.delete();
