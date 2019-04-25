@@ -174,8 +174,6 @@ public class Cave {
  		}
  		return false;
  	}
- 	
-	//Tests all the other methods
 	
  	//Tests all the other methods
  	private void tester() {
@@ -228,10 +226,6 @@ public class Cave {
 			System.out.println();
 		}
 	}
-	
-	//-------------------------------------------------------------------Adjacent Rooms Methods-------------------------------------------------------------------//
-	
-	//Returns an array of the rooms which are adjacent to a select room (restricted to 1 - 30)
 	
 	//-------------------------------------------------------------------Adjacent Rooms Methods-------------------------------------------------------------------//
 	
