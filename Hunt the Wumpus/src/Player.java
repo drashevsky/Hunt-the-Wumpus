@@ -29,13 +29,19 @@ public class Player {
 	{
 		return "Player";
 	}
-	
-	/*
-	public void move() {
-		
-		
+	public void shootArrow(Room x) {
+		arrows--;
+		if (x == location.trackWumpus()) {
+			killedWumpus = true;
+		}
+		/*
+		else {
+			location.moveWumpus();
+		}
+		if 
+		*/
 	}
-	*/
+
 	
 	public int getGoldCoins() {
 		return goldCoins;

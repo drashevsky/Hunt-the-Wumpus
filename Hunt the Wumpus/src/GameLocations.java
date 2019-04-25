@@ -46,6 +46,18 @@ public class GameLocations {
 	public int numberOfTurns() {
 		return turns;
 	}
+	public String nearHazard(Room x) {
+		for(int a = 0; a < x.getConnectedRooms().length; a++)
+		{
+			if (x.getConnectedRooms()[a] == 1) {
+				return "I feel a draft";
+			}
+			else if (x.getConnectedRooms()[a] == 2) {
+				return "Bats Nearby";
+			}
+		}
+		return "none";
+	}
 	
 	public void movePlayer(Room c)
 	{
@@ -53,12 +65,20 @@ public class GameLocations {
 		turns++;
 		
 	}
+	public void moveWumpus(Room y)
+	{
+		int[] possible = y.getConnectedRooms();
+		wumpus = c.getRoom(possible[(int)(Math.random()*3 + 1)]);
+	}
 	
 	public Room trackWumpus() {
 		return wumpus;
 	}
 	public Room trackPlayer() {
 		return player;
+	}
+	public void onBats() {
+			
 	}
 }
 
