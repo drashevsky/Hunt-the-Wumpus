@@ -13,15 +13,17 @@ public class Player {
 	int goldCoins;
 	boolean killedWumpus;
 	String name;
+	Cave c;
 	private GameLocations location;
 	
-	public Player(GameLocations location, String name) {
+	public Player(GameLocations location, String name, Cave C) {
 		arrows = 3;
 		secrets = 0;
 		goldCoins = 0;
 		this.location = location;
 		this.name = name;
 		killedWumpus = false;
+		c = C;
 	}
 	
 	// Returns string the player
@@ -30,17 +32,17 @@ public class Player {
 		return "Player";
 	}
 	public void shootArrow(int x) {
-		arrows--;
+		for(int y = 0; y < location.trackPlayer(); y++) {
+			if (x == c.getRoom(location.trackPlayer()).getConnectedRooms()[y]) {
+				arrows--;
+			}
+		}
 		if (x == location.trackWumpus()) {
 			killedWumpus = true;
 		}
-		
-		/*
 		else {
 			location.moveWumpus();
 		}
-		if 
-		*/
 	}
 
 	
