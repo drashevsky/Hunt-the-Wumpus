@@ -1,3 +1,8 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+
 /**
  * 
  * @author Eric Anderson
@@ -17,7 +22,7 @@
  *		- Declared static instance of GameControl
  *		- Deleted unnecessary methods
  */
-public class GameControl {
+public class GameControl extends JFrame implements ActionListener{
 	public static GameControl gameControl;
 	private Cave cave;
 	private GameLocations gameLocations;
@@ -31,11 +36,22 @@ public class GameControl {
 		gameLocations = new GameLocations(cave);
 		gui = new GraphicalInterface("GUI");
 		highscore = new HighScore();
-		player = new Player(gameLocations, "temp_name");
+		player = new Player(gameLocations, "temp_name", cave);
 		trivia = new Trivia();
+		
 	}
+	
 	public static void main(String[] args) {
 		// Create an instance of GameControl
 		gameControl = new GameControl();
+		gameControl.actionPerformed()
+		while(true) {
+			
+		}
+	}
+	
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }
