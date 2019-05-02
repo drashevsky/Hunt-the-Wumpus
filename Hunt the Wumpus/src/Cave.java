@@ -19,15 +19,17 @@
  * 			   developed 2 randomMap generator algorithms and helper methods 
  * 			   (both still in testing), fixed loadmap to be compatible with 
  *             mapRows/Cols
+ * 5/02/2019 - Updated documentation for randomMap and its helper, rearranged code,
+ * 			   added improveRandomMap
  */
 
 import java.util.*;
 import java.io.*;
 
 public class Cave {
-	private Room[][] caveMap;
-	private String mapFile;
-	private int mapRows, mapCols;
+	private Room[][] caveMap;		//Represents map
+	private String mapFile;			//Name of map file
+	private int mapRows, mapCols;	//Map dimensions
 	
 	public Cave(String mapFile) {
 		this.mapRows = 5;
@@ -53,128 +55,7 @@ public class Cave {
 		return "Cave Object: " + caveMap.length + " x " + caveMap[0].length + ", " + this.mapFile;
 	}
 	
-	//Reads from a map file into caveMap following a specific format: 
-	// * First line contains two ints with 2d array size (e.g. 6 5),
-	// * Followed by each room's properties occupying their own line (e.g. 1 4 5).
-	// * Only property so far is connected rooms, 3 ints ----------------^
-	private void loadMap(String mapFile) {
-		Scanner src;
-		
-		try {
-			src = new Scanner(new File("./input/" + mapFile));						//Read from this map file, or give error message
-		} catch (FileNotFoundException e) {
-			System.out.println("Could not access \"" + mapFile + "\".");
-			return;
-		}
-		
-		caveMap = new Room[src.nextInt()][src.nextInt()];								//First line contains two ints with 2d array size
-		src.nextLine();																	//Force next line
-		
-		for (int i = 1; src.hasNextLine() && i <= caveMap.length * caveMap[0].length; i++) {	//Each room's properties take up one line
-			Room newRoom = new Room(src.nextInt(), src.nextInt(), src.nextInt());				//First 3 ints are connected rooms
-			caveMap[roomRow(i)][roomCol(i)] = newRoom;
-			if (src.hasNextLine())
-				src.nextLine();																//Force next line
-		}
-		
-		this.mapRows = caveMap.length;												//Updates map rows and cols for adjacentRooms
-		this.mapCols = caveMap[0].length;
-		src.close();
-	}
-	
-	//Creates a random map of connected room starting with startRoom (1 - 30)
-	private int[][] randomMap(int startRoom, int numRooms) {
- 		int[][] map = new int[numRooms][3];
- 		int currRoom = startRoom;
- 		int nextRoom;
- 		
- 		ArrayList<Integer> stack = new ArrayList<Integer>();
- 		ArrayList<Integer> usedRooms = new ArrayList<Integer>();
- 		
- 		while (unconnectedRoomsExist(map)) {
- 			int[] adjRooms = this.adjacentRooms(currRoom);
- 			boolean unconnectedAdjacentRooms = false;
- 			
- 			for (int i = 0; i < adjRooms.length; i++) {
- 	 			for (int j = 0; j < usedRooms.size(); j++) {
- 	 				if (adjRooms[i] == usedRooms.get(j))
- 	 					adjRooms[i] = 0;
- 	 			}
- 	 			if (adjRooms[i] != 0)
- 					unconnectedAdjacentRooms = true;
- 	 		}
- 			
- 			if (unconnectedAdjacentRooms) {
- 				while ((nextRoom = adjRooms[(int)(Math.random() * adjRooms.length)]) == 0);
- 				stack.add(nextRoom);
- 				
- 				int cStartIndex, nStartIndex;
-	 			for (cStartIndex = 0; cStartIndex < 3 && map[currRoom - 1][cStartIndex] != 0; cStartIndex++);
-	 			for (nStartIndex = 0; nStartIndex < 3 && map[nextRoom - 1][nStartIndex] != 0; nStartIndex++);
-	 			
- 				map[currRoom - 1][cStartIndex] = nextRoom;
- 				map[nextRoom - 1][nStartIndex] = currRoom;
- 				currRoom = nextRoom;
- 				usedRooms.add(currRoom);
- 			} else if (stack.size() > 0) {
- 				currRoom = stack.remove(stack.size() - 1);
- 			}
- 		}
- 		return map;
- 	}
- 	
- 	private int[][] randomMap2(int startRoom, int numRooms) {
- 		int[][] map = new int[numRooms][3];
 
- 		for (int i = 1; i <= numRooms; i++) {
- 			int[] adjRooms = this.adjacentRooms(i);
- 			
- 			for (int j = 0; j < adjRooms.length; j++) {
- 	 			if (map[adjRooms[j] - 1][0] != 0 && map[adjRooms[j] - 1][1] != 0 && map[adjRooms[j] - 1][2] != 0)
- 	 					adjRooms[j] = 0;
- 	 		}
- 			
- 			int count = 0;
- 			for (int j = 0; j < adjRooms.length; j++) count += adjRooms[j];
- 			System.out.println(count);
- 			
- 			if (map[i - 1][0] == 0 || map[i - 1][1] == 0 || map[i - 1][2] == 0) {
-	 			int startIndex;
-	 			int endIndex = 2;
-	 			for (startIndex = 0; startIndex < 3 && map[i - 1][startIndex] != 0; startIndex++);
-	 			if (startIndex == 0) endIndex = 1;
-	 			
-	 			for (int j = startIndex; j <= endIndex; j++) {
-	 				int randRoom = 0;
-	 				int randRoomIndex = 0;
-	 				
-	 				while (randRoom == 0) {
-	 					randRoomIndex = (int)(Math.random() * adjRooms.length);
-	 					randRoom = adjRooms[randRoomIndex];
-	 				}
-	 				map[i - 1][j] = randRoom;
-	 				
-	 				int startIndexRand;
-		 			for (startIndexRand = 0; startIndexRand < 3 && map[randRoom - 1][startIndexRand] != 0; startIndexRand++);
-	 				map[randRoom - 1][startIndexRand] = i;
-	 				adjRooms[randRoomIndex] = 0;
-	 			}
- 			}
- 		}
- 		return map;
- 	}
-	
- 	private boolean unconnectedRoomsExist(int[][] map) {
- 		for (int i = 0; i < map.length; i++) {
- 			int a = 0;
- 			for (int j = 0; j < map[0].length; j++) {
- 				a += map[i][j];
- 			}
- 			if (a == 0) return true;
- 		}
- 		return false;
- 	}
-	
  	//Tests all the other methods
  	private void tester() {
 		System.out.println("Testing 1D -> 2D index conversion:");
@@ -217,7 +98,7 @@ public class Cave {
 		System.out.println(this); //toString test
 		
 		System.out.println("\nTesting random map:");
-		int[][] newMap = randomMap(1, 30);
+		int[][] newMap = improveRandomMap(randomMap(1, 30), 30);
 		for (int i = 0; i < newMap.length; i++) {
 			System.out.print(i + 1 + ": ");
 			for (int j = 0; j < newMap[0].length; j++) {
@@ -226,6 +107,130 @@ public class Cave {
 			System.out.println();
 		}
 	}
+ 	
+ 	//--------------------------------------------------------------------Map Loading Methods--------------------------------------------------------------------//
+ 	
+	//Reads from a map file into caveMap following a specific format: 
+	// * First line contains two ints with 2d array size (e.g. 6 5),
+	// * Followed by each room's properties occupying their own line (e.g. 1 4 5).
+	// * Only property so far is connected rooms, 3 ints ----------------^
+	private void loadMap(String mapFile) {
+		Scanner src;
+		
+		try {
+			src = new Scanner(new File("./input/" + mapFile));						//Read from this map file, or give error message
+		} catch (FileNotFoundException e) {
+			System.out.println("Could not access \"" + mapFile + "\".");
+			return;
+		}
+		
+		caveMap = new Room[src.nextInt()][src.nextInt()];								//First line contains two ints with 2d array size
+		src.nextLine();																	//Force next line
+		
+		for (int i = 1; src.hasNextLine() && i <= caveMap.length * caveMap[0].length; i++) {	//Each room's properties take up one line
+			Room newRoom = new Room(src.nextInt(), src.nextInt(), src.nextInt());				//First 3 ints are connected rooms
+			caveMap[roomRow(i)][roomCol(i)] = newRoom;
+			if (src.hasNextLine())
+				src.nextLine();																//Force next line
+		}
+		
+		this.mapRows = caveMap.length;												//Updates map rows and cols for adjacentRooms
+		this.mapCols = caveMap[0].length;
+		src.close();
+	}
+	
+	//Creates a random map of connected rooms starting with startRoom (1 - 30)
+	private int[][] randomMap(int startRoom, int numRooms) {
+ 		int[][] map = new int[numRooms][3];										//Create empty array of connected rooms
+ 		int currRoom = startRoom;												//Current location
+ 		int nextRoom;															//Next unvisited adjacent room to be connected to map
+ 		
+ 		ArrayList<Integer> stack = new ArrayList<Integer>();					//Keeps track of current path algorithm is on
+ 		ArrayList<Integer> usedRooms = new ArrayList<Integer>();				//Keeps track of all visited rooms
+ 		
+ 		//Algorithm used to generate maze is recursive backtracking: going
+ 		//down one path until dead end, then backtracking to find another
+ 		
+ 		while (unconnectedRoomsExist(map)) {
+ 			int[] adjRooms = this.adjacentRooms(currRoom);		//Find adjacent rooms to current room
+ 			boolean unconnectedAdjacentRooms = false;			//Do any unvisited adjacent rooms exist?
+ 			
+ 			for (int i = 0; i < adjRooms.length; i++) {			//Loop through adjacent rooms, check if visited, set visited rooms to 0
+ 	 			for (int j = 0; j < usedRooms.size(); j++) {
+ 	 				if (adjRooms[i] == usedRooms.get(j))
+ 	 					adjRooms[i] = 0;
+ 	 			}
+ 	 			if (adjRooms[i] != 0)							//At least one unvisited adjacent room exists
+ 					unconnectedAdjacentRooms = true;
+ 	 		}
+ 			
+ 			if (unconnectedAdjacentRooms) {																			//Does at least one unvisited adjacent room exist?
+ 				while ((nextRoom = adjRooms[(int)(Math.random() * adjRooms.length)]) == 0);							//Randomly pick an unvisited adjacent room, add to stack
+ 				stack.add(nextRoom);
+ 				
+ 				int cStartIndex, nStartIndex;																		//Find first empty index in current room and unvisited adjacent room
+	 			for (cStartIndex = 0; cStartIndex < 3 && map[currRoom - 1][cStartIndex] != 0; cStartIndex++);
+	 			for (nStartIndex = 0; nStartIndex < 3 && map[nextRoom - 1][nStartIndex] != 0; nStartIndex++);
+	 			
+ 				map[currRoom - 1][cStartIndex] = nextRoom;		//Connect the current room to the adjacent room
+ 				map[nextRoom - 1][nStartIndex] = currRoom;		//Connect the adjacent room to the current room
+ 				currRoom = nextRoom;							//Move to next room, marked current room as used
+ 				usedRooms.add(currRoom);
+ 			} else if (stack.size() > 0) {																			//If reached a dead end, backtrack
+ 				currRoom = stack.remove(stack.size() - 1);
+ 			}
+ 		}
+ 		
+ 		return map;
+ 	}
+	
+	private int[][] improveRandomMap(int[][] map, int numRooms) {
+		for (int i = 1; i <= numRooms; i++) {
+			if (!(roomRow(i) == 0 || roomRow(i) == this.mapRows || roomCol(i) == 0 || roomCol(i) == this.mapCols) && Math.random() <= 0.55) {
+				int[] adjRooms = this.adjacentRooms(i);
+				
+				for (int j = 0; j < adjRooms.length; j++) {
+		 			if (map[adjRooms[j] - 1][0] != 0 && map[adjRooms[j] - 1][1] != 0 && map[adjRooms[j] - 1][2] != 0)
+		 					adjRooms[j] = 0;
+		 		}
+				
+				if (map[i - 1][0] == 0 || map[i - 1][1] == 0 || map[i - 1][2] == 0) {
+		 			int index;
+		 			for (index = 0; index < 3 && map[i - 1][index] != 0; index++);
+		 			
+		 			int randRoom = 0;
+		 			int randRoomIndex = 0;
+		 				
+		 			while (randRoom == 0) {
+		 				randRoomIndex = (int)(Math.random() * adjRooms.length);
+		 				randRoom = adjRooms[randRoomIndex];
+		 			}
+		 			
+		 			
+		 			int indexRand;
+			 		for (indexRand = 0; indexRand < 3 && map[randRoom - 1][indexRand] != 0; indexRand++);
+			 		
+			 		map[i - 1][index] = randRoom;
+			 		map[randRoom - 1][indexRand] = i;
+				}
+			}
+		}
+		
+		return map;
+	}
+	
+ 	//Helper method for random map: Checks an array storing pointers of a room to 
+ 	//its connected room for whether any one room is completely disconnected
+ 	private boolean unconnectedRoomsExist(int[][] map) {
+ 		for (int i = 0; i < map.length; i++) {				//For each row (representing a single room)
+ 			int a = 0;
+ 			for (int j = 0; j < map[0].length; j++) {		//Add the numbers of the rooms connected to the current room together
+ 				a += map[i][j];
+ 			}
+ 			if (a == 0) return true;						//Return true if all connected rooms set to 0 (completely disconnected)
+ 		}
+ 		return false;										//Return false if connected rooms exist
+ 	}
 	
 	//-------------------------------------------------------------------Adjacent Rooms Methods-------------------------------------------------------------------//
 	
