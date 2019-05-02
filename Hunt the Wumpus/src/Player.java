@@ -29,11 +29,12 @@ public class Player {
 	{
 		return "Player";
 	}
-	public void shootArrow(Room x) {
+	public void shootArrow(int x) {
 		arrows--;
 		if (x == location.trackWumpus()) {
 			killedWumpus = true;
 		}
+		
 		/*
 		else {
 			location.moveWumpus();

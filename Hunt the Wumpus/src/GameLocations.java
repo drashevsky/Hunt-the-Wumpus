@@ -11,9 +11,9 @@
  */
 
 public class GameLocations {
-	private Room player;
-	private Room wumpus;
-	private Room[] Hazards;
+	private int player;
+	private int wumpus;
+	private int[] Hazards;
 	private Cave c; 
 	private int turns;
 
@@ -22,18 +22,18 @@ public class GameLocations {
 		this.c = c;
 		int x = 1;
 		turns = 0;
-		player = c.getRoom(1);
-		wumpus = c.getRoom((int)(Math.random()*30) + 1);
+		player = 1;
+		wumpus = (int)(Math.random()*30) + 1;
 		while (wumpus == player) {
-			wumpus = c.getRoom((int)(Math.random()*30) + 1);
+			wumpus = (int)(Math.random()*30) + 1;
 		}
-		Hazards = new Room[4];
-		Hazards[0] = c.getRoom((int)(Math.random()*30) + 1);
-		Hazards[1] = c.getRoom((int)(Math.random()*30) + 1);
-		Hazards[2] = c.getRoom((int)(Math.random()*30) + 1);
-		Hazards[3] = c.getRoom((int)(Math.random()*30) + 1);
+		Hazards = new int[4];
+		Hazards[0] = (int)(Math.random()*30) + 1;
+		Hazards[1] = (int)(Math.random()*30) + 1;
+		Hazards[2] = (int)(Math.random()*30) + 1;
+		Hazards[3] = (int)(Math.random()*30) + 1;
 		while (x < Hazards.length && Hazards[x] == Hazards[x-1]) {
-			Hazards[x] = c.getRoom((int)(Math.random()*30) + 1);
+			Hazards[x] = (int)(Math.random()*30) + 1;
 			x++;
 		}
 	}
@@ -55,30 +55,48 @@ public class GameLocations {
 			else if (x.getConnectedRooms()[a] == 2) {
 				return "Bats Nearby";
 			}
+			else if(x.getConnectedRooms()[a] == wumpus) {
+				return "I smell a Wumpus!";
+			}
 		}
 		return "none";
 	}
-	
-	public void movePlayer(Room c)
-	{
-		player = c;
-		turns++;
-		
+	public void handleHazard(String s) {
+		if (player == Hazards[0]) {
+			player = (int)(Math.random()*30) + 1;
+			Hazards[0] = (int)(Math.random()*30) + 1;
+			while (Hazards[0] == player) {
+				Hazards[0] = (int)(Math.random()*30) + 1;
+			}
+		}
+		if (player == Hazards[2] || player == Hazards[3]) {
+			//
+		}
 	}
-	public void moveWumpus(Room y)
+	
+	public void movePlayer(int d)
 	{
-		int[] possible = y.getConnectedRooms();
-		wumpus = c.getRoom(possible[(int)(Math.random()*3 + 1)]);
+		int[] possible = c.getRoom(player).getConnectedRooms();
+		for(int x = 0; x < possible.length; x++) {
+			if (d == possible[x]) {
+				player = d;
+				turns++;
+				break;
+			}
+		}
 	}
 	
-	public Room trackWumpus() {
+	public void moveWumpus()
+	{
+		int[] possible = c.adjacentRooms(wumpus);
+		wumpus = possible[(int)(Math.random()*3 + 1)];
+	}
+	
+	public int trackWumpus() {
 		return wumpus;
 	}
-	public Room trackPlayer() {
+	public int trackPlayer() {
 		return player;
-	}
-	public void onBats() {
-			
 	}
 }
 
