@@ -19,7 +19,7 @@
  * 			   developed 2 randomMap generator algorithms and helper methods 
  * 			   (both still in testing), fixed loadmap to be compatible with 
  *             mapRows/Cols
- * 5/02/2019 - Updated documentation for randomMap and its helper, rearranged code,
+ * 5/01/2019 - Updated documentation for randomMap and its helper, rearranged code,
  * 			   added improveRandomMap
  */
 
