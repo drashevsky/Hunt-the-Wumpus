@@ -8,6 +8,7 @@
  * 3/27/2019 - Testing bitbucket -> discord functionality (just this line)
  * 4/17/2019 - Added a hazard property
  * 4/24/2019 - Updated getters and setters for hazards
+ * 5/20/2019 - Added toString
  */
 
 //NOTE: For connected rooms, the int can be either 0 or 1 - 30: if 0, that pathway isn't used 
@@ -37,5 +38,18 @@ public class Room {
 	//Returns the type of hazard the room has, or 0 if none
 	public int getHazard() {
 		return hazardType;
+	}
+	
+	//Returns a text summary of the room's properties
+	public String toString() {
+		String hazard;
+		if (hazardType == 0) {
+			hazard = "None";
+		} else if (hazardType == 1) {
+			hazard = "Pit";
+		} else {
+			hazard = "Bat";
+		}
+		return "Connected to rooms " + connectedRooms[0] + ", " + connectedRooms[1] + ", " + connectedRooms[2] + ". Hazard: " + hazard;
 	}
 }
