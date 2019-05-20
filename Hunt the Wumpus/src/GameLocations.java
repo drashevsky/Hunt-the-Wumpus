@@ -8,6 +8,7 @@
  * 3/12/2019 - Added dummy methods 
  * 3/19/2019 - Wrote 2 methods that return both the player and the wumpus positions, based on dummy positions when intialized. 
  * 4/03/2019 - [DANIEL] Fixed bugs & formatting per Shrey's request
+ * 5/20/2019 - [DANIEL] Added a way for GameControl to set where player starts
  */
 
 public class GameLocations {
@@ -18,11 +19,11 @@ public class GameLocations {
 	private int turns;
 
 	
-	public GameLocations(Cave c) {
+	public GameLocations(Cave c, int playerLocation) {
 		this.c = c;
 		int x = 1;
 		turns = 0;
-		player = 1;
+		player = playerLocation;
 		wumpus = (int)(Math.random()*30) + 1;
 		while (wumpus == player) {
 			wumpus = (int)(Math.random()*30) + 1;
