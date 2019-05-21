@@ -32,8 +32,8 @@ public class GameLocations {
 		Hazards[1] = (int)(Math.random()*30) + 1;
 		Hazards[2] = (int)(Math.random()*30) + 1;
 		Hazards[3] = (int)(Math.random()*30) + 1;
-		while (x < Hazards.length && Hazards[x] == Hazards[x-1]) {
-			Hazards[x] = (int)(Math.random()*30) + 1;
+		while (x < Hazards.length && Hazards[x] == Hazards[x-1]) { //Shreyo you need to fix this it doesn't check if [3] and [1] are the
+			Hazards[x] = (int)(Math.random()*30) + 1;			   //same
 			x++;
 		}
 	}
