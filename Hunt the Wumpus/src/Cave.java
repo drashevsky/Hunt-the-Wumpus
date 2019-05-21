@@ -50,6 +50,11 @@ public class Cave {
 		return caveMap[roomRow(room)][roomCol(room)];
 	}
 	
+	//Sets a room's hazard type on the map, (0 = nothing, 1 = pit, 2 = bat
+	public void setRoomHazard(int room, int hazardType) {
+		caveMap[roomRow(room)][roomCol(room)].setHazard(hazardType);
+	}
+	
 	//Returns a string containing information about the Cave object
 	public String toString() {
 		return "Cave Object: " + caveMap.length + " x " + caveMap[0].length + ", " + this.mapFile;
@@ -185,13 +190,26 @@ public class Cave {
  	}
 	
 	private int[][] improveRandomMap(int[][] map, int numRooms) {
+		//Loop through all rooms in map
 		for (int i = 1; i <= numRooms; i++) {
+			
+			//If the room is not on an edge of the map and the room is randomly selected
 			if (!(roomRow(i) == 0 || roomRow(i) == this.mapRows || roomCol(i) == 0 || roomCol(i) == this.mapCols) && Math.random() <= 0.55) {
-				int[] adjRooms = this.adjacentRooms(i);
 				
+				int[] adjRooms = this.adjacentRooms(i);			//Get adjacent rooms
+				
+				//Loop through adjacent rooms, make they can be connected to current room
 				for (int j = 0; j < adjRooms.length; j++) {
+					
+					//Is the adjacent room already connected to 3 others?
 		 			if (map[adjRooms[j] - 1][0] != 0 && map[adjRooms[j] - 1][1] != 0 && map[adjRooms[j] - 1][2] != 0)
 		 					adjRooms[j] = 0;
+		 			
+		 			//Is adjacent room already connected to the current room?
+		 			if (map[adjRooms[j] - 1][0] == adjRooms[j] ||
+		 				map[adjRooms[j] - 1][1] == adjRooms[j] ||
+		 				map[adjRooms[j] - 1][2] == adjRooms[j])
+		 					adjRooms[0] = 0;
 		 		}
 				
 				if (map[i - 1][0] == 0 || map[i - 1][1] == 0 || map[i - 1][2] == 0) {
