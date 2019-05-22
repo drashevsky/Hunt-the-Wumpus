@@ -194,9 +194,10 @@ public class Cave {
 		for (int i = 1; i <= numRooms; i++) {
 			
 			//If the room is not on an edge of the map and the room is randomly selected
-			if (!(roomRow(i) == 0 || roomRow(i) == this.mapRows || roomCol(i) == 0 || roomCol(i) == this.mapCols) && Math.random() <= 0.70) {
+			if (!(roomRow(i) == 0 || roomRow(i) == this.mapRows || roomCol(i) == 0 || roomCol(i) == this.mapCols) && Math.random() <= 0.80) {
 				
 				int[] adjRooms = this.adjacentRooms(i);			//Get adjacent rooms
+				int adjRoomsAvailable = 0;						//If this value is not 0 after loop, there are available adjacent rooms
 				
 				//Loop through adjacent rooms, make they can be connected to current room
 				for (int j = 0; j < adjRooms.length; j++) {
@@ -210,11 +211,14 @@ public class Cave {
 		 				adjRooms[j] == map[i - 1][1] ||
 		 				adjRooms[j] == map[i - 1][2])
 		 					adjRooms[j] = 0;
+		 			
+		 			//Update room availability
+		 			adjRoomsAvailable += adjRooms[j];
 		 		}
 				
 				//If there is any space left in the current room,
-				//doesn't check if all adjacent rooms are taken
-				if (map[i - 1][0] == 0 || map[i - 1][1] == 0 || map[i - 1][2] == 0) {
+				//and there are available adjacent rooms
+				if (adjRoomsAvailable != 0 && (map[i - 1][0] == 0 || map[i - 1][1] == 0 || map[i - 1][2] == 0)) {
 		 			int index;															//Find first free index in current room
 		 			for (index = 0; index < 3 && map[i - 1][index] != 0; index++);
 		 			
