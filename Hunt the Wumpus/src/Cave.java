@@ -33,9 +33,10 @@ public class Cave {
 	private int mapRows, mapCols;	//Map dimensions
 	
 	public Cave(String mapFile) {
-		this.mapRows = 5;
+		this.mapRows = 5;			//Defaults
 		this.mapCols = 6;
 		
+		//Either reads from a map file or generates a map
 		this.mapFile = mapFile;
 		if (mapFile.equals("")) {
 			loadMap();
