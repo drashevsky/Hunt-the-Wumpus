@@ -21,6 +21,7 @@
  *             mapRows/Cols
  * 5/01/2019 - Updated documentation for randomMap and its helper, rearranged code,
  * 			   added improveRandomMap
+ * 5/22/2019 - Improve/document improveRandomMap
  */
 
 import java.util.*;
@@ -60,7 +61,6 @@ public class Cave {
 		return "Cave Object: " + caveMap.length + " x " + caveMap[0].length + ", " + this.mapFile;
 	}
 	
-
  	//Tests all the other methods
  	private void tester() {
 		System.out.println("Testing 1D -> 2D index conversion:");
@@ -194,7 +194,7 @@ public class Cave {
 		for (int i = 1; i <= numRooms; i++) {
 			
 			//If the room is not on an edge of the map and the room is randomly selected
-			if (!(roomRow(i) == 0 || roomRow(i) == this.mapRows || roomCol(i) == 0 || roomCol(i) == this.mapCols) && Math.random() <= 0.55) {
+			if (!(roomRow(i) == 0 || roomRow(i) == this.mapRows || roomCol(i) == 0 || roomCol(i) == this.mapCols) && Math.random() <= 0.70) {
 				
 				int[] adjRooms = this.adjacentRooms(i);			//Get adjacent rooms
 				
@@ -206,30 +206,32 @@ public class Cave {
 		 					adjRooms[j] = 0;
 		 			
 		 			//Is adjacent room already connected to the current room?
-		 			if (map[adjRooms[j] - 1][0] == adjRooms[j] ||
-		 				map[adjRooms[j] - 1][1] == adjRooms[j] ||
-		 				map[adjRooms[j] - 1][2] == adjRooms[j])
-		 					adjRooms[0] = 0;
+		 			if (adjRooms[j] == map[i - 1][0] ||
+		 				adjRooms[j] == map[i - 1][1] ||
+		 				adjRooms[j] == map[i - 1][2])
+		 					adjRooms[j] = 0;
 		 		}
 				
+				//If there is any space left in the current room,
+				//doesn't check if all adjacent rooms are taken
 				if (map[i - 1][0] == 0 || map[i - 1][1] == 0 || map[i - 1][2] == 0) {
-		 			int index;
+		 			int index;															//Find first free index in current room
 		 			for (index = 0; index < 3 && map[i - 1][index] != 0; index++);
 		 			
 		 			int randRoom = 0;
 		 			int randRoomIndex = 0;
 		 				
-		 			while (randRoom == 0) {
+		 			while (randRoom == 0) {												//Get a random available adjacent room
 		 				randRoomIndex = (int)(Math.random() * adjRooms.length);
 		 				randRoom = adjRooms[randRoomIndex];
 		 			}
 		 			
-		 			
-		 			int indexRand;
-			 		for (indexRand = 0; indexRand < 3 && map[randRoom - 1][indexRand] != 0; indexRand++);
+		 			int adjRoomIndex;													//Find first free index in adjacent room							
+			 		for (adjRoomIndex = 0; adjRoomIndex < 3 && map[randRoom - 1][adjRoomIndex] != 0; adjRoomIndex++);
 			 		
+			 		//Connect current room to adjacent room
 			 		map[i - 1][index] = randRoom;
-			 		map[randRoom - 1][indexRand] = i;
+			 		map[randRoom - 1][adjRoomIndex] = i;
 				}
 			}
 		}
