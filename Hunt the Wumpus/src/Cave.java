@@ -37,7 +37,11 @@ public class Cave {
 		this.mapCols = 6;
 		
 		this.mapFile = mapFile;
-		loadMap(mapFile);
+		if (mapFile.equals("")) {
+			loadMap();
+		} else {
+			loadMap(mapFile);
+		}
 		tester();
 	}
 	
@@ -142,6 +146,20 @@ public class Cave {
 		this.mapRows = caveMap.length;												//Updates map rows and cols for adjacentRooms
 		this.mapCols = caveMap[0].length;
 		src.close();
+	}
+	
+	//Generates a random map if no map file is specified
+	private void loadMap() {
+		int numRooms = this.mapRows * this.mapCols;	
+		int[][] newMap = improveRandomMap(randomMap(1, numRooms), numRooms);				//Generates a random set of connected rooms
+		
+		caveMap = new Room[this.mapRows][this.mapCols];										//Creates a cave map of the default size
+		
+		//Each room's properties take up one line in the set
+		for (int i = 1; i <= numRooms; i++) {
+			Room newRoom = new Room(newMap[i - 1][0], newMap[i - 1][1], newMap[i - 1][2]);	//3 ints for 3 connected rooms
+			caveMap[roomRow(i)][roomCol(i)] = newRoom;
+		}
 	}
 	
 	//Creates a random map of connected rooms starting with startRoom (1 - 30)
