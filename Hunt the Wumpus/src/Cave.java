@@ -43,7 +43,7 @@ public class Cave {
 		} else {
 			loadMap(mapFile);
 		}
-		tester();
+		//tester();
 	}
 	
 	//Returns entire map of cave
