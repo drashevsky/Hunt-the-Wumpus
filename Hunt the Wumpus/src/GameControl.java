@@ -1,5 +1,6 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Scanner;
 
 import javax.swing.JFrame;
 
@@ -33,6 +34,7 @@ public class GameControl{
 	private TextUI textUI;
 	private boolean GUIMODE = false;
 	private Room currentRoom;
+	private Scanner scan;
 
 	public GameControl() {
 		
@@ -44,12 +46,17 @@ public class GameControl{
 		player = new Player(gameLocations, "temp_name", cave);
 		trivia = new Trivia();
 		textUI = new TextUI(5);
+		scan = new Scanner(System.in);
 	}
 	
 	public static void main(String[] args) {
 		// Create an instance of GameControl
 		gameControl = new GameControl();
 		gameControl.start();
+	}
+	
+	public Scanner getScanner() {
+		return scan;
 	}
 	
 	public GameLocations getGameLocations() {
@@ -77,7 +84,66 @@ public class GameControl{
 			textUI.showRoom(currentRoom, surroundingRooms);
 		}
 	}
-	public void takeAction(int input) {
-		
+	public void takeAction(String input, Room playerRoom) {
+		if(input.equals("1")) {
+			System.out.println("Which room would you like to move to?");
+			// Print out room numbers:
+			for(int x = 0; x < playerRoom.getConnectedRooms().length; x++) {
+				if(playerRoom.getConnectedRooms()[x] != 0) {
+					System.out.print("[" + playerRoom.getConnectedRooms()[x] + "] ");
+				}
+				System.out.println();
+			}
+			// Check to see if room number is valid first before moving player
+			// Change to a while loop
+			boolean validRoomNumber = false;
+			int x;
+			while(!validRoomNumber) {
+				x = 0;
+				input = scan.nextLine();
+				while(x < playerRoom.getConnectedRooms().length && !validRoomNumber){
+					if(input.equals("" + playerRoom.getConnectedRooms()[x]) && !input.equals("0")) {
+						validRoomNumber = true;
+					}
+					x++;
+				}
+				if(!validRoomNumber) {
+					System.out.println("Invalid room number, type in another room: ");
+				}
+			}
+			getGameLocations().movePlayer(Integer.parseInt(input));
+			
+			System.out.println("The wumpus moves...");
+			System.out.println("The wumpus is in room: " + gameControl.getGameLocations().trackWumpus());
+			//gameControl.getGameLocations().moveWumpus();
+		} else if(input.equals("2")) {
+			System.out.println("Which room would you like to shoot an arrow in?");
+			// Print out room numbers:
+			for(int x = 0; x < playerRoom.getConnectedRooms().length; x++) {
+				if(playerRoom.getConnectedRooms()[x] != 0) {
+					System.out.print("[" + playerRoom.getConnectedRooms()[x] + "] ");
+				}
+				System.out.println();
+			}
+			
+			// Check to see if room number is valid first before moving player
+			// Change to a while loop
+			boolean validRoomNumber = false;
+			int x;
+			while(!validRoomNumber) {
+				x = 0;
+				input = scan.nextLine();
+				while(x < playerRoom.getConnectedRooms().length && !validRoomNumber){
+					if(input.equals("" + playerRoom.getConnectedRooms()[x]) && !input.equals("0")) {
+						validRoomNumber = true;
+					}
+					x++;
+				}
+				if(!validRoomNumber) {
+					System.out.println("Invalid room number, type in another room: ");
+				}
+			}
+			player.shootArrow(Integer.parseInt(input));
+		}
 	}
 }
