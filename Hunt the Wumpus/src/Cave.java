@@ -24,6 +24,16 @@
  * 5/22/2019 - Improve/document improveRandomMap
  */
 
+/* Methods:
+ * 
+ * Cave(String mapFile) - reads in mapFile or generates random map if empty string ""
+ * Room[][] fullMap() - returns full cave map
+ * Room getRoom(int room) - returns a room object
+ * void setRoomHazard() - sets room hazard type on map
+ * String toString() - info about cave object
+ * public int[] adjacentRooms(int room) - returns array of all rooms surrounding a room
+ */
+
 import java.util.*;
 import java.io.*;
 
