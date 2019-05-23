@@ -3,7 +3,6 @@ import java.util.Scanner;
 public class TextUI {
 	private int width;
 	private int length;
-	
 	private final int scale;
 	
 	public TextUI(int scale) {
@@ -13,9 +12,8 @@ public class TextUI {
 	}
 	
 	public void runEvents(GameControl gameControl) {
-		Scanner scan = new Scanner(System.in);
 		System.out.println("Type 'x' to start a new game.");
-		String input = scan.nextLine();
+		String input = gameControl.getScanner().nextLine();
 		if (input.equals("x"))
 		{
 			GameControl.gameControl.newGameButtonClicked();
@@ -27,6 +25,11 @@ public class TextUI {
 			Room playerRoom = gameControl.getCave().getRoom(playerRoomValue);
 			String nearHazardCheck = gameControl.getGameLocations().nearHazard(playerRoom);
 			System.out.println(nearHazardCheck);
+			
+			//Players turn
+			System.out.println("What action would you like to take?");
+			System.out.println("[1] Move [2] Shoot an arrow \n[3] Purchase arrows [4] Purchase secrets");
+			gameControl.takeAction(gameControl.getScanner().nextLine(), playerRoom);
 		}
 	}
 	
@@ -36,7 +39,6 @@ public class TextUI {
 	}
 	
 	public void showMainMenu() {
-		
 		System.out.println("Printing a text menu: ");
 		for(int x = 0; x < length; x++) {
 			for(int y = 0; y < width; y++) {
