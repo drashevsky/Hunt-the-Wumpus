@@ -32,13 +32,10 @@ public class Player {
 		return "Player";
 	}
 	public void shootArrow(int x) {
-		for(int y = 0; y < location.trackPlayer(); y++) {
-			if (x == c.getRoom(location.trackPlayer()).getConnectedRooms()[y]) {
-				arrows--;
-			}
-		}
+		arrows--;
 		if (x == location.trackWumpus()) {
 			killedWumpus = true;
+			System.out.println("Killed Wumpus");
 		}
 		else {
 			location.moveWumpus();
