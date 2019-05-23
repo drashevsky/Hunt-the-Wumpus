@@ -85,9 +85,16 @@ public class GameLocations {
 			while (Hazards[0] == player) {
 				Hazards[0] = (int)(Math.random()*30) + 1;
 			}
+		if (player == Hazards[1]) {
+				player = (int)(Math.random()*30) + 1;
+				Hazards[1] = (int)(Math.random()*30) + 1;
+				while (Hazards[1] == player) {
+					Hazards[1] = (int)(Math.random()*30) + 1;
+		}
 		}
 		if (player == Hazards[2] || player == Hazards[3]) {
-			//
+			
+		}
 		}
 	}
 	
@@ -101,6 +108,14 @@ public class GameLocations {
 				break;
 			}
 		}
+	}
+	
+	public void startTrivia() {
+		//
+	}
+	
+	public void endTrivia(boolean result) {
+		//
 	}
 	
 	public void moveWumpus()
