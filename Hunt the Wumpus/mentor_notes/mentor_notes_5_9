@@ -1,0 +1,6 @@
+Cave:
+- Thanks for the documentation on randomMap. Need documentation for improvedRandomMap.
+- Looking at some of your methods it might have been easier if you numbered the rooms 0-29 and used -1 as an invalid room. Just an observation.
+- How do you know if improvedRandomMap is producing valid maps? Maybe if you could draw the map to visualize? Or maybe add a validMap() function to check if a map is valid?
+
+Player: Single letter variable 'c' ...

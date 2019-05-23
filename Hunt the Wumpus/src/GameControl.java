@@ -22,7 +22,7 @@ import javax.swing.JFrame;
  *		- Declared static instance of GameControl
  *		- Deleted unnecessary methods
  */
-public class GameControl extends JFrame implements ActionListener{
+public class GameControl{
 	public static GameControl gameControl;
 	private Cave cave;
 	private GameLocations gameLocations;
@@ -30,28 +30,54 @@ public class GameControl extends JFrame implements ActionListener{
 	private HighScore highscore;
 	private Player player;
 	private Trivia trivia;
+	private TextUI textUI;
+	private boolean GUIMODE = false;
+	private Room currentRoom;
 
 	public GameControl() {
-		cave = new Cave("map.txt");
-		gameLocations = new GameLocations(cave);
+		
+		int randRoom = 4;//(int)(Math.random()*30);
+		cave = new Cave("map2.txt");
+		gameLocations = new GameLocations(cave, randRoom);
 		gui = new GraphicalInterface("GUI");
 		highscore = new HighScore();
 		player = new Player(gameLocations, "temp_name", cave);
 		trivia = new Trivia();
-		
+		textUI = new TextUI(5);
 	}
 	
 	public static void main(String[] args) {
 		// Create an instance of GameControl
 		gameControl = new GameControl();
-		gameControl.actionPerformed()
-		while(true) {
-			
-		}
+		gameControl.start();
 	}
 	
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+	public GameLocations getGameLocations() {
+		return gameLocations;
+	}
+	
+	public Cave getCave() {
+		return cave;
+	}
+	
+	public void start()
+	{
+		textUI.showMainMenu();
+		textUI.runEvents(gameControl);
+	}
+	public void newGameButtonClicked() {
+		// Reset the cave
+		// Reset game locations...
+		int currentRoom = gameLocations.trackPlayer();
+		Room surroundingRooms = cave.getRoom(currentRoom);
+		
+		if (GUIMODE){
+			//gui.showRoom(firstRoom);
+		} else {
+			textUI.showRoom(currentRoom, surroundingRooms);
+		}
+	}
+	public void takeAction(int input) {
 		
 	}
 }
