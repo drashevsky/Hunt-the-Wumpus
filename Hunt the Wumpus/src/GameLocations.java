@@ -15,30 +15,32 @@
 
 public class GameLocations {
 	private int player;
-	private int wumpus;
 	private int[] Hazards;
 	private Cave c; 
 	private int turns;
+	private int start;
+	private Wumpus wumpus;
 
 	
 	public GameLocations(Cave c, int playerLocation) {
 		this.c = c;
-		int x = 1;
 		turns = 0;
+		wumpus = new Wumpus(c, this);
 		player = playerLocation;
-		wumpus = (int)(Math.random()*30) + 1;
-		while (wumpus == player) {
-			wumpus = (int)(Math.random()*30) + 1;
-		}
+		start = playerLocation;
 		Hazards = new int[4];
-		Hazards[0] = 1;//(int)(Math.random()*30) + 1;
-		Hazards[1] = 2;//(int)(Math.random()*30) + 1;
-		Hazards[2] = 3;//(int)(Math.random()*30) + 1;
-		Hazards[3] = 4;//(int)(Math.random()*30) + 1;
-		/*while (x < Hazards.length && Hazards[x] == Hazards[x-1]) { //Shreyo you need to fix this it doesn't check if [3] and [1] are the
-			Hazards[x] = (int)(Math.random()*30) + 1;			   //same
-			x++;
-		}*/
+		Hazards[0] = (int)(Math.random()*30) + 1;
+		Hazards[1] = (int)(Math.random()*30) + 1;
+		Hazards[2] = (int)(Math.random()*30) + 1;
+		Hazards[3] = (int)(Math.random()*30) + 1;
+		for (int x = 0; x < Hazards.length; x++) {
+			for (int y = 0; y < Hazards.length; y++)
+			{
+				if (Hazards[x] == Hazards[y]) {
+					Hazards[x] = (int)(Math.random()*30) + 1;
+				}
+			}
+		}
 		setHazardTypes(c);
 	}
 
@@ -70,7 +72,7 @@ public class GameLocations {
 				else if (c.getRoom(currConnRoom).getHazard() == 2) {
 					return "Bats Nearby";
 				}
-				else if (currConnRoom == wumpus) {
+				else if (currConnRoom == wumpus.track()) {
 					return "I smell a Wumpus!";
 				}
 			}
@@ -78,24 +80,22 @@ public class GameLocations {
 		return "none";
 	}
 	
-	public void handleHazard(String s) {
-		if (player == Hazards[0]) {
-			player = (int)(Math.random()*30) + 1;
-			Hazards[0] = (int)(Math.random()*30) + 1;
-			while (Hazards[0] == player) {
-				Hazards[0] = (int)(Math.random()*30) + 1;
+	public void handleHazard() {
+		// Handle situation with pit
+		if (c.getRoom(trackPlayer()).getHazard() == 1) {
+			startTrivia();
+			player = start;
+		}
+		// Handle situation with bats
+		else if (c.getRoom(trackPlayer()).getHazard() == 2) {
+			for (int x = 0; x < Hazards.length; x++) {
+				while (Hazards[x] == trackPlayer()) {
+					Hazards[x] = (int)(Math.random()*30) + 1;
+					player = (int)(Math.random()*30) + 1;
+				}
 			}
-		if (player == Hazards[1]) {
-				player = (int)(Math.random()*30) + 1;
-				Hazards[1] = (int)(Math.random()*30) + 1;
-				while (Hazards[1] == player) {
-					Hazards[1] = (int)(Math.random()*30) + 1;
 		}
-		}
-		if (player == Hazards[2] || player == Hazards[3]) {
-			
-		}
-		}
+		
 	}
 	
 	public void movePlayer(int d)
@@ -118,15 +118,6 @@ public class GameLocations {
 		//
 	}
 	
-	public void moveWumpus()
-	{
-		int[] possible = c.adjacentRooms(wumpus);
-		wumpus = possible[(int)(Math.random()*3 + 1)];
-	}
-	
-	public int trackWumpus() {
-		return wumpus;
-	}
 	
 	public int trackPlayer() {
 		return player;
