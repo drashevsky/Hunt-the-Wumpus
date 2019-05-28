@@ -20,17 +20,28 @@ public class TextUI {
 		}
 		while(true) {
 			//First check hazards
-			System.out.println("Checking for hazards: ");
+			System.out.print("Checking for hazards: ");
 			int playerRoomValue = gameControl.getGameLocations().trackPlayer();
 			Room playerRoom = gameControl.getCave().getRoom(playerRoomValue);
 			String nearHazardCheck = gameControl.getGameLocations().nearHazard(playerRoom);
 			System.out.println(nearHazardCheck);
 			int currentRoom = gameControl.getGameLocations().trackPlayer();
+			System.out.println("Hazards are in rooms: \n" + gameControl.getGameLocations().toString());
 			if(gameControl.getCave().getRoom(currentRoom).getHazard() != 0) {
+				System.out.println("---[Handling hazards]---");
 				gameControl.getGameLocations().handleHazard();
+			}
+			if(currentRoom == gameControl.getGameLocations().trackWumpus()) {
+				boolean triviaPass = gameControl.getTrivia().startTrivia(3, 5);
+				if(triviaPass) {
+					gameControl.getWumpus().endTrivia();
+				} else {
+					System.out.println("You've died. Game over.");
+				}
 			}
 			
 			//Players turn
+			showRoom(playerRoomValue, playerRoom);
 			System.out.println("What action would you like to take?");
 			System.out.println("[1] Move [2] Shoot an arrow \n[3] Purchase arrows [4] Purchase secrets");
 			gameControl.takeAction(gameControl.getScanner().nextLine(), playerRoom);
@@ -38,8 +49,10 @@ public class TextUI {
 	}
 	
 	public void showRoom(int roomNumber, Room surroundingRooms) {
-		System.out.println("You are in room: " + roomNumber);
+		System.out.println("---[You are in room: " + roomNumber + "]---");
+		System.out.println("---[Some data about the room you're in]---");
 		System.out.println(surroundingRooms.toString());
+		System.out.println();
 	}
 	
 	public void showMainMenu() {
