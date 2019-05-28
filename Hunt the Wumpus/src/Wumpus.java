@@ -9,6 +9,7 @@
 
 public class Wumpus {
 	private int location;
+	private int x;
 	private Cave C;
 	
 	public Wumpus(Cave c, GameLocations loc) {
