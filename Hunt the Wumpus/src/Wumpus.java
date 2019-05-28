@@ -23,7 +23,7 @@ public class Wumpus {
 	public void move() {
 		int random = (int)(Math.random()*3);
 		int[] possible = C.getRoom(location).getConnectedRooms();
-		while (possible[random] != 0) 
+		while (possible[random] == 0) 
 			random = (int)(Math.random()*3);
 		location = possible[random];
 	}

@@ -29,6 +29,7 @@ public class GameControl{
 	private GameLocations gameLocations;
 	private GraphicalInterface gui;
 	private HighScore highscore;
+	private Wumpus wumpus;
 	private Player player;
 	private Trivia trivia;
 	private TextUI textUI;
@@ -43,7 +44,8 @@ public class GameControl{
 		gameLocations = new GameLocations(cave, randRoom);
 		gui = new GraphicalInterface("GUI");
 		highscore = new HighScore();
-		player = new Player(gameLocations, "temp_name", cave);
+		wumpus = new Wumpus(cave, gameLocations);
+		player = new Player(gameLocations, "temp_name", cave, wumpus);
 		trivia = new Trivia();
 		textUI = new TextUI(5);
 		scan = new Scanner(System.in);
@@ -144,6 +146,7 @@ public class GameControl{
 				}
 			}
 			player.shootArrow(Integer.parseInt(input));
+			System.out.println("You shot an arrow!");
 		} else if (input.equals("3")) {			
 			if(trivia.startTrivia(2, 3)) {
 				player.purchaseArrows();

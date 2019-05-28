@@ -25,6 +25,10 @@ public class TextUI {
 			Room playerRoom = gameControl.getCave().getRoom(playerRoomValue);
 			String nearHazardCheck = gameControl.getGameLocations().nearHazard(playerRoom);
 			System.out.println(nearHazardCheck);
+			int currentRoom = gameControl.getGameLocations().trackPlayer();
+			if(gameControl.getCave().getRoom(currentRoom).getHazard() != 0) {
+				gameControl.getGameLocations().handleHazard();
+			}
 			
 			//Players turn
 			System.out.println("What action would you like to take?");
