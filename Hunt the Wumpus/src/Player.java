@@ -73,6 +73,10 @@ public class Player {
 		return this.name;
 	}
 	
+	public int getArrows() {
+		return arrows;
+	}
+	
 	//Purchases arrow based on the number of questions answered, will probably call Trivia method for parameter
 	public boolean purchaseArrows(int questionsAnswered)
 	{
