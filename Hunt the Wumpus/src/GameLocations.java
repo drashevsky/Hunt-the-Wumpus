@@ -58,6 +58,10 @@ public class GameLocations {
 		return "GameLocations";
 	}
 	
+	public int[] getHazards() {
+		return Hazards;
+	}
+	
 	public int numberOfTurns() {
 		return turns;
 	}
