@@ -11,6 +11,7 @@
  * 5/20/2019 - [DANIEL] Added a way for GameControl to set where player starts
  * 5/21/2019 - [ERIC] Added a setHazardType function because Shrey didn't do it
  * 5/22/2019 - [DANIEL] fixed nearhazard to function properly
+ * 5/28/2019 - [DEEPAYAN] Added trackWumpus and moveWumpus method
  */
 
 public class GameLocations {
@@ -110,6 +111,10 @@ public class GameLocations {
 		}
 	}
 	
+	public void moveWumpus() {
+		wumpus.move();
+	}
+	
 	public void startTrivia() {
 		//
 	}
@@ -122,7 +127,9 @@ public class GameLocations {
 	public int trackPlayer() {
 		return player;
 	}
+	
+	public int trackWumpus() {
+		return wumpus.track();
+	}
+	
 }
-
-
-

@@ -144,6 +144,13 @@ public class GameControl{
 				}
 			}
 			player.shootArrow(Integer.parseInt(input));
+		} else if (input.equals("3")) {			
+			if(trivia.startTrivia(2, 3)) {
+				player.purchaseArrows();
+				System.out.println("You bought 2 arrows");
+			} else {
+				System.out.println("You failed to purchase arrows");
+			}
 		}
 	}
 }

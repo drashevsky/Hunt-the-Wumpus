@@ -4,7 +4,8 @@
  * Description: Manages the player's state
  * Rev. History: (Date - Revision)
  * 
- * 4/03/2019 - [DANIEL] Fixed formatting 
+ * 4/03/2019 - [DANIEL] Fixed formatting
+ * 5/28/2019 - [DEEPAYAN] Added several methods
  */
 
 public class Player {
@@ -31,6 +32,7 @@ public class Player {
 	{
 		return "Player";
 	}
+	
 	public void shootArrow(int x) {
 		arrows--;
 		if (x == location.trackWumpus()) {
@@ -74,6 +76,11 @@ public class Player {
 			return true;
 		}
 		return false;
+	}
+	
+	//Purchases arrows
+	public void purchaseArrows() {
+		this.arrows += 2;
 	}
 	
 	//Purchase a secret based on the number of questions answered, will probably call Trivia method for parameter

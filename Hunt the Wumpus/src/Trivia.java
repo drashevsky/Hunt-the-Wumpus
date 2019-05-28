@@ -64,7 +64,7 @@ public class Trivia {
 	
 	//Starts a Round of Trivia
 	//Parameters are the Number of Correct Answers to Pass and Number of Questions Asked
-	public void startTrivia(int correctAnswersToPass, int questionsTotal) {
+	public boolean startTrivia(int correctAnswersToPass, int questionsTotal) {
 		
 		int asked = 0;
 		int correct = 0;
@@ -99,13 +99,15 @@ public class Trivia {
 			
 			//player.endTrivia(true);
 			System.out.println();
-			System.out.println("You passed the trivia");			
+			System.out.println("You passed the trivia");
+			return true;
 			
 		} else {
 			
 			//player.endTrivia(false);
 			System.out.println();
 			System.out.println("You failed the trivia");
+			return false;
 			
 		}
 		
