@@ -15,12 +15,16 @@ public class Trivia {
 	private String[] currentTrivia;
 	private String[] displayedAnswers;
 	
+	private GameLocations gameLocations;
+	
 	//Generates object using questions and answers from the question file
-	public Trivia() {
+	public Trivia(GameLocations gameLocations) {
 		
 		triviaFile = new File(triviaPath);
 		
 		retrieveTrivia();
+		
+		this.gameLocations = gameLocations;
 		
 	}
 	
@@ -113,11 +117,54 @@ public class Trivia {
 		
 	}
 	
+	//Returns a random secret
+	/*
+	 * Options: 
+	 * 1. Bat cave location
+	 * 2. Pit location
+	 * 3. Wumpus within 2 rooms
+	 * 4. Wumpus room
+	 * 5. Current room
+	 * 6. Answer to a Trivia Question Already Asked
+	 */
+	private String getSecret() {
+		
+		int randomNum = (int)(Math.random()*6) + 1;
+		
+		if(randomNum == 1) {
+			return "There are bats living in room " + gameLocations.getHazards()[(int)(Math.random()*2)+2];
+		} else if(randomNum == 2) {
+			return "There is a pit in room " + gameLocations.getHazards()[(int)(Math.random()*2)];
+		} else if(randomNum == 3) {
+			if(gameLocations.playerWithinTwoRooms()) {
+				return "The Wumpus is within two rooms of the player";
+			} else {
+				return "The Wumpus is not within two rooms of the player";
+			}
+		} else if(randomNum == 4) {
+			return "The Wumpus is in room " + gameLocations.trackWumpus();
+		} else if(randomNum == 5) {
+			return "The player is in room " + gameLocations.trackPlayer();
+		} else if(currentTrivia != null && displayedAnswers.length == 4) {
+			return "The answer to one of the trivia questions is " + currentTrivia[1];
+		} else {
+			return "the player is in room " + gameLocations.trackPlayer();
+		}
+	}
+	
+	//Displays a secret
+	public void displaySecret() {
+		System.out.println(getSecret());
+	}
+	
+	
+	//Gets a Trivia from the ArrayList
 	private void getTrivia() {
 		currentTrivia = trivia.get(( (int) (Math.random() * trivia.size()) ));
 		trivia.remove(currentTrivia);
 	}
 	
+	//Displays Trivia Questions/Answers
 	private void displayTrivia(String question, String[] answers) {
 		
 		System.out.println();
@@ -129,6 +176,7 @@ public class Trivia {
 		
 	}
 	
+	//Displays Feedback for Whether Answer is Correct
 	private void displayCorrect(boolean isCorrect) {
 		
 		System.out.println();
@@ -140,10 +188,11 @@ public class Trivia {
 		
 	}
 	
+	//Interprets Input for Answer Selected
 	public int getAnswer() {
 		Scanner input = new Scanner(System.in);
 		
-		String line = input.next();
+		String line = input.next().toLowerCase();
 		
 		if(line.equals("a")) {
 			return 0;
@@ -157,6 +206,7 @@ public class Trivia {
 		
 	}
 	
+	//Determines Whether the Answer at the Given Index is Correct	
 	public boolean isAnswerCorrect(int index) {
 		
 		if(index < 0 || index > 2) {
@@ -171,6 +221,7 @@ public class Trivia {
 		
 	}
 	
+	//Shuffles an Array of Strings
 	private void shuffle(String[] array) {
 		
 		Random random = new Random();

@@ -136,4 +136,23 @@ public class GameLocations {
 		return wumpus.track();
 	}
 	
+	//Returns true if Wumpus is within two rooms of the Player
+	public boolean playerWithinTwoRooms() {
+		int[] surroundingRooms = c.adjacentRooms(player);
+		int wumpusPos = wumpus.track();
+		for(int i : surroundingRooms) {
+			if(wumpusPos == i) {
+				return true;
+			} else {
+				int[] surroundingRoomsSecond = c.adjacentRooms(i);
+				for(int j : surroundingRoomsSecond) {
+					if(wumpusPos == j) {
+						return true;
+					}
+				}				
+			}
+		}
+		return false;
+	}
+	
 }

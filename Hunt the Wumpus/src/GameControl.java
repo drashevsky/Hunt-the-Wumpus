@@ -46,7 +46,7 @@ public class GameControl{
 		highscore = new HighScore();
 		wumpus = new Wumpus(cave, gameLocations);
 		player = new Player(gameLocations, "temp_name", cave, wumpus);
-		trivia = new Trivia();
+		trivia = new Trivia(gameLocations);
 		textUI = new TextUI(5);
 		scan = new Scanner(System.in);
 	}
@@ -154,6 +154,15 @@ public class GameControl{
 			} else {
 				System.out.println("You failed to purchase arrows");
 			}
+		} else if (input.equals("4")) {
+			if(trivia.startTrivia(2, 3)) {
+				System.out.println("You obtained a secret!");
+				trivia.displaySecret();
+			} else {
+				System.out.println("You didn't get a secret");
+			}
+		} else {
+			System.out.println("The input is invalid");
 		}
 	}
 }
