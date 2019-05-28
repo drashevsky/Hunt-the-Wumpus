@@ -14,15 +14,17 @@ public class Player {
 	boolean killedWumpus;
 	String name;
 	Cave c;
+	Wumpus w;
 	private GameLocations location;
 	
-	public Player(GameLocations location, String name, Cave C) {
+	public Player(GameLocations location, String name, Cave C, Wumpus W) {
 		arrows = 3;
 		secrets = 0;
 		goldCoins = 0;
 		this.location = location;
 		this.name = name;
 		killedWumpus = false;
+		w = W;
 		c = C;
 	}
 	
@@ -33,12 +35,12 @@ public class Player {
 	}
 	public void shootArrow(int x) {
 		arrows--;
-		if (x == location.trackWumpus()) {
+		if (x == w.track()) {
 			killedWumpus = true;
 			System.out.println("Killed Wumpus");
 		}
 		else {
-			location.moveWumpus();
+			w.move();
 		}
 	}
 
