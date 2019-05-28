@@ -38,9 +38,9 @@ public class GameControl{
 	private Scanner scan;
 
 	public GameControl() {
-		
+		scan = new Scanner(System.in);
 		int randRoom = 4;//(int)(Math.random()*30);
-		cave = new Cave("map2.txt");
+		cave = new Cave(getMap());
 		gameLocations = new GameLocations(cave, randRoom);
 		gui = new GraphicalInterface("GUI");
 		highscore = new HighScore();
@@ -48,7 +48,6 @@ public class GameControl{
 		player = new Player(gameLocations, "temp_name", cave, wumpus);
 		trivia = new Trivia();
 		textUI = new TextUI(5);
-		scan = new Scanner(System.in);
 	}
 	
 	public static void main(String[] args) {
@@ -86,6 +85,17 @@ public class GameControl{
 			textUI.showRoom(currentRoom, surroundingRooms);
 		}
 	}
+	
+	public String getMap() {
+		System.out.println("Type a number between 1-5 for a map.");
+		String input = scan.nextLine();
+		if(Integer.parseInt(input) > 0 && Integer.parseInt(input) < 6) {
+			return "map" + input + ".txt";
+		} else {
+			return "";
+		}
+	}
+	
 	public void takeAction(String input, Room playerRoom) {
 		if(input.equals("1")) {
 			System.out.println("Which room would you like to move to?");
@@ -120,6 +130,7 @@ public class GameControl{
 			//gameControl.getGameLocations().moveWumpus();
 		} else if(input.equals("2")) {
 			System.out.println("Which room would you like to shoot an arrow in?");
+			System.out.println(player.getArrows());
 			// Print out room numbers:
 			for(int x = 0; x < playerRoom.getConnectedRooms().length; x++) {
 				if(playerRoom.getConnectedRooms()[x] != 0) {
