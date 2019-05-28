@@ -45,7 +45,7 @@ public class GameLocations {
 		setHazardTypes(c);
 	}
 
-	// Sets each room to either a bat or a pit 
+	// Sets each room to either a bat(2s) or a pit (1s) 
 	public void setHazardTypes(Cave cave) {
 		cave.setRoomHazard(Hazards[0], 1);
 		cave.setRoomHazard(Hazards[1], 1);

@@ -36,12 +36,17 @@ public class Player {
 	}
 	// hello
 	public void shootArrow(int x) {
-		arrows--;
-		if (x == w.track()) {
+		
+		if (arrows == 0) {
+			System.out.print("You can't shoot no more");
+		}
+		else if (x == w.track()) {
+			arrows--;
 			killedWumpus = true;
 			System.out.println("Killed Wumpus");
 		}
 		else {
+			arrows--;
 			w.move();
 		}
 	}
