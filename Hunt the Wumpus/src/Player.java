@@ -46,6 +46,12 @@ public class Player {
 	public int getGoldCoins() {
 		return goldCoins;
 	}
+	
+	//Increments goldCoins by num
+	public void incrementGoldCoins(int num) {
+		goldCoins += num;
+	}
+	
 	public int computeScore() {
 		if (killedWumpus == false)
 		{
