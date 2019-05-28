@@ -21,7 +21,6 @@ public class GameLocations {
 	private int turns;
 	private int start;
 	private Wumpus wumpus;
-
 	
 	public GameLocations(Cave c, int playerLocation) {
 		this.c = c;
@@ -45,7 +44,7 @@ public class GameLocations {
 		setHazardTypes(c);
 	}
 
-	// Sets each room to either a bat or a pit 
+	// Sets each room to either a bat(2s) or a pit (1s) 
 	public void setHazardTypes(Cave cave) {
 		cave.setRoomHazard(Hazards[0], 1);
 		cave.setRoomHazard(Hazards[1], 1);
@@ -55,7 +54,11 @@ public class GameLocations {
 	
 	// returns the name of the object
 	public String toString() {
-		return "GameLocations";
+		String hazards = "";
+		for(int room : Hazards) {
+			hazards += room + " \n";
+		}
+		return hazards;
 	}
 	
 	public int[] getHazards() {
@@ -89,7 +92,10 @@ public class GameLocations {
 		// Handle situation with pit
 		if (c.getRoom(trackPlayer()).getHazard() == 1) {
 			startTrivia();
-			player = start;
+			if(startTrivia()) {
+				System.out.println("---[Moving player back to start]---");
+				player = start;
+			}
 		}
 		// Handle situation with bats
 		else if (c.getRoom(trackPlayer()).getHazard() == 2) {
@@ -100,7 +106,6 @@ public class GameLocations {
 				}
 			}
 		}
-		
 	}
 	
 	public void movePlayer(int d)
@@ -119,8 +124,8 @@ public class GameLocations {
 		wumpus.move();
 	}
 	
-	public void startTrivia() {
-		//
+	public boolean startTrivia() {
+		return GameControl.gameControl.getTrivia().startTrivia(2, 3);
 	}
 	
 	public void endTrivia(boolean result) {

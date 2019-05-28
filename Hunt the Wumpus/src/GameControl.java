@@ -38,9 +38,9 @@ public class GameControl{
 	private Scanner scan;
 
 	public GameControl() {
-		
-		int randRoom = 4;//(int)(Math.random()*30);
-		cave = new Cave("map2.txt");
+		scan = new Scanner(System.in);
+		int randRoom = (int)(Math.random()*30);
+		cave = new Cave(getMap());
 		gameLocations = new GameLocations(cave, randRoom);
 		gui = new GraphicalInterface("GUI");
 		highscore = new HighScore();
@@ -48,7 +48,6 @@ public class GameControl{
 		player = new Player(gameLocations, "temp_name", cave, wumpus);
 		trivia = new Trivia(gameLocations);
 		textUI = new TextUI(5);
-		scan = new Scanner(System.in);
 	}
 	
 	public static void main(String[] args) {
@@ -69,6 +68,14 @@ public class GameControl{
 		return cave;
 	}
 	
+	public Trivia getTrivia() {
+		return trivia;
+	}
+	
+	public Wumpus getWumpus() {
+		return wumpus;
+	}
+	
 	public void start()
 	{
 		textUI.showMainMenu();
@@ -83,9 +90,21 @@ public class GameControl{
 		if (GUIMODE){
 			//gui.showRoom(firstRoom);
 		} else {
-			textUI.showRoom(currentRoom, surroundingRooms);
+			//textUI.showRoom(currentRoom, surroundingRooms);
 		}
 	}
+	
+	public String getMap() {
+		System.out.println("Type a number between 1-5 for a map.");
+		String input = scan.nextLine();
+		for(int x = 1; x <= 5; x++) {
+			if(input.equals("" + x)) {
+				return "map" + input + ".txt";
+			}
+		}
+		return "";
+	}
+	
 	public void takeAction(String input, Room playerRoom) {
 		if(input.equals("1")) {
 			System.out.println("Which room would you like to move to?");
@@ -94,7 +113,6 @@ public class GameControl{
 				if(playerRoom.getConnectedRooms()[x] != 0) {
 					System.out.print("[" + playerRoom.getConnectedRooms()[x] + "] ");
 				}
-				System.out.println();
 			}
 			// Check to see if room number is valid first before moving player
 			// Change to a while loop
@@ -116,10 +134,11 @@ public class GameControl{
 			getGameLocations().movePlayer(Integer.parseInt(input));
 			
 			System.out.println("The wumpus moves...");
-			System.out.println("The wumpus is in room: " + gameControl.getGameLocations().trackWumpus());
-			//gameControl.getGameLocations().moveWumpus();
+			gameControl.getGameLocations().moveWumpus();
+			System.out.println("---[The wumpus is in room: " + gameControl.getGameLocations().trackWumpus() + "]---");
 		} else if(input.equals("2")) {
 			System.out.println("Which room would you like to shoot an arrow in?");
+			System.out.println("You have " + player.getArrows() + " arrows left.");
 			// Print out room numbers:
 			for(int x = 0; x < playerRoom.getConnectedRooms().length; x++) {
 				if(playerRoom.getConnectedRooms()[x] != 0) {

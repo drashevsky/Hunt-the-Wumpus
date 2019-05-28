@@ -36,12 +36,17 @@ public class Player {
 	}
 	// hello
 	public void shootArrow(int x) {
-		arrows--;
-		if (x == w.track()) {
+		
+		if (arrows == 0) {
+			System.out.print("You can't shoot no more");
+		}
+		else if (x == w.track()) {
+			arrows--;
 			killedWumpus = true;
 			System.out.println("Killed Wumpus");
 		}
 		else {
+			arrows--;
 			w.move();
 		}
 	}
@@ -66,6 +71,10 @@ public class Player {
 	
 	public String name() {
 		return this.name;
+	}
+	
+	public int getArrows() {
+		return arrows;
 	}
 	
 	//Purchases arrow based on the number of questions answered, will probably call Trivia method for parameter
