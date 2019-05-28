@@ -5,88 +5,183 @@ import java.io.*;
 	// 3.5.18 - First Assignment: Class Header + Constructor + toString
 public class Trivia {
 	
-	private ArrayList<String> questions;
-	private ArrayList<String> correctAnswers;
-	private ArrayList<String> incorrectAnswersOne;
-	private ArrayList<String> incorrectAnswersTwo;
+	private static final String triviaPath = "./input/Trivia.txt";
+	private static File triviaFile;
 	
-	private int coinCount = 0;
-	private int currentQuestionIndex = -1;
+	//each element is an array of 4 Strings
+	//each element in String represents [Question, CorrectAnswer, OtherAnswer, OtherAnswer]
+	private ArrayList<String[]> trivia;
 	
-	//Four File Parameters are required in this order: questions, correctAnswers, incorrectAnswersOne, incorrectAnswersTwo
-	//Each line of the file represents the a single question or answer
-	public Trivia(File questions, File correctAnswers, File incorrectAnswersOne, File incorrectAnswersTwo) throws FileNotFoundException {
-		
-		this.questions = new ArrayList<String>();
-		this.correctAnswers = new ArrayList<String>();
-		this.incorrectAnswersOne = new ArrayList<String>();
-		this.incorrectAnswersTwo = new ArrayList<String>();
-		
-		Scanner questionsScanner = new Scanner("./input/" + questions);
-		Scanner correctAnswersScanner = new Scanner("./input/" + correctAnswers);
-		Scanner incorrectAnswersOneScanner = new Scanner("./input/" + incorrectAnswersOne);
-		Scanner incorrectAnswersTwoScanner = new Scanner("./input/" + incorrectAnswersTwo);
-		
-		while(questionsScanner.hasNextLine()) {
-			this.questions.add(questionsScanner.nextLine());
-		}
-		questionsScanner.close();
-		
-		while(correctAnswersScanner.hasNextLine()) {
-			this.questions.add(correctAnswersScanner.nextLine());
-		}
-		correctAnswersScanner.close();
-		
-		while(incorrectAnswersOneScanner.hasNextLine()) {
-			this.questions.add(incorrectAnswersOneScanner.nextLine());
-		}
-		incorrectAnswersOneScanner.close();
-		
-		while(incorrectAnswersTwoScanner.hasNextLine()) {
-			this.questions.add(incorrectAnswersTwoScanner.nextLine());
-		}
-		incorrectAnswersTwoScanner.close();
-		
-	}
+	private String[] currentTrivia;
+	private String[] displayedAnswers;
 	
-	//Generates object with default set of questions and answers
+	//Generates object using questions and answers from the question file
 	public Trivia() {
 		
-		this.questions = new ArrayList<String>();
-		this.correctAnswers = new ArrayList<String>();
-		this.incorrectAnswersOne = new ArrayList<String>();
-		this.incorrectAnswersTwo = new ArrayList<String>();
+		triviaFile = new File(triviaPath);
 		
-		questions.add("Did you remember to add File Parameters?");
-		correctAnswers.add("No");
-		incorrectAnswersOne.add("Yes");
-		incorrectAnswersTwo.add("You don't need them");
+		retrieveTrivia();
 		
 	}
-				
-	//This method returns the value of the coinCount field
-	public int getCoinCount() {
-		return coinCount;
+	
+	//Retrieves trivia questions from file and stores them in "trivia"
+	private void retrieveTrivia() {
+		
+		Scanner reader;
+		
+		try {
+			reader = new Scanner(triviaFile);
+		} catch(FileNotFoundException e){
+			e.printStackTrace();
+			return;
+		}
+		
+		trivia = new ArrayList<String[]>();
+		
+		while(reader.hasNextLine()) {
+			
+			String[] data = new String[4];
+			
+			data[0] = reader.nextLine();
+			
+			reader.nextLine();
+			
+			for(int i = 1; i <= 3; i++) {
+				data[i] = reader.nextLine();
+			}
+			
+			if(reader.hasNextLine()) {
+				reader.nextLine();
+			}
+			
+			trivia.add(data);
+			
+		}
+		
+		reader.close();
+		
 	}
 	
-	//This method sets the value of the coinCount field. The parameter is an integer which the coinCount field is set to.
-	public void setCoinCount(int value) {
-		coinCount = value;
+	//Starts a Round of Trivia
+	//Parameters are the Number of Correct Answers to Pass and Number of Questions Asked
+	public boolean startTrivia(int correctAnswersToPass, int questionsTotal) {
+		
+		int asked = 0;
+		int correct = 0;
+		
+		while(asked < questionsTotal && correct < correctAnswersToPass /* && gameControl.getPlayer().getGoldCoins() */ ) {
+			
+			getTrivia();
+			
+			displayedAnswers = new String[3];
+			
+			for(int i = 0; i < displayedAnswers.length; i++) {
+				displayedAnswers[i] = currentTrivia[i+1];
+			}
+			
+			shuffle(displayedAnswers);
+			
+			displayTrivia(currentTrivia[0], displayedAnswers);
+
+			int answer = getAnswer();
+			boolean isCorrect = isAnswerCorrect(answer);
+			displayCorrect(isCorrect);
+			
+			asked++;
+			
+			if(isCorrect) {
+				correct++;
+			}
+			
+		}
+		
+		if(correct >= correctAnswersToPass) {
+			
+			//player.endTrivia(true);
+			System.out.println();
+			System.out.println("You passed the trivia");
+			return true;
+			
+		} else {
+			
+			//player.endTrivia(false);
+			System.out.println();
+			System.out.println("You failed the trivia");
+			return false;
+			
+		}
+		
 	}
 	
-	//This method increments the value of the coinCount field. The parameter is the integer by which coinCount is incremented.
-	public void incrementCoinCount(int value) {
-		coinCount += value;
+	private void getTrivia() {
+		currentTrivia = trivia.get(( (int) (Math.random() * trivia.size()) ));
+		trivia.remove(currentTrivia);
 	}
 	
-	//This method returns a question from the question set at random as a String.
-	public String getQuestion() {
-		return questions.get((int)(questions.size()*Math.random()));
+	private void displayTrivia(String question, String[] answers) {
+		
+		System.out.println();
+		System.out.println(question);
+		System.out.println();
+		System.out.println("a) " + answers[0]);
+		System.out.println("b) " + answers[1]);
+		System.out.println("c) " + answers[2]);
+		
 	}
 	
-	//When a question is answered, this method is called. The parameter is a boolean that is true if the answer is correct
-	//This method changes this object internally, like removing the question from the set of questions
-	public void answerQuestion(boolean isCorrect) {
+	private void displayCorrect(boolean isCorrect) {
+		
+		System.out.println();
+		if(isCorrect) {
+			System.out.println("Correct!");
+		} else {
+			System.out.println("Incorrect!");
+		}
+		
+	}
+	
+	public int getAnswer() {
+		Scanner input = new Scanner(System.in);
+		
+		String line = input.next();
+		
+		if(line.equals("a")) {
+			return 0;
+		} else if(line.equals("b")) {
+			return 1;
+		} else if(line.equals("c")) {
+			return 2;
+		} else {
+			return -1;
+		}
+		
+	}
+	
+	public boolean isAnswerCorrect(int index) {
+		
+		if(index < 0 || index > 2) {
+			return false;
+		}
+		
+		if(displayedAnswers[index].equals(currentTrivia[1])) {
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+	
+	private void shuffle(String[] array) {
+		
+		Random random = new Random();
+		
+		for(int i = array.length-1; i > 0; i--) {
+			
+			int index = random.nextInt(i + 1);
+			String placeholder = array[index];
+			array[index] = array[i];
+			array[i] = placeholder;
+		}
 		
 	}
 	
