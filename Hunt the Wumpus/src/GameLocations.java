@@ -36,7 +36,7 @@ public class GameLocations {
 		for (int x = 0; x < Hazards.length; x++) {
 			for (int y = 0; y < Hazards.length; y++)
 			{
-				if (Hazards[x] == Hazards[y]) {
+				if (player == Hazards[x] || Hazards[x] == Hazards[y]) {
 					Hazards[x] = (int)(Math.random()*30) + 1;
 				}
 			}
