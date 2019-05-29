@@ -47,6 +47,7 @@ public class GameControl{
 		wumpus = new Wumpus(cave, gameLocations);
 		player = new Player(gameLocations, "temp_name", cave, wumpus);
 		trivia = new Trivia(gameLocations);
+		textUI = new TextUI(4);
 	}
 	
 	public static void main(String[] args) {
@@ -77,6 +78,7 @@ public class GameControl{
 	
 	public void start()
 	{
+
 		if(!GUIMODE) {
 			textUI.showMainMenu();
 			textUI.runEvents(gameControl);
@@ -138,11 +140,12 @@ public class GameControl{
 					System.out.println("Invalid room number, type in another room: ");
 				}
 			}
-			getGameLocations().movePlayer(Integer.parseInt(input));
+			gameLocations.movePlayer(Integer.parseInt(input));
 			
 			System.out.println("The wumpus moves...");
 			gameControl.getGameLocations().moveWumpus();
 			System.out.println("---[The wumpus is in room: " + gameControl.getGameLocations().trackWumpus() + "]---");
+			textUI.showRoom(gameLocations.trackPlayer(), cave.getRoom(gameLocations.trackPlayer()));
 		} else if(input.equals("2")) {
 			System.out.println("Which room would you like to shoot an arrow in?");
 			System.out.println("You have " + player.getArrows() + " arrows left.");

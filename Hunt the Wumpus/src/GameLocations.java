@@ -91,7 +91,6 @@ public class GameLocations {
 	public void handleHazard() {
 		// Handle situation with pit
 		if (c.getRoom(trackPlayer()).getHazard() == 1) {
-			startTrivia();
 			if(startTrivia()) {
 				System.out.println("---[Moving player back to start]---");
 				player = start;
@@ -100,7 +99,7 @@ public class GameLocations {
 		// Handle situation with bats
 		else if (c.getRoom(trackPlayer()).getHazard() == 2) {
 			for (int x = 0; x < Hazards.length; x++) {
-				while (Hazards[x] == trackPlayer()) {
+				while (Hazards[x] == player) {
 					Hazards[x] = (int)(Math.random()*30) + 1;
 					player = (int)(Math.random()*30) + 1;
 				}

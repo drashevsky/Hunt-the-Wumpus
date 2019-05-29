@@ -25,15 +25,17 @@ public class TextUI {
 			Room playerRoom = gameControl.getCave().getRoom(playerRoomValue);
 			String nearHazardCheck = gameControl.getGameLocations().nearHazard(playerRoom);
 			System.out.println(nearHazardCheck);
-			int currentRoom = gameControl.getGameLocations().trackPlayer();
 			System.out.println("Hazards are in rooms: \n" + gameControl.getGameLocations().toString());
-			if(gameControl.getCave().getRoom(currentRoom).getHazard() != 0) {
+			if(gameControl.getCave().getRoom(playerRoomValue).getHazard() != 0) {
 				System.out.println("---[Handling hazards]---");
 				gameControl.getGameLocations().handleHazard();
 			}
+			playerRoomValue = gameControl.getGameLocations().trackPlayer();
+			playerRoom = gameControl.getCave().getRoom(playerRoomValue);
 			
 			//Check for Wumpus
-			if(currentRoom == gameControl.getGameLocations().trackWumpus()) {
+			if(playerRoomValue == gameControl.getGameLocations().trackWumpus()) {
+				System.out.println("The Wumpus! Answer some trivia to stay alive!");
 				boolean triviaPass = gameControl.getTrivia().startTrivia(3, 5);
 				if(triviaPass) {
 					gameControl.getWumpus().endTrivia();
@@ -43,6 +45,7 @@ public class TextUI {
 			}
 			
 			//Players turn
+
 			showRoom(playerRoomValue, playerRoom);
 			System.out.println("What action would you like to take?");
 			System.out.println("[1] Move [2] Shoot an arrow \n[3] Purchase arrows [4] Purchase secrets");
