@@ -18,7 +18,7 @@ public class TextUI {
 		{
 			GameControl.gameControl.newGameButtonClicked();
 		}
-		while(true) {
+		while(!gameControl.isGameOver()) {
 			//First check hazards
 			System.out.print("Checking for hazards nearby: ");
 			int playerRoomValue = gameControl.getGameLocations().trackPlayer();
@@ -41,15 +41,17 @@ public class TextUI {
 					gameControl.getWumpus().endTrivia();
 				} else {
 					System.out.println("You've died. Game over.");
+					gameControl.gameOver(true);
 				}
 			}
 			
-			//Players turn
-
-			showRoom(playerRoomValue, playerRoom);
-			System.out.println("What action would you like to take?");
-			System.out.println("[1] Move [2] Shoot an arrow \n[3] Purchase arrows [4] Purchase secrets");
-			gameControl.takeAction(gameControl.getScanner().nextLine(), playerRoom);
+			if(!gameControl.isGameOver()) {
+				//Players turn
+				showRoom(playerRoomValue, playerRoom);
+				System.out.println("What action would you like to take?");
+				System.out.println("[1] Move [2] Shoot an arrow \n[3] Purchase arrows [4] Purchase secrets");
+				gameControl.takeAction(gameControl.getScanner().nextLine(), playerRoom);
+			}
 		}
 	}
 	

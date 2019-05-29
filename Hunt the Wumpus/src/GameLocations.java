@@ -94,6 +94,9 @@ public class GameLocations {
 			if(startTrivia()) {
 				System.out.println("---[Moving player back to start]---");
 				player = start;
+			}else {
+				System.out.println("You've failed and therefore are dead.");
+				GameControl.gameControl.gameOver(true);
 			}
 		}
 		// Handle situation with bats
@@ -104,6 +107,7 @@ public class GameLocations {
 					player = (int)(Math.random()*30) + 1;
 				}
 			}
+			System.out.println("Bats! You've been randomly teleported.");
 		}
 	}
 	

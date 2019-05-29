@@ -25,6 +25,8 @@ import javax.swing.JFrame;
  */
 public class GameControl{
 	public static GameControl gameControl;
+	public boolean GUIMODE = false;
+	private boolean gameOver = false;
 	private Cave cave;
 	private GameLocations gameLocations;
 	private GraphicalInterface gui;
@@ -33,7 +35,6 @@ public class GameControl{
 	private Player player;
 	private Trivia trivia;
 	private TextUI textUI;
-	private boolean GUIMODE = false;
 	private Room currentRoom;
 	private Scanner scan;
 
@@ -54,6 +55,10 @@ public class GameControl{
 		// Create an instance of GameControl
 		gameControl = new GameControl();
 		gameControl.start();
+	}
+	
+	public boolean isGameOver() {
+		return gameOver;
 	}
 	
 	public Scanner getScanner() {
@@ -112,6 +117,13 @@ public class GameControl{
 			return "map1.txt";
 		}
 		return "";
+	}
+	
+	public void gameOver(boolean isDead) {
+		if(isDead)
+			System.out.println("Game over. Wah wah.");
+		gameOver = isDead;
+			
 	}
 	
 	public void takeAction(String input, Room playerRoom) {
