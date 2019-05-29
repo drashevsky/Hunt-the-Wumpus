@@ -47,7 +47,6 @@ public class GameControl{
 		wumpus = new Wumpus(cave, gameLocations);
 		player = new Player(gameLocations, "temp_name", cave, wumpus);
 		trivia = new Trivia(gameLocations);
-		textUI = new TextUI(5);
 	}
 	
 	public static void main(String[] args) {
@@ -78,8 +77,12 @@ public class GameControl{
 	
 	public void start()
 	{
-		textUI.showMainMenu();
-		textUI.runEvents(gameControl);
+		if(!GUIMODE) {
+			textUI.showMainMenu();
+			textUI.runEvents(gameControl);
+		} else {
+			gui.showMainMenu();
+		}
 	}
 	public void newGameButtonClicked() {
 		// Reset the cave
@@ -95,12 +98,16 @@ public class GameControl{
 	}
 	
 	public String getMap() {
-		System.out.println("Type a number between 1-5 for a map.");
-		String input = scan.nextLine();
-		for(int x = 1; x <= 5; x++) {
-			if(input.equals("" + x)) {
-				return "map" + input + ".txt";
+		if(!GUIMODE) {
+			System.out.println("Type a number between 1-5 for a map.");
+			String input = scan.nextLine();
+			for(int x = 1; x <= 5; x++) {
+				if(input.equals("" + x)) {
+					return "map" + input + ".txt";
+				}
 			}
+		} else {
+			return "map1.txt";
 		}
 		return "";
 	}

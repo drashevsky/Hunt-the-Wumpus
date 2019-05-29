@@ -13,12 +13,13 @@ public class GraphicalInterface extends JFrame implements ActionListener {
 	
 	//constructor
 
-    static final String gapList[] = {"0", "10", "15", "20"};
-    final static int maxGap = 20;
-    JComboBox horGapComboBox;
-    JComboBox verGapComboBox;
-    JButton applyButton = new JButton("Apply gaps");
-    GridLayout experimentLayout = new GridLayout(0,2);
+    static final private String gapList[] = {"0", "10", "15", "20"};
+    private final static int maxGap = 20;
+    private JComboBox horGapComboBox;
+    private JComboBox verGapComboBox;
+    private JButton applyButton = new JButton("Apply gaps");
+    private GridLayout experimentLayout = new GridLayout(0,2);
+    private GridLayout highScoresLayout = new GridLayout(1, 1);
 
 
 	public GraphicalInterface(String name)
@@ -39,7 +40,8 @@ public class GraphicalInterface extends JFrame implements ActionListener {
             ex.printStackTrace();
         }
         
-        setResizable(false);  
+        setResizable(false);
+        
 	}
 	
 	 public void initGaps() {
@@ -57,8 +59,8 @@ public class GraphicalInterface extends JFrame implements ActionListener {
 	        //Set up components preferred size
 	        JButton b = new JButton("Play");
 	        Dimension buttonSize = b.getPreferredSize();
-	        compsToExperiment.setPreferredSize(new Dimension((int)(buttonSize.getWidth() * 2.5)+maxGap,
-	                (int)(buttonSize.getHeight() * 3.5)+maxGap * 2));
+	        compsToExperiment.setPreferredSize(new Dimension((int)(buttonSize.getWidth() * 5)+maxGap,
+	                (int)(buttonSize.getHeight() * 7)+maxGap * 2));
 	         
 	        //Add buttons to experiment with Grid Layout
 	        compsToExperiment.add(b);
@@ -68,6 +70,11 @@ public class GraphicalInterface extends JFrame implements ActionListener {
 	        compsToExperiment.add(new JButton("Print Room"));
 	        compsToExperiment.add(new JButton("High Scores"));
 	         
+	        
+	        //New JPanel for High Score
+	        final JPanel highScorePanel = new JPanel();
+	        highScorePanel.setLayout(highScoresLayout);
+	        
 	        //Add controls to set up horizontal and vertical gaps
 
 	        controls.add(new Label(" "));
@@ -126,6 +133,7 @@ public class GraphicalInterface extends JFrame implements ActionListener {
 	            }
 	        });
 	    }
+	    
 	//toString
 	public String toString()
 	{
@@ -159,7 +167,8 @@ public class GraphicalInterface extends JFrame implements ActionListener {
 	{
 		System.out.print(actions);
 	}
-	 public void actionPerformed(ActionEvent ae) {
+	 public void actionPerformed(ActionEvent ae)
+	 {
 		    String comStr = ae.getActionCommand();
 		    System.out.println(comStr + " Selected");
 	}

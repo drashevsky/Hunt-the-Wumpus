@@ -152,6 +152,11 @@ public class Trivia {
 		}
 	}
 	
+	//Returns a hint about a future trivia question
+	public String getHint() {
+		return trivia.get(( (int) (Math.random() * trivia.size()) ))[1];
+	}
+	
 	//Displays a secret
 	public void displaySecret() {
 		System.out.println(getSecret());
