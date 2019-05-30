@@ -50,8 +50,9 @@ public class Player {
 			w.move();
 		}
 	}
-
-	
+	public boolean wumpusState() {
+		return killedWumpus;
+	}
 	public int getGoldCoins() {
 		return goldCoins;
 	}
