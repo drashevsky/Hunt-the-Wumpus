@@ -288,8 +288,21 @@ public class Cave {
 	
 	//-------------------------------------------------------------------Adjacent Rooms Methods-------------------------------------------------------------------//
 	
-	//Returns an array of the rooms which are adjacent to a select room (restricted to 1 - 30)
- 	public int[] adjacentRooms(int room) {
+ 	//Accessor for adjacentRooms algorithm: Returns an array of the rooms which are 
+ 	//adjacent to a select room (restricted to 1 - 30), sorted least to greatest
+	public int[] adjacentRooms(int room) {
+		return adjacentRoomsMaster(room, true);
+	}
+	
+	//Accessor for adjacentRooms algorithm: Returns an array of the rooms which are 
+	//adjacent to a select room (restricted to 1 - 30), order is:
+	//top left, top right, top, bottom, bottom left, bottom right
+	public int[] adjacentRoomsUnsorted(int room) {
+		return adjacentRoomsMaster(room, false);
+	}
+	
+ 	//Returns an array of the rooms which are adjacent to a select room (restricted to 1 - 30), can be sorted or in specific order
+ 	private int[] adjacentRoomsMaster(int room, boolean sort) {
 		int[] rooms = new int[6];
 		
 		//Get room indexes in 2d array
@@ -327,7 +340,9 @@ public class Cave {
 			rooms[5] = adjacentRoomHelper(ref, roomRow(ref), roomCol(ref))[1]; //Above-to-the-right room
 		}
 		
-		Arrays.sort(rooms);
+		//Return in specific order or unsorted?
+		if (sort)					
+			Arrays.sort(rooms);
 		return rooms;
 	}
 	
