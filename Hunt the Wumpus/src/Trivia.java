@@ -75,6 +75,10 @@ public class Trivia {
 		
 		while(asked < questionsTotal && correct < correctAnswersToPass /* && gameControl.getPlayer().getGoldCoins() */ ) {
 			
+			if(trivia.size() <= 0) {
+				retrieveTrivia();
+			}
+			
 			getTrivia();
 			
 			displayedAnswers = new String[3];

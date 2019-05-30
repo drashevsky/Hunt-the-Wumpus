@@ -76,7 +76,7 @@ Yellowstone
 Grand Teton
 Yosemite
 
-What is the northernmost world captital?
+What is the northernmost world capital?
 
 Reykjavik, Iceland
 Moscow, Russia
@@ -147,3 +147,9 @@ Who wrote 1984?
 George Orwell
 Aldous Huxley
 JK Rowling
+
+What is the highest capital in elevation?
+
+La Paz, Bolivia
+Tehran, Iran
+Nairobi, Kenya
