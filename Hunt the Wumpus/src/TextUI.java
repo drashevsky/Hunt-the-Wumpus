@@ -19,6 +19,10 @@ public class TextUI {
 			GameControl.gameControl.newGameButtonClicked();
 		}
 		while(!gameControl.isGameOver()) {
+			//Display current score
+			int currentScore = GameControl.gameControl.getPlayer().computeScore();
+			System.out.println("Your current score is: " + currentScore);
+			
 			//First check hazards
 			System.out.print("Checking for hazards nearby: ");
 			int playerRoomValue = gameControl.getGameLocations().trackPlayer();
@@ -40,7 +44,6 @@ public class TextUI {
 				if(triviaPass) {
 					gameControl.getWumpus().endTrivia();
 				} else {
-					System.out.println("You've died. Game over.");
 					gameControl.gameOver(true);
 				}
 			}

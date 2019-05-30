@@ -81,6 +81,10 @@ public class GameControl{
 		return wumpus;
 	}
 	
+	public Player getPlayer() {
+		return player;
+	}
+	
 	public void start()
 	{
 
@@ -119,11 +123,12 @@ public class GameControl{
 		return "";
 	}
 	
-	public void gameOver(boolean isDead) {
-		if(isDead)
-			System.out.println("Game over. Wah wah.");
-		gameOver = isDead;
-			
+	public void gameOver(boolean isOver) {
+		if(isOver && player.wumpusState())
+			System.out.println("You've killed the Wumpus! You win the game.");
+		else if(isOver && !player.wumpusState())
+			System.out.println("You are dead! Game over.");
+		gameOver = isOver;
 	}
 	
 	public void takeAction(String input, Room playerRoom) {
@@ -154,10 +159,10 @@ public class GameControl{
 			}
 			gameLocations.movePlayer(Integer.parseInt(input));
 			
-			System.out.println("The wumpus moves...");
-			gameControl.getGameLocations().moveWumpus();
+			System.out.println("The wumpus moves... [NOT REALLY]");
+			//gameControl.getGameLocations().moveWumpus();
 			System.out.println("---[The wumpus is in room: " + gameControl.getGameLocations().trackWumpus() + "]---");
-			textUI.showRoom(gameLocations.trackPlayer(), cave.getRoom(gameLocations.trackPlayer()));
+			//textUI.showRoom(gameLocations.trackPlayer(), cave.getRoom(gameLocations.trackPlayer()));
 		} else if(input.equals("2")) {
 			System.out.println("Which room would you like to shoot an arrow in?");
 			System.out.println("You have " + player.getArrows() + " arrows left.");
@@ -188,6 +193,9 @@ public class GameControl{
 			}
 			player.shootArrow(Integer.parseInt(input));
 			System.out.println("You shot an arrow!");
+			if(player.wumpusState()) {
+				gameOver(true);
+			}
 		} else if (input.equals("3")) {			
 			if(trivia.startTrivia(2, 3)) {
 				player.purchaseArrows();

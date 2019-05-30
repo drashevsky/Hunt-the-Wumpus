@@ -43,7 +43,6 @@ public class Player {
 		else if (x == w.track()) {
 			arrows--;
 			killedWumpus = true;
-			System.out.println("Killed Wumpus");
 		}
 		else {
 			arrows--;
