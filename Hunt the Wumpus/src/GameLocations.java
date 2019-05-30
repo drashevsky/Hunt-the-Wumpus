@@ -21,12 +21,15 @@ public class GameLocations {
 	private int turns;
 	private int start;
 	private Wumpus wumpus;
+	private Player actualPlayer;
+	private int totalGoldCoins;
 	
 	public GameLocations(Cave c, int playerLocation) {
 		this.c = c;
 		turns = 0;
 		wumpus = new Wumpus(c, this);
 		player = playerLocation;
+		actualPlayer = new Player(this, "bob", c, wumpus);
 		start = playerLocation;
 		Hazards = new int[4];
 		Hazards[0] = (int)(Math.random()*30) + 1;
@@ -91,23 +94,20 @@ public class GameLocations {
 	public void handleHazard() {
 		// Handle situation with pit
 		if (c.getRoom(trackPlayer()).getHazard() == 1) {
+			startTrivia();
 			if(startTrivia()) {
 				System.out.println("---[Moving player back to start]---");
 				player = start;
-			}else {
-				System.out.println("You've failed and therefore are dead.");
-				GameControl.gameControl.gameOver(true);
 			}
 		}
 		// Handle situation with bats
 		else if (c.getRoom(trackPlayer()).getHazard() == 2) {
 			for (int x = 0; x < Hazards.length; x++) {
-				while (Hazards[x] == player) {
+				while (Hazards[x] == trackPlayer()) {
 					Hazards[x] = (int)(Math.random()*30) + 1;
 					player = (int)(Math.random()*30) + 1;
 				}
 			}
-			System.out.println("Bats! You've been randomly teleported.");
 		}
 	}
 	
@@ -118,6 +118,7 @@ public class GameLocations {
 			if (d == possible[x]) {
 				player = d;
 				turns++;
+				actualPlayer.incrementGoldCoins(1);
 				break;
 			}
 		}
