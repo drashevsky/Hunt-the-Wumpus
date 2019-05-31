@@ -18,8 +18,6 @@ public class GraphicalInterfaceBackup extends JPanel
     
     private HighScore highScore;
     
-    private String highScoreString;
-    
     HashMap<Rectangle, ActionListener> buttonActions = new HashMap<Rectangle, ActionListener>();
     
     private GameControl gameControl;
@@ -50,8 +48,6 @@ public class GraphicalInterfaceBackup extends JPanel
 	public GraphicalInterfaceBackup(GameControl gameControl)
 	{		
 		this.gameControl = gameControl;
-		
-		highScore = gameControl.getHighScore();
 		
 		// Lead the cave background image, to be used later in drawing.
 		try {
@@ -96,14 +92,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	repaint();
     }
     
-    public void displayHighScore(String[] players, int[] scores, String[] caves) {
-    	String str = " ";
-    	for(int i = 0; i < players.length; i++) {
-    		str += players + "\n";
-    	}
-    	highScoreString = str;
-    	System.out.println(str);
-    	
+    public void displayHighScore(String[] players, int[] scores, String[] caves) {    	
     	showHighScore = true;
     	showMenu = false;
     	showCave = false;
@@ -123,11 +112,14 @@ public class GraphicalInterfaceBackup extends JPanel
     	} else if (showMenu) {
     		paintMenu(g);
     	} else if (showHighScore) {
-    		paintHighScores(g, highScoreString);
+    		paintHighScores(g, highScore.getHighScorePlayers(), highScore.getHighScores(), highScore.getHighScoreCaves());
     	}
     }
     
     public void paintMenu(Graphics g) {
+    	
+    	g.setColor(Color.LIGHT_GRAY);
+    	g.fillRect(0, 0, 800, 500);
     	
     	Font buttonFont = new Font("Arial", Font.BOLD, 30);
     	
@@ -144,6 +136,8 @@ public class GraphicalInterfaceBackup extends JPanel
     	
     	drawCenteredButton(g, "High Scores", buttonFont, new Rectangle(400, 225, 200, 50), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	highScore = gameControl.getHighScore();
+            	System.out.println(highScore.toString());
             	displayHighScore(highScore.getHighScorePlayers(), highScore.getHighScores(), highScore.getHighScoreCaves());
             	repaint();
             }
@@ -151,16 +145,35 @@ public class GraphicalInterfaceBackup extends JPanel
     	
     }
     
-    public void paintHighScores(Graphics g, String s) {
+    public void paintHighScores(Graphics g, String[] players, int[] scores, String[] caves) {
+    	
+    	g.setColor(Color.LIGHT_GRAY);
+    	g.fillRect(0, 0, 800, 500);
+    	
     	Font buttonFont = new Font("Arial", Font.BOLD, 30);
     	
     	g.setColor(Color.BLACK);
     	
     	drawCenteredString(g, "High Scores:", new Rectangle(0, 0, 800, 100), new Font("Arial", Font.BOLD, 60));
     	
-    	drawCenteredString(g, s, new Rectangle(0, 0, 800, 100), new Font("Arial", Font.BOLD, 30));
+    	g.setFont(new Font("Arial", Font.BOLD, 20));
     	
-    	drawCenteredButton(g, "Back", buttonFont, new Rectangle(400, 300, 200, 50), new ActionListener() {
+    	g.drawString("Players:", 50, 110);
+    	for(int i = 0; i < players.length; i++) {
+    		g.drawString(players[i], 50, 140+i*20);
+    	}
+    	
+    	g.drawString("Scores:", 300, 110);
+    	for(int i = 0; i < scores.length; i++) {
+    		g.drawString("" + scores[i], 300, 140+i*20);
+    	}
+    	
+    	g.drawString("Caves:", 600, 110);
+    	for(int i = 0; i < caves.length; i++) {
+    		g.drawString(caves[i], 600, 140+i*20);
+    	}
+    	
+    	drawCenteredButton(g, "Back", buttonFont, new Rectangle(400, 400, 200, 50), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	showMenu();
             	repaint();

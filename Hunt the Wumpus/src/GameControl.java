@@ -42,12 +42,12 @@ public class GameControl{
 
 	public GameControl() {
 		scan = new Scanner(System.in);
+		highScore = new HighScore();
 		int randRoom = (int)(Math.random()*30);
 		cave = new Cave(getMap());
 		gameLocations = new GameLocations(cave, randRoom);
 		gui = new GraphicalInterface("GUI");
 		guiBackup = new GraphicalInterfaceBackup(this);
-		highScore = new HighScore();
 		wumpus = new Wumpus(cave, gameLocations);
 		player = new Player(gameLocations, "temp_name", cave, wumpus);
 		trivia = new Trivia(gameLocations);

@@ -27,12 +27,52 @@ public class HighScore {
 		retrievePlayers();
 		retrieveMapNames();
 		
+		
+		
 	}
 	
 	//Returns the top 10 High Scores as an array of integers and retrieves it from the text file
 	private int[] retrieveHighScores() {
 		
-		return retrieveArray(highScoresFile, highScores);
+		int counter = 0;
+
+		Scanner textCounter;
+		try {
+			textCounter = new Scanner(highScoresFile);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+		while(textCounter.hasNextLine()){
+
+			counter++;
+			textCounter.nextLine();
+
+		}
+
+		textCounter.close();
+		
+		Scanner textReader;
+		try {
+			textReader = new Scanner(highScoresFile);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		highScores = new int[counter];
+
+		for(int i = 0; i < counter; i++){
+
+			highScores[i] = textReader.nextInt();
+
+		}
+
+		textReader.close();
+
+		return highScores;
 		
 	}
 	
@@ -128,14 +168,88 @@ public class HighScore {
 	//Returns the top 10 High Scored Players as an array of String and retrieves it from the text file
 	private String[] retrievePlayers() {
 		
-		return retrieveArray(highScorePlayersFile, highScorePlayers);
+		int counter = 0;
+
+		Scanner textCounter;
+		try {
+			textCounter = new Scanner(highScorePlayersFile);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+		while(textCounter.hasNextLine()){
+
+			counter++;
+			textCounter.nextLine();
+
+		}
+
+		textCounter.close();
+		
+		Scanner textReader;
+		try {
+			textReader = new Scanner(highScorePlayersFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+		highScorePlayers = new String[counter];
+
+		for(int i = 0; i < counter; i++){
+
+			highScorePlayers[i] = textReader.nextLine();
+
+		}
+
+		textReader.close();
+
+		return highScorePlayers;
 		
 	}
 
 	//Returns the maps of the top 10 Highest Scored Players as an array of String and retrieves it from the text file
 	private String[] retrieveMapNames() {
 		
-		return retrieveArray(mapNamesFile, mapNames);
+		int counter = 0;
+
+		Scanner textCounter;
+		try {
+			textCounter = new Scanner(mapNamesFile);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+		while(textCounter.hasNextLine()){
+
+			counter++;
+			textCounter.nextLine();
+
+		}
+
+		textCounter.close();
+		
+		Scanner textReader;
+		try {
+			textReader = new Scanner(mapNamesFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+		mapNames = new String[counter];
+
+		for(int i = 0; i < counter; i++){
+
+			mapNames[i] = textReader.nextLine();
+
+		}
+
+		textReader.close();
+
+		return mapNames;
 		
 	}	
 	
