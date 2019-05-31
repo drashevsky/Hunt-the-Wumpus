@@ -15,8 +15,11 @@ public class GraphicalInterfaceBackup extends JPanel
     private boolean showCave = false;
     private boolean showMenu = false;
     private boolean showHighScore = false;
+    private boolean showCaveChooser = false;
     
     private HighScore highScore;
+    
+    private Cave cave;
     
     HashMap<Rectangle, ActionListener> buttonActions = new HashMap<Rectangle, ActionListener>();
     
@@ -82,6 +85,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	showCave = true;
     	showMenu = false;
     	showHighScore = false;
+    	showCaveChooser = false;
     	repaint();
     }
     
@@ -89,6 +93,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	showMenu = true;
     	showCave = false;
     	showHighScore = false;
+    	showCaveChooser = false;
     	repaint();
     }
     
@@ -96,7 +101,15 @@ public class GraphicalInterfaceBackup extends JPanel
     	showHighScore = true;
     	showMenu = false;
     	showCave = false;
+    	showCaveChooser = false;
     	repaint();
+    }
+    
+    public void showCaveChooser() {
+    	showCaveChooser = true;
+    	showCave = false;
+    	showMenu = false;
+    	showHighScore = false;
     }
     
     // This gets called every time you call repaint()
@@ -113,6 +126,8 @@ public class GraphicalInterfaceBackup extends JPanel
     		paintMenu(g);
     	} else if (showHighScore) {
     		paintHighScores(g, highScore.getHighScorePlayers(), highScore.getHighScores(), highScore.getHighScoreCaves());
+    	} else if (showCaveChooser) {
+    		paintCaveChooser(g);
     	}
     }
     
@@ -129,7 +144,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	
     	drawCenteredButton(g, "Play", buttonFont, new Rectangle(400, 150, 200, 50), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	showCave();
+            	showCaveChooser();
             	repaint();
             }
         });
@@ -142,6 +157,59 @@ public class GraphicalInterfaceBackup extends JPanel
             	repaint();
             }
         }); 	
+    	
+    }
+    
+    public void paintCaveChooser(Graphics g) {
+    	
+    	g.setColor(Color.LIGHT_GRAY);
+    	g.fillRect(0, 0, 800, 500);
+    	
+    	Font buttonFont = new Font("Arial", Font.BOLD, 30);
+    	
+    	g.setColor(Color.BLACK);
+    	
+    	drawCenteredString(g, "Choose a Cave", new Rectangle(0, 0, 800, 100), new Font("Arial", Font.BOLD, 60));
+    	
+    	drawCenteredButton(g, "Cave 1", buttonFont, new Rectangle(400, 150, 100, 30), new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	gameControl.setCave(new Cave("map1.txt"));
+            	showCave();
+            	repaint();
+            }
+        });
+    	
+    	drawCenteredButton(g, "Cave 2", buttonFont, new Rectangle(400, 190, 100, 30), new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	gameControl.setCave(new Cave("map2.txt"));
+            	showCave();
+            	repaint();
+            }
+        });
+    	
+    	drawCenteredButton(g, "Cave 3", buttonFont, new Rectangle(400, 230, 100, 30), new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	gameControl.setCave(new Cave("map3.txt"));
+            	showCave();
+            	repaint();
+            }
+        });
+    	
+    	drawCenteredButton(g, "Cave 4", buttonFont, new Rectangle(400, 270, 100, 30), new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	gameControl.setCave(new Cave("map4.txt"));
+            	showCave();
+            	repaint();
+            }
+        });
+    	
+    	drawCenteredButton(g, "Cave 5", buttonFont, new Rectangle(400, 310, 100, 30), new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	gameControl.setCave(new Cave("map5.txt"));
+            	showCave();
+            	repaint();
+            }
+        });
     	
     }
     

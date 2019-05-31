@@ -46,18 +46,42 @@ public class GameControl{
 		int randRoom = (int)(Math.random()*30);
 		cave = new Cave(getMap());
 		gameLocations = new GameLocations(cave, randRoom);
-		gui = new GraphicalInterface("GUI");
-		guiBackup = new GraphicalInterfaceBackup(this);
 		wumpus = new Wumpus(cave, gameLocations);
 		player = new Player(gameLocations, "temp_name", cave, wumpus);
 		trivia = new Trivia(gameLocations);
 		textUI = new TextUI(4);
+		gui = new GraphicalInterface("GUI");
+		guiBackup = new GraphicalInterfaceBackup(this);
+	}
+	
+	public int getRandRoom() {
+		return (int)(Math.random()*30);
 	}
 	
 	public static void main(String[] args) {
 		// Create an instance of GameControl
 		gameControl = new GameControl();
 		gameControl.start();
+	}
+	
+	public void setCave(Cave cave) {
+		this.cave = cave;
+	}
+	
+	public void setTrivia(Trivia trivia) {
+		this.trivia = trivia;
+	}
+	
+	public void setGameLocations(GameLocations gameLocations) {
+		this.gameLocations = gameLocations;
+	}
+	
+	public void setWumpus(Wumpus wumpus) {
+		this.wumpus = wumpus;
+	}
+	
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 	
 	public boolean isGameOver() {
