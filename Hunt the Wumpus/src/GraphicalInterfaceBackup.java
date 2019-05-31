@@ -14,6 +14,11 @@ public class GraphicalInterfaceBackup extends JPanel
     
     private boolean showCave = false;
     private boolean showMenu = false;
+    private boolean showHighScore = false;
+    
+    private HighScore highScore;
+    
+    private String highScoreString;
     
     HashMap<Rectangle, ActionListener> buttonActions = new HashMap<Rectangle, ActionListener>();
     
@@ -43,9 +48,10 @@ public class GraphicalInterfaceBackup extends JPanel
 	}
 
 	public GraphicalInterfaceBackup(GameControl gameControl)
-	{
-		
+	{		
 		this.gameControl = gameControl;
+		
+		highScore = gameControl.getHighScore();
 		
 		// Lead the cave background image, to be used later in drawing.
 		try {
@@ -79,11 +85,27 @@ public class GraphicalInterfaceBackup extends JPanel
     {
     	showCave = true;
     	showMenu = false;
+    	showHighScore = false;
     	repaint();
     }
     
     public void showMenu() {
     	showMenu = true;
+    	showCave = false;
+    	showHighScore = false;
+    	repaint();
+    }
+    
+    public void displayHighScore(String[] players, int[] scores, String[] caves) {
+    	String str = " ";
+    	for(int i = 0; i < players.length; i++) {
+    		str += players + "\n";
+    	}
+    	highScoreString = str;
+    	System.out.println(str);
+    	
+    	showHighScore = true;
+    	showMenu = false;
     	showCave = false;
     	repaint();
     }
@@ -100,24 +122,50 @@ public class GraphicalInterfaceBackup extends JPanel
 	        paintCave(g);
     	} else if (showMenu) {
     		paintMenu(g);
+    	} else if (showHighScore) {
+    		paintHighScores(g, highScoreString);
     	}
     }
     
-    public void paintMenu(Graphics graphics) {
+    public void paintMenu(Graphics g) {
     	
     	Font buttonFont = new Font("Arial", Font.BOLD, 30);
     	
-    	graphics.setColor(Color.BLACK);
+    	g.setColor(Color.BLACK);
     	
-    	drawCenteredString(graphics, "Hunt the Wumpus", new Rectangle(0, 0, 800, 100), new Font("Arial", Font.BOLD, 60));
+    	drawCenteredString(g, "Hunt the Wumpus", new Rectangle(0, 0, 800, 100), new Font("Arial", Font.BOLD, 60));
     	
-    	drawButton(graphics, "Play", buttonFont, new Rectangle(300, 200, 100, 75), new ActionListener() {
+    	drawCenteredButton(g, "Play", buttonFont, new Rectangle(400, 150, 200, 50), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	System.out.println("Play");
+            	showCave();
             	repaint();
             }
         });
     	
+    	drawCenteredButton(g, "High Scores", buttonFont, new Rectangle(400, 225, 200, 50), new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	displayHighScore(highScore.getHighScorePlayers(), highScore.getHighScores(), highScore.getHighScoreCaves());
+            	repaint();
+            }
+        }); 	
+    	
+    }
+    
+    public void paintHighScores(Graphics g, String s) {
+    	Font buttonFont = new Font("Arial", Font.BOLD, 30);
+    	
+    	g.setColor(Color.BLACK);
+    	
+    	drawCenteredString(g, "High Scores:", new Rectangle(0, 0, 800, 100), new Font("Arial", Font.BOLD, 60));
+    	
+    	drawCenteredString(g, s, new Rectangle(0, 0, 800, 100), new Font("Arial", Font.BOLD, 30));
+    	
+    	drawCenteredButton(g, "Back", buttonFont, new Rectangle(400, 300, 200, 50), new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	showMenu();
+            	repaint();
+            }
+        });
     }
     
     public void paintCave(Graphics g)
@@ -170,6 +218,11 @@ public class GraphicalInterfaceBackup extends JPanel
     	drawCenteredString(g, text, rect, new Font("Arial", Font.BOLD, 12));
     	
     	buttonActions.put(rect, listener);
+    }
+    
+    private void drawCenteredButton(Graphics g, String text, Font font, Rectangle rect, ActionListener listener) {
+    	Rectangle centeredRect = new Rectangle(rect.x-rect.width/2, rect.y, rect.width, rect.height);
+    	drawButton(g, text, font, centeredRect, listener);
     }
     
     public void drawCenteredString(Graphics g, String text, Rectangle rect, Font font) {

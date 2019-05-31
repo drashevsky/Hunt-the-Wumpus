@@ -149,6 +149,11 @@ public class HighScore {
 		return highScorePlayers;
 	}
 	
+	//Returns High Score Caves as an array
+	public String[] getHighScoreCaves() {
+		return mapNames;
+	}
+	
 	//Returns the High Score at the given index. The integer parameter represents the index of the High Score.
 	public int getHighScore(int index) {
 		return highScores[index];
