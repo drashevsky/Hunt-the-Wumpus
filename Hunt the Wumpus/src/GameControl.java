@@ -25,11 +25,13 @@ import javax.swing.JFrame;
  */
 public class GameControl{
 	public static GameControl gameControl;
-	public boolean GUIMODE = false;
+	public final boolean GUIMODE = true;
+	public final boolean SAMPLEGUIMODE = true;
 	private boolean gameOver = false;
 	private Cave cave;
 	private GameLocations gameLocations;
 	private GraphicalInterface gui;
+	private GraphicalInterfaceBackup guiBackup;
 	private HighScore highscore;
 	private Wumpus wumpus;
 	private Player player;
@@ -44,6 +46,7 @@ public class GameControl{
 		cave = new Cave(getMap());
 		gameLocations = new GameLocations(cave, randRoom);
 		gui = new GraphicalInterface("GUI");
+		guiBackup = new GraphicalInterfaceBackup(this);
 		highscore = new HighScore();
 		wumpus = new Wumpus(cave, gameLocations);
 		player = new Player(gameLocations, "temp_name", cave, wumpus);
@@ -92,7 +95,11 @@ public class GameControl{
 			textUI.showMainMenu();
 			textUI.runEvents(gameControl);
 		} else {
-			gui.showMainMenu();
+			if(!SAMPLEGUIMODE) {
+				gui.showMainMenu();
+			} else {
+				guiBackup.startMainMenu();
+			}
 		}
 	}
 	public void newGameButtonClicked() {
