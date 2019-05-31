@@ -9,6 +9,7 @@ import java.util.HashMap;
 public class GraphicalInterfaceBackup extends JPanel
 {	
 	private static JFrame frame;
+	private static JFrame triviaFrame;
     private Image caveImage;
     private int currentRoom = 0;
     
@@ -16,8 +17,11 @@ public class GraphicalInterfaceBackup extends JPanel
     private boolean showMenu = false;
     private boolean showHighScore = false;
     private boolean showCaveChooser = false;
+    private boolean showTrivia = false;
     
     private HighScore highScore;
+    
+    private int triviaResult = -1;
     
     private Cave cave;
     
@@ -47,6 +51,23 @@ public class GraphicalInterfaceBackup extends JPanel
             }
         });
 	}
+    
+    public void displayTrivia() {
+    	triviaFrame = new JFrame("Trivia");
+    	frame.setSize(new Dimension(800, 500));
+    	
+    	setVisible(true);
+    	frame.add(this);
+    	frame.setVisible(true);
+    	
+    	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	
+    	SwingUtilities.invokeLater(new Runnable() {
+    		public void run() {
+    			showTrivia();
+    		}
+    	});
+    }
 
 	public GraphicalInterfaceBackup(GameControl gameControl)
 	{		
@@ -79,6 +100,21 @@ public class GraphicalInterfaceBackup extends JPanel
 		});
 	}
     
+	public int getTriviaResult() {
+		
+		return 1;
+		
+	}
+	
+	public void showTrivia() {
+		showTrivia = true;
+		showCave = false;
+		showMenu = false;
+		showHighScore = false;
+		showCaveChooser = false;
+		repaint();
+	}
+	
 	// Tells paintComponent method that it should draw the cave
     public void showCave()
     {
@@ -86,6 +122,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	showMenu = false;
     	showHighScore = false;
     	showCaveChooser = false;
+    	showTrivia = false;
     	repaint();
     }
     
@@ -94,6 +131,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	showCave = false;
     	showHighScore = false;
     	showCaveChooser = false;
+    	showTrivia = false;
     	repaint();
     }
     
@@ -102,6 +140,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	showMenu = false;
     	showCave = false;
     	showCaveChooser = false;
+    	showTrivia = false;
     	repaint();
     }
     
@@ -110,6 +149,8 @@ public class GraphicalInterfaceBackup extends JPanel
     	showCave = false;
     	showMenu = false;
     	showHighScore = false;
+    	showTrivia = false;
+    	repaint();
     }
     
     // This gets called every time you call repaint()
@@ -128,6 +169,8 @@ public class GraphicalInterfaceBackup extends JPanel
     		paintHighScores(g, highScore.getHighScorePlayers(), highScore.getHighScores(), highScore.getHighScoreCaves());
     	} else if (showCaveChooser) {
     		paintCaveChooser(g);
+    	} else if (showTrivia) {
+    		paintTrivia(g);
     	}
     }
     
@@ -154,6 +197,33 @@ public class GraphicalInterfaceBackup extends JPanel
             	highScore = gameControl.getHighScore();
             	System.out.println(highScore.toString());
             	displayHighScore(highScore.getHighScorePlayers(), highScore.getHighScores(), highScore.getHighScoreCaves());
+            	repaint();
+            }
+        }); 	
+    	
+    }
+    
+    public void paintTrivia(Graphics g) {
+    	
+    	g.setColor(Color.LIGHT_GRAY);
+    	g.fillRect(0, 0, 800, 500);
+    	
+    	Font buttonFont = new Font("Arial", Font.BOLD, 30);
+    	
+    	g.setColor(Color.BLACK);
+    	
+    	drawCenteredString(g, "Question", new Rectangle(0, 0, 800, 100), new Font("Arial", Font.BOLD, 40));
+    	
+    	drawCenteredButton(g, "0", buttonFont, new Rectangle(400, 150, 200, 50), new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	triviaResult = 1;
+            	repaint();
+            }
+        });
+    	
+    	drawCenteredButton(g, "1", buttonFont, new Rectangle(400, 225, 200, 50), new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	triviaResult = 2;
             	repaint();
             }
         }); 	
@@ -273,7 +343,7 @@ public class GraphicalInterfaceBackup extends JPanel
         // Draw another simple button
         drawButton(g, "Buy Arrow", new Rectangle(100, 200, 100, 50), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	System.out.println("Bought an arrow");
+            	gameControl.getTrivia().startTrivia(1, 1);
             	repaint();
             }
         });

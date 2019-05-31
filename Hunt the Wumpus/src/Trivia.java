@@ -15,12 +15,16 @@ public class Trivia {
 	private String[] currentTrivia;
 	private String[] displayedAnswers;
 	
+	private GameControl gameControl;
+	
 	private GameLocations gameLocations;
 	
 	//Generates object using questions and answers from the question file
-	public Trivia(GameLocations gameLocations) {
+	public Trivia(GameLocations gameLocations, GameControl gameControl) {
 		
 		triviaFile = new File(triviaPath);
+		
+		this.gameControl = gameControl;
 		
 		retrieveTrivia();
 		
@@ -199,6 +203,8 @@ public class Trivia {
 	
 	//Interprets Input for Answer Selected
 	public int getAnswer() {
+		
+		/*
 		Scanner input = new Scanner(System.in);
 		
 		String line = input.next().toLowerCase();
@@ -212,7 +218,10 @@ public class Trivia {
 		} else {
 			return -1;
 		}
+		*/
 		
+		return gameControl.getGraphicalInterfaceBackup().getTriviaResult();
+
 	}
 	
 	//Determines Whether the Answer at the Given Index is Correct	

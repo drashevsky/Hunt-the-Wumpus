@@ -48,7 +48,7 @@ public class GameControl{
 		gameLocations = new GameLocations(cave, randRoom);
 		wumpus = new Wumpus(cave, gameLocations);
 		player = new Player(gameLocations, "temp_name", cave, wumpus);
-		trivia = new Trivia(gameLocations);
+		trivia = new Trivia(gameLocations, this);
 		textUI = new TextUI(4);
 		gui = new GraphicalInterface("GUI");
 		guiBackup = new GraphicalInterfaceBackup(this);
@@ -114,6 +114,10 @@ public class GameControl{
 	
 	public HighScore getHighScore() {
 		return highScore;
+	}
+	
+	public GraphicalInterfaceBackup getGraphicalInterfaceBackup () {
+		return guiBackup;
 	}
 	
 	public void start()
