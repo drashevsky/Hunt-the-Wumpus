@@ -73,6 +73,10 @@ public class Player {
 		return this.name;
 	}
 	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public int getArrows() {
 		return arrows;
 	}

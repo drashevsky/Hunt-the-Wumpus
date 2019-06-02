@@ -18,6 +18,9 @@ public class GraphicalInterfaceBackup extends JPanel
     private boolean showHighScore = false;
     private boolean showCaveChooser = false;
     private boolean showTrivia = false;
+    private boolean showNameChooser = false;
+    
+    private String playerName;
     
     private HighScore highScore;
     
@@ -106,12 +109,23 @@ public class GraphicalInterfaceBackup extends JPanel
 		
 	}
 	
+	public void showNameChooser() {
+		showNameChooser = true;
+		showCave = false;
+		showMenu = false;
+		showHighScore = false;
+		showCaveChooser = false;
+		showTrivia = false;
+		playerName = "";
+	}
+	
 	public void showTrivia() {
 		showTrivia = true;
 		showCave = false;
 		showMenu = false;
 		showHighScore = false;
 		showCaveChooser = false;
+		showNameChooser = false;
 		repaint();
 	}
 	
@@ -123,6 +137,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	showHighScore = false;
     	showCaveChooser = false;
     	showTrivia = false;
+    	showNameChooser = false;
     	repaint();
     }
     
@@ -132,6 +147,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	showHighScore = false;
     	showCaveChooser = false;
     	showTrivia = false;
+    	showNameChooser = false;
     	repaint();
     }
     
@@ -141,6 +157,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	showCave = false;
     	showCaveChooser = false;
     	showTrivia = false;
+    	showNameChooser = false;
     	repaint();
     }
     
@@ -150,6 +167,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	showMenu = false;
     	showHighScore = false;
     	showTrivia = false;
+    	showNameChooser = false;
     	repaint();
     }
     
@@ -171,6 +189,8 @@ public class GraphicalInterfaceBackup extends JPanel
     		paintCaveChooser(g);
     	} else if (showTrivia) {
     		paintTrivia(g);
+    	} else if (showNameChooser) {
+    		paintNameChooser(g);
     	}
     }
     
@@ -244,7 +264,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	drawCenteredButton(g, "Cave 1", buttonFont, new Rectangle(400, 150, 100, 30), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	gameControl.setCave(new Cave("map1.txt"));
-            	showCave();
+            	showNameChooser();
             	repaint();
             }
         });
@@ -252,7 +272,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	drawCenteredButton(g, "Cave 2", buttonFont, new Rectangle(400, 190, 100, 30), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	gameControl.setCave(new Cave("map2.txt"));
-            	showCave();
+            	showNameChooser();
             	repaint();
             }
         });
@@ -260,7 +280,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	drawCenteredButton(g, "Cave 3", buttonFont, new Rectangle(400, 230, 100, 30), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	gameControl.setCave(new Cave("map3.txt"));
-            	showCave();
+            	showNameChooser();
             	repaint();
             }
         });
@@ -268,7 +288,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	drawCenteredButton(g, "Cave 4", buttonFont, new Rectangle(400, 270, 100, 30), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	gameControl.setCave(new Cave("map4.txt"));
-            	showCave();
+            	showNameChooser();
             	repaint();
             }
         });
@@ -276,7 +296,61 @@ public class GraphicalInterfaceBackup extends JPanel
     	drawCenteredButton(g, "Cave 5", buttonFont, new Rectangle(400, 310, 100, 30), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	gameControl.setCave(new Cave("map5.txt"));
-            	showCave();
+            	showNameChooser();
+            	repaint();
+            }
+        });
+    	
+    }
+    
+public void paintNameChooser(Graphics g) {
+    	
+    	g.setColor(Color.LIGHT_GRAY);
+    	g.fillRect(0, 0, 800, 500);
+    	
+    	Font buttonFont = new Font("Arial", Font.BOLD, 30);
+    	
+    	g.setColor(Color.BLACK);
+    	
+    	drawCenteredString(g, "Type your Name", new Rectangle(0, 0, 800, 100), new Font("Arial", Font.BOLD, 60));
+    	
+    	drawCenteredString(g, playerName, new Rectangle(0, 70, 800, 100), new Font("Arial", Font.PLAIN, 40));
+    	
+    	char[][] characters = {
+    			{'A', 'B', 'C', 'D', 'E', 'F', 'G'},
+    			{'H', 'I', 'J', 'K', 'L', 'M', 'N'},
+    			{'O', 'P', 'Q', 'R', 'S', 'T', 'Y'},
+    			{'V', 'W', 'X', 'Y', 'Z'}
+    	};
+    	
+    	for(int r = 0; r < characters.length; r++) {
+    		for(int c = 0; c < characters[r].length; c++) {
+    			char ch = characters[r][c];
+		    	drawCenteredButton(g, "" + ch, buttonFont, new Rectangle(220 + c*60, 200 + r*40, 30, 30), new ActionListener() {
+		            public void actionPerformed(ActionEvent e) {
+		            	playerName += "" + ch;
+		            	System.out.println(playerName);
+		            	repaint();
+		            }
+		        });
+    		}	    	
+    	}
+    	
+    	drawCenteredButton(g, "Backspace", buttonFont, new Rectangle(400, 160, 160, 30), new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	if(playerName.length() > 0) {
+            		playerName = playerName.substring(0, playerName.length()-1);
+            	}
+            	repaint();
+            }
+        });
+    	
+    	drawCenteredButton(g, "Start", buttonFont, new Rectangle(400, 380, 160, 30), new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	if(playerName.length() > 0) {
+	            	gameControl.getPlayer().setName(playerName);
+	            	showCave();
+            	}
             	repaint();
             }
         });
