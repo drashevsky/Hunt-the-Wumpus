@@ -135,7 +135,7 @@ public class Trivia {
 	 * 5. Current room
 	 * 6. Answer to a Trivia Question Already Asked
 	 */
-	private String getSecret() {
+	public String getSecret() {
 		
 		int randomNum = (int)(Math.random()*6) + 1;
 		

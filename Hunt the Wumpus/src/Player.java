@@ -109,4 +109,9 @@ public class Player {
 		}
 		return false;
 	}
+	
+	public void purchaseSecrets() {
+		this.secrets++;
+	}
+	
 }

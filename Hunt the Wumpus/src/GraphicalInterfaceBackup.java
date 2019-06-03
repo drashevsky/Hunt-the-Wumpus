@@ -30,6 +30,8 @@ public class GraphicalInterfaceBackup extends JPanel
     
     private GameControl gameControl;
     
+    private String currentTip = "";
+    
     public void startMainMenu()
     {
     	// Create the GUI window
@@ -437,7 +439,7 @@ public void paintNameChooser(Graphics g) {
         	repaint();
         }
         	
-        
+        g.drawString(currentTip, 10, 430);
         
         System.out.println(gameControl.getGameLocations().nearHazard(playerRoom));
         System.out.println(playerRoom.getHazard());
@@ -451,6 +453,7 @@ public void paintNameChooser(Graphics g) {
 	            public void actionPerformed(ActionEvent e) {
 	            	gameControl.getGameLocations().movePlayer(connectedRooms[0]);
 	            	gameControl.getPlayer().incrementGoldCoins(1);
+	            	currentTip = "Hint: " + gameControl.getTrivia().getHint();
 	            	repaint();
 	            }
 	        });
@@ -462,6 +465,7 @@ public void paintNameChooser(Graphics g) {
                 public void actionPerformed(ActionEvent e) {
                 	gameControl.getGameLocations().movePlayer(connectedRooms[1]);
                 	gameControl.getPlayer().incrementGoldCoins(1);
+                	currentTip = "Hint: " + gameControl.getTrivia().getHint();
                 	repaint();
                 }
             });
@@ -473,22 +477,27 @@ public void paintNameChooser(Graphics g) {
                 public void actionPerformed(ActionEvent e) {
                 	gameControl.getGameLocations().movePlayer(connectedRooms[2]);
                 	gameControl.getPlayer().incrementGoldCoins(1);
+                	currentTip = "Hint: " + gameControl.getTrivia().getHint();
                 	repaint();
                 }
             });
         }
         
-        /*
         // Draw another simple button
-        drawButton(g, "Buy Arrow", new Rectangle(50, 250, 100, 50), new ActionListener() {
+        drawButton(g, "Buy Arrow", new Rectangle(50, 200, 100, 50), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	if(gameControl.getTrivia().startTrivia(1, 1)) {
-            		gameControl.getPlayer().purchaseArrows();
-            	}
+            	gameControl.getPlayer().purchaseArrows();
             	repaint();
             }
         });
-        */
+        
+        drawButton(g, "Buy Secret", new Rectangle(50, 300, 100, 50), new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	gameControl.getPlayer().purchaseSecrets();
+            	currentTip = "Secret: " + gameControl.getTrivia().getSecret();
+            	repaint();
+            }
+        });
         
     }
     	
