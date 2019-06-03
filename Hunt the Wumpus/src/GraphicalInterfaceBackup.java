@@ -410,7 +410,8 @@ public void paintNameChooser(Graphics g) {
         g.drawString("Score: " + player.computeScore(), 10, 20);
         g.drawString("Arrows: " + player.getArrows(), 10, 50);
         g.drawString("Room: " + playerRoomValue, 10, 80);
-        g.drawString("Near Hazard Check: " + gameLocations.nearHazard(playerRoom), 10, 110);
+        g.drawString("Coins: " + gameControl.getPlayer().getGoldCoins(), 10, 110);
+        g.drawString("Near Hazard Check: " + gameLocations.nearHazard(playerRoom), 10, 410);
         System.out.println(gameLocations.nearHazard(playerRoom));
         System.out.println(playerRoom.getHazard());
         for (int i : gameLocations.getHazards()) {
