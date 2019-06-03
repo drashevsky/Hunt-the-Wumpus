@@ -94,7 +94,7 @@ public class GameLocations {
 	public void handleHazard() {
 		// Handle situation with pit
 		if (c.getRoom(trackPlayer()).getHazard() == 1) {
-			if(startTrivia()) {
+			if(/*startTrivia()*/true) {
 				System.out.println("---[Moving player back to start]---");
 				player = start;
 			}

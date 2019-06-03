@@ -20,6 +20,8 @@ public class GraphicalInterfaceBackup extends JPanel
     private boolean showTrivia = false;
     private boolean showNameChooser = false;
     
+    private boolean showingHazard = false;
+    
     private String playerName;
     
     private HighScore highScore;
@@ -381,6 +383,19 @@ public void paintNameChooser(Graphics g) {
     
     public void paintCave(Graphics g)
     {
+    	
+    	if(showingHazard) {
+    		try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	gameControl.getGameLocations().handleHazard();
+        	showingHazard = false;
+        	repaint();
+    	}
+    	
     	// Draw background image
     	//g.drawImage(caveImage, 0, 0, getSize().width, getSize().height, null);
     	g.setColor(Color.LIGHT_GRAY);
@@ -409,7 +424,21 @@ public void paintNameChooser(Graphics g) {
         g.drawString("Arrows: " + gameControl.getPlayer().getArrows(), 10, 50);
         g.drawString("Room: " + playerRoomValue, 10, 80);
         g.drawString("Coins: " + gameControl.getPlayer().getGoldCoins(), 10, 110);
-        g.drawString("Near Hazard Check: " + gameControl.getGameLocations().nearHazard(playerRoom), 10, 410);
+        
+        if(playerRoom.getHazard() == 0 && !showingHazard) {
+        	g.drawString("Near Hazard Check: " + gameControl.getGameLocations().nearHazard(playerRoom), 10, 410);
+        } else if(playerRoom.getHazard() == 1 && !showingHazard){
+        	g.drawString("You have fallen into a pit! Moving to start...", 10, 410);
+        	showingHazard = true;
+        	repaint();
+        } else if (playerRoom.getHazard() == 2 && !showingHazard){
+        	g.drawString("You have encountered Super Bats! Moving to a random room...", 10, 410);
+        	showingHazard = true;
+        	repaint();
+        }
+        	
+        
+        
         System.out.println(gameControl.getGameLocations().nearHazard(playerRoom));
         System.out.println(playerRoom.getHazard());
         for (int i : gameControl.getGameLocations().getHazards()) {
@@ -417,16 +446,18 @@ public void paintNameChooser(Graphics g) {
         }
         
         //Room 1
-        drawButton(g, "" + connectedRooms[0], new Rectangle(275, 225, 20, 20), new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	gameControl.getGameLocations().movePlayer(connectedRooms[0]);
-            	gameControl.getPlayer().incrementGoldCoins(1);
-            	repaint();
-            }
-        });
+        if(playerRoom.getHazard() == 0) {
+	        drawButton(g, "" + connectedRooms[0], new Rectangle(275, 225, 20, 20), new ActionListener() {
+	            public void actionPerformed(ActionEvent e) {
+	            	gameControl.getGameLocations().movePlayer(connectedRooms[0]);
+	            	gameControl.getPlayer().incrementGoldCoins(1);
+	            	repaint();
+	            }
+	        });
+        }
         
         //Room 2
-        if(connectedRooms.length >= 1 && connectedRooms[1] != 0) {
+        if(connectedRooms.length >= 1 && connectedRooms[1] != 0 && playerRoom.getHazard() == 0) {
             drawButton(g, "" + connectedRooms[1], new Rectangle(400, 125, 20, 20), new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                 	gameControl.getGameLocations().movePlayer(connectedRooms[1]);
@@ -437,7 +468,7 @@ public void paintNameChooser(Graphics g) {
         }
         
         //Room 3
-        if(connectedRooms.length >= 2 && connectedRooms[2] != 0) {
+        if(connectedRooms.length >= 2 && connectedRooms[2] != 0 && playerRoom.getHazard() == 0) {
             drawButton(g, "" + connectedRooms[2], new Rectangle(525, 225, 20, 20), new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                 	gameControl.getGameLocations().movePlayer(connectedRooms[2]);
