@@ -32,21 +32,26 @@ public class Player {
 	// Returns string the player
 	public String toString()
 	{
-		return "Player";
+		return name;
 	}
 	// hello
-	public void shootArrow(int x) {
+	public boolean shootArrow(int x) {
 		
 		if (arrows == 0) {
 			System.out.print("You can't shoot no more");
+			return false;
 		}
-		else if (x == w.track()) {
+		else if (x == location.getWumpus().track()) {
 			arrows--;
 			killedWumpus = true;
+			System.out.println("Hit!");
+			return true;
 		}
 		else {
 			arrows--;
-			w.move();
+			location.getWumpus().move();
+			System.out.println("Missed");
+			return false;
 		}
 	}
 	public boolean wumpusState() {

@@ -2,6 +2,14 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.Line;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 import javax.swing.*;
 import java.io.*;
 import java.util.HashMap;
@@ -12,6 +20,7 @@ public class GraphicalInterfaceSample extends JPanel
     static GraphicalInterfaceSample gui;
     Image caveImage;
     int currentRoom = 0;
+    static Clip clip;
     boolean showCave = false;
     HashMap<Rectangle, ActionListener> buttonActions = new HashMap<Rectangle, ActionListener>();
     
@@ -35,9 +44,26 @@ public class GraphicalInterfaceSample extends JPanel
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	gui.showCave();
+            	try {
+
+                    AudioInputStream ais = AudioSystem.getAudioInputStream(new File("res/airplane-landing_daniel_simion.wav").toURI().toURL());
+
+                    clip = AudioSystem.getClip();
+
+                    clip.open(ais);
+
+            }catch (IOException | LineUnavailableException | UnsupportedAudioFileException e){
+
+                    System.out.print("Error");
+             }
+			FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(0.0f);
+            // 0asdasdasdamakes it so it doesn't loop at all, 1 would make it so it ran and then ran again
+            clip.loop(0);
             }
-        });
-	}
+            });
+        }
+	
 
 	public GraphicalInterfaceSample()
 	{

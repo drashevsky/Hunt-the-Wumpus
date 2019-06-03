@@ -55,6 +55,11 @@ public class GameLocations {
 		cave.setRoomHazard(Hazards[3], 2);
 	}
 	
+	// Returns score
+	public int getScore() {
+		return actualPlayer.computeScore();
+	}
+	
 	// returns the name of the object
 	public String toString() {
 		String hazards = "";
@@ -94,7 +99,7 @@ public class GameLocations {
 	public void handleHazard() {
 		// Handle situation with pit
 		if (c.getRoom(trackPlayer()).getHazard() == 1) {
-			if(/*startTrivia()*/true) {
+			if(true) {
 				System.out.println("---[Moving player back to start]---");
 				player = start;
 			}
@@ -124,6 +129,18 @@ public class GameLocations {
 		player = d;
 		turns++;
 		actualPlayer.incrementGoldCoins(1);
+	}
+	
+	public Wumpus getWumpus() {
+		return wumpus;
+	}
+	
+	public Player getPlayer() {
+		return actualPlayer;
+	}
+	
+	public void incrementTurns(int num) {
+		turns += num;
 	}
 	
 	public void moveWumpus() {

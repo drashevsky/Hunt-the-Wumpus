@@ -29,6 +29,9 @@ public class GraphicalInterfaceBackup extends JPanel
     private boolean showNameChooser = false;
     
     private boolean showingHazard = false;
+    private boolean showingWumpus = false;
+    
+    private boolean hitWumpus = false;
     
     private String playerName;
     
@@ -36,11 +39,15 @@ public class GraphicalInterfaceBackup extends JPanel
     
     private HighScore highScore;
     
+    private boolean gameOver = false;
+    
     HashMap<Rectangle, ActionListener> buttonActions = new HashMap<Rectangle, ActionListener>();
     
     private GameControl gameControl;
     
     private String currentTip = "";
+    
+    private String caveName;
     
     public void startMainMenu()
     {
@@ -61,6 +68,7 @@ public class GraphicalInterfaceBackup extends JPanel
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	showMenu();
+            	
             }
         });
         
@@ -182,6 +190,16 @@ public class GraphicalInterfaceBackup extends JPanel
     	repaint();
     }
     
+    public void gameOver() {
+    	
+    	System.out.println(gameControl.getGameLocations().getScore());
+    	System.out.println(playerName);
+    	System.out.println(caveName);
+    	
+    	gameControl.getHighScore().addScore(gameControl.getGameLocations().getScore(), 
+    			playerName, caveName);
+    }
+    
     // This gets called every time you call repaint()
     public void paintComponent(Graphics g)
     {
@@ -276,6 +294,7 @@ public class GraphicalInterfaceBackup extends JPanel
             public void actionPerformed(ActionEvent e) {
             	gameControl.setCave(new Cave("map1.txt"));
             	gameControl.getGameLocations().setHazardTypes(gameControl.getCave());
+            	caveName = "Cave 1";
             	showNameChooser();
             	repaint();
             }
@@ -285,6 +304,7 @@ public class GraphicalInterfaceBackup extends JPanel
             public void actionPerformed(ActionEvent e) {
             	gameControl.getCave().loadMap("map2.txt");
             	gameControl.getGameLocations().setHazardTypes(gameControl.getCave());
+            	caveName = "Cave 2";
             	showNameChooser();
             	repaint();
             }
@@ -294,6 +314,7 @@ public class GraphicalInterfaceBackup extends JPanel
             public void actionPerformed(ActionEvent e) {
             	gameControl.setCave(new Cave("map3.txt"));
             	gameControl.getGameLocations().setHazardTypes(gameControl.getCave());
+            	caveName = "Cave 3";
             	showNameChooser();
             	repaint();
             }
@@ -303,6 +324,7 @@ public class GraphicalInterfaceBackup extends JPanel
             public void actionPerformed(ActionEvent e) {
             	gameControl.setCave(new Cave("map4.txt"));
             	gameControl.getGameLocations().setHazardTypes(gameControl.getCave());
+            	caveName = "Cave 4";
             	showNameChooser();
             	repaint();
             }
@@ -312,6 +334,7 @@ public class GraphicalInterfaceBackup extends JPanel
             public void actionPerformed(ActionEvent e) {
             	gameControl.setCave(new Cave("map5.txt"));
             	gameControl.getGameLocations().setHazardTypes(gameControl.getCave());
+            	caveName = "Cave 5";
             	showNameChooser();
             	repaint();
             }
@@ -322,6 +345,7 @@ public class GraphicalInterfaceBackup extends JPanel
             public void actionPerformed(ActionEvent e) {
             	gameControl.setCave(new Cave(""));
             	gameControl.getGameLocations().setHazardTypes(gameControl.getCave());
+            	caveName = "Random Cave";
             	showNameChooser();
             	repaint();
             }
@@ -344,8 +368,8 @@ public void paintNameChooser(Graphics g) {
     	char[][] characters = {
     			{'A', 'B', 'C', 'D', 'E', 'F', 'G'},
     			{'H', 'I', 'J', 'K', 'L', 'M', 'N'},
-    			{'O', 'P', 'Q', 'R', 'S', 'T', 'Y'},
-    			{'V', 'W', 'X', 'Y', 'Z'}
+    			{'O', 'P', 'Q', 'R', 'S', 'T', 'U'},
+    			{'U', 'V', 'W', 'X', 'Y', 'Z'}
     	};
     	
     	for(int r = 0; r < characters.length; r++) {
@@ -435,6 +459,18 @@ public void paintNameChooser(Graphics g) {
         	repaint();
     	}
     	
+    	if(showingWumpus) {
+    		gameOver();
+    		try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	showCave = false;
+        	frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+    	}
+    	
     	// Draw background image
     	//g.drawImage(caveImage, 0, 0, getSize().width, getSize().height, null);
     	g.setColor(Color.LIGHT_GRAY);
@@ -460,19 +496,44 @@ public void paintNameChooser(Graphics g) {
     		g.drawImage(wumpusImage, 350, 200, 100, 100, null);
     	}
     	
+    	if(foundWumpus || playerRoom.getHazard() != 0) {
+    		SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                	
+                try {
+                        AudioInputStream ais = AudioSystem.getAudioInputStream(new File("res/hazard.wav").toURI().toURL());
+                        gongClip = AudioSystem.getClip();
+                        gongClip.open(ais);
+                }catch (IOException | LineUnavailableException | UnsupportedAudioFileException e){
+                        System.out.print("Error");
+                }
+                FloatControl gainControl = (FloatControl) gongClip.getControl(FloatControl.Type.MASTER_GAIN);
+                gainControl.setValue(0.0f);
+                // 0     asdasdasdamakes it so it doesn't loop at all, 1 would make it so it ran and then ran again
+                gongClip.loop(0);;
+                repaint();
+                }
+            });
+    	}
+    	
     	// Draw some white text information
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 20));
         g.drawString("Score: " + gameControl.getPlayer().computeScore(), 10, 20);
-        g.drawString("Arrows: " + gameControl.getPlayer().getArrows(), 10, 50);
+        g.drawString("Arrows: " + gameControl.getGameLocations().getPlayer().getArrows(), 10, 50);
         g.drawString("Room: " + playerRoomValue, 10, 80);
         g.drawString("Coins: " + gameControl.getPlayer().getGoldCoins(), 10, 110);
         
-        if(playerRoom.getHazard() == 0 && !showingHazard && !foundWumpus) {
-        			g.drawString("Near Hazard Check: " + gameControl.getGameLocations().nearHazard(playerRoom), 10, 410);
+        if(gameControl.getGameLocations().getPlayer().killedWumpus) {
+        	g.drawString("The Wumpus has been vanquished!", 10, 410);
+        	repaint();
+        }
+        else if(playerRoom.getHazard() == 0 && !showingHazard && !foundWumpus) {
+        	g.drawString("Near Hazard Check: " + gameControl.getGameLocations().nearHazard(playerRoom), 10, 410);
         } else if(playerRoom.getHazard() == 1 && !showingHazard){
         	g.drawString("You have fallen into a pit! Moving to start...", 10, 410);
         	showingHazard = true;
+        	repaint();
         	repaint();
         } else if (playerRoom.getHazard() == 2 && !showingHazard){
         	g.drawString("You have encountered Super Bats! Moving to a random room...", 10, 410);
@@ -480,6 +541,7 @@ public void paintNameChooser(Graphics g) {
         	repaint();
         } else if(playerRoom.getHazard() == 0 && !showingHazard && foundWumpus) {
         			g.drawString("You found the Wumpus! Game Over.", 10, 410);
+        			showingWumpus = true;
         			repaint();
         }
         	
@@ -498,6 +560,7 @@ public void paintNameChooser(Graphics g) {
 	            	gameControl.getGameLocations().movePlayer(connectedRooms[0]);
 	            	gameControl.getPlayer().incrementGoldCoins(1);
 	            	currentTip = "Hint: " + gameControl.getTrivia().getHint();
+	            	gameControl.getGameLocations().incrementTurns(1);
 	            	repaint();
 	            }
 	        });
@@ -510,6 +573,8 @@ public void paintNameChooser(Graphics g) {
                 	gameControl.getGameLocations().movePlayer(connectedRooms[1]);
                 	gameControl.getPlayer().incrementGoldCoins(1);
                 	currentTip = "Hint: " + gameControl.getTrivia().getHint();
+                	gameControl.getGameLocations().incrementTurns(1);
+                	g.drawString("The Wumpus has been vanquished!", 10, 450);
                 	repaint();
                 }
             });
@@ -522,10 +587,70 @@ public void paintNameChooser(Graphics g) {
                 	gameControl.getGameLocations().movePlayer(connectedRooms[2]);
                 	gameControl.getPlayer().incrementGoldCoins(1);
                 	currentTip = "Hint: " + gameControl.getTrivia().getHint();
+                	gameControl.getGameLocations().incrementTurns(1);
+                	g.drawString("The Wumpus has been vanquished!", 10, 450);
                 	repaint();
                 }
             });
         }
+        
+        if(gameControl.getGameLocations().getPlayer().getArrows() > 0 && playerRoom.getHazard() == 0) {
+        
+        	g.drawString("Shoot Arrow", 640, 220);
+        	
+	        //Room 1 Shoot
+	        if(playerRoom.getHazard() == 0 && !foundWumpus) {
+		        drawButton(g, "" + connectedRooms[0], new Rectangle(640, 250, 20, 20), new ActionListener() {
+		            public void actionPerformed(ActionEvent e) {
+		            	hitWumpus = gameControl.getGameLocations().getPlayer().shootArrow(connectedRooms[0]);
+		            	gameControl.getGameLocations().incrementTurns(1);
+		            	
+		            	if(hitWumpus) {
+		            		gameControl.getGameLocations().getPlayer().killedWumpus = true;
+		            		showingWumpus = true;
+		            	}
+		            	
+		            	repaint();
+		            }
+		        });
+	        }
+	        
+	        //Room 2 Shoot
+	        if(connectedRooms.length >= 1 && connectedRooms[1] != 0 && playerRoom.getHazard() == 0 && !foundWumpus) {
+	            drawButton(g, "" + connectedRooms[1], new Rectangle(670, 250, 20, 20), new ActionListener() {
+	                public void actionPerformed(ActionEvent e) {
+	                	hitWumpus = gameControl.getGameLocations().getPlayer().shootArrow(connectedRooms[1]);
+		            	gameControl.getGameLocations().incrementTurns(1);
+		            	
+		            	if(hitWumpus) {
+		            		gameControl.getGameLocations().getPlayer().killedWumpus = true;
+		            		showingWumpus = true;
+		            	}
+		            	
+		            	repaint();
+	                }
+	            });
+	        }
+	        
+	        //Room 3 Shoot
+	        if(connectedRooms.length >= 2 && connectedRooms[2] != 0 && playerRoom.getHazard() == 0 && !foundWumpus) {
+	            drawButton(g, "" + connectedRooms[2], new Rectangle(700, 250, 20, 20), new ActionListener() {
+	                public void actionPerformed(ActionEvent e) {
+	                	hitWumpus = gameControl.getGameLocations().getPlayer().shootArrow(connectedRooms[2]);
+		            	gameControl.getGameLocations().incrementTurns(1);
+		            	
+		            	if(hitWumpus) {
+		            		gameControl.getGameLocations().getPlayer().killedWumpus = true;
+		            		showingWumpus = true;
+		            	}
+		            	
+		            	repaint();
+	                }
+	            });
+	        }
+        
+        }
+
         
         // Draw another simple button
         if(!foundWumpus) {
@@ -542,6 +667,7 @@ public void paintNameChooser(Graphics g) {
         		public void actionPerformed(ActionEvent e) {
 	            	gameControl.getPlayer().purchaseSecrets();
 	            	currentTip = "Secret: " + gameControl.getTrivia().getSecret();
+	            	gameControl.getGameLocations().incrementTurns(1);
 	            	repaint();
 	            }
 	        });
