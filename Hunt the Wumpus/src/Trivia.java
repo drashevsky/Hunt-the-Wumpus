@@ -204,7 +204,7 @@ public class Trivia {
 	//Interprets Input for Answer Selected
 	public int getAnswer() {
 		
-		/*
+		
 		Scanner input = new Scanner(System.in);
 		
 		String line = input.next().toLowerCase();
@@ -218,9 +218,9 @@ public class Trivia {
 		} else {
 			return -1;
 		}
-		*/
 		
-		return gameControl.getGraphicalInterfaceBackup().getTriviaResult();
+		
+		//return gameControl.getGraphicalInterfaceBackup().getTriviaResult();
 
 	}
 	

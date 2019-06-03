@@ -134,7 +134,7 @@ public class Cave {
 	// * First line contains two ints with 2d array size (e.g. 6 5),
 	// * Followed by each room's properties occupying their own line (e.g. 1 4 5).
 	// * Only property so far is connected rooms, 3 ints ----------------^
-	private void loadMap(String mapFile) {
+	public void loadMap(String mapFile) {
 		Scanner src;
 		
 		try {

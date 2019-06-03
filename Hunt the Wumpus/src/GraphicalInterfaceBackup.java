@@ -9,9 +9,9 @@ import java.util.HashMap;
 public class GraphicalInterfaceBackup extends JPanel
 {	
 	private static JFrame frame;
-	private static JFrame triviaFrame;
     private Image caveImage;
-    private int currentRoom = 0;
+    private Image batImage;
+    private Image pitImage;
     
     private boolean showCave = false;
     private boolean showMenu = false;
@@ -23,10 +23,6 @@ public class GraphicalInterfaceBackup extends JPanel
     private String playerName;
     
     private HighScore highScore;
-    
-    private int triviaResult = -1;
-    
-    private Cave cave;
     
     HashMap<Rectangle, ActionListener> buttonActions = new HashMap<Rectangle, ActionListener>();
     
@@ -54,23 +50,6 @@ public class GraphicalInterfaceBackup extends JPanel
             }
         });
 	}
-    
-    public void displayTrivia() {
-    	triviaFrame = new JFrame("Trivia");
-    	frame.setSize(new Dimension(800, 500));
-    	
-    	setVisible(true);
-    	frame.add(this);
-    	frame.setVisible(true);
-    	
-    	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	
-    	SwingUtilities.invokeLater(new Runnable() {
-    		public void run() {
-    			showTrivia();
-    		}
-    	});
-    }
 
 	public GraphicalInterfaceBackup(GameControl gameControl)
 	{		
@@ -79,6 +58,8 @@ public class GraphicalInterfaceBackup extends JPanel
 		// Lead the cave background image, to be used later in drawing.
 		try {
 			caveImage = ImageIO.read(new File("res/cave.jpg"));
+			batImage = ImageIO.read(new File("res/bats.png"));
+			pitImage = ImageIO.read(new File("res/pit.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -236,14 +217,14 @@ public class GraphicalInterfaceBackup extends JPanel
     	
     	drawCenteredButton(g, "0", buttonFont, new Rectangle(400, 150, 200, 50), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	triviaResult = 1;
+            	
             	repaint();
             }
         });
     	
     	drawCenteredButton(g, "1", buttonFont, new Rectangle(400, 225, 200, 50), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	triviaResult = 2;
+            	
             	repaint();
             }
         }); 	
@@ -264,6 +245,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	drawCenteredButton(g, "Cave 1", buttonFont, new Rectangle(400, 150, 100, 30), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	gameControl.setCave(new Cave("map1.txt"));
+            	gameControl.getGameLocations().setHazardTypes(gameControl.getCave());
             	showNameChooser();
             	repaint();
             }
@@ -271,7 +253,8 @@ public class GraphicalInterfaceBackup extends JPanel
     	
     	drawCenteredButton(g, "Cave 2", buttonFont, new Rectangle(400, 190, 100, 30), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	gameControl.setCave(new Cave("map2.txt"));
+            	gameControl.getCave().loadMap("map2.txt");
+            	gameControl.getGameLocations().setHazardTypes(gameControl.getCave());
             	showNameChooser();
             	repaint();
             }
@@ -280,6 +263,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	drawCenteredButton(g, "Cave 3", buttonFont, new Rectangle(400, 230, 100, 30), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	gameControl.setCave(new Cave("map3.txt"));
+            	gameControl.getGameLocations().setHazardTypes(gameControl.getCave());
             	showNameChooser();
             	repaint();
             }
@@ -288,6 +272,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	drawCenteredButton(g, "Cave 4", buttonFont, new Rectangle(400, 270, 100, 30), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	gameControl.setCave(new Cave("map4.txt"));
+            	gameControl.getGameLocations().setHazardTypes(gameControl.getCave());
             	showNameChooser();
             	repaint();
             }
@@ -296,6 +281,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	drawCenteredButton(g, "Cave 5", buttonFont, new Rectangle(400, 310, 100, 30), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	gameControl.setCave(new Cave("map5.txt"));
+            	gameControl.getGameLocations().setHazardTypes(gameControl.getCave());
             	showNameChooser();
             	repaint();
             }
@@ -396,26 +382,71 @@ public void paintNameChooser(Graphics g) {
     public void paintCave(Graphics g)
     {
     	// Draw background image
-    	g.drawImage(caveImage, 0, 0, getSize().width, getSize().height, null);
+    	//g.drawImage(caveImage, 0, 0, getSize().width, getSize().height, null);
+    	g.setColor(Color.LIGHT_GRAY);
+    	g.fillRect(0, 0, 800, 500);
+    	
+    	g.setColor(Color.WHITE);
+    	g.fillRect(300, 150, 200, 200);
+    	
+    	Player player = gameControl.getPlayer();
+    	GameLocations gameLocations = gameControl.getGameLocations();
+    	int playerRoomValue = gameLocations.trackPlayer();
+    	Room playerRoom = gameControl.getCave().getRoom(playerRoomValue);
+    	int[] connectedRooms = playerRoom.getConnectedRooms();
+    	
+    	//Display Bats
+    	if(playerRoom.getHazard() == 2) {
+    		g.drawImage(batImage, 300, 150, 200, 200, null);
+    	}
+    	
+    	if(playerRoom.getHazard() == 1) {
+    		g.drawImage(pitImage, 300, 150, 200, 200, null);
+    	}
     	
     	// Draw some white text information
-        g.setColor(Color.WHITE);
+        g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 20));
-        g.drawString("Score: 103", 10, 20);
-        g.drawString("Arrows: 12", 10, 50);
-        g.drawString("Room: " + currentRoom, 10, 80);
+        g.drawString("Score: " + player.computeScore(), 10, 20);
+        g.drawString("Arrows: " + player.getArrows(), 10, 50);
+        g.drawString("Room: " + playerRoomValue, 10, 80);
+        g.drawString("Near Hazard Check: " + gameLocations.nearHazard(playerRoom), 10, 110);
+        System.out.println(gameLocations.nearHazard(playerRoom));
+        System.out.println(playerRoom.getHazard());
+        for (int i : gameLocations.getHazards()) {
+        	System.out.print(" " + i + " ");
+        }
         
-        // Draw a simple button
-        drawButton(g, "Move", new Rectangle(100, 100, 50, 50), new ActionListener() {
+        //Room 1
+        drawButton(g, "" + connectedRooms[0], new Rectangle(275, 225, 20, 20), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	System.out.println("Moved");
-            	currentRoom++;
+            	gameLocations.movePlayer(connectedRooms[0]);
             	repaint();
             }
         });
         
+        //Room 2
+        if(connectedRooms.length >= 1 && connectedRooms[1] != 0) {
+            drawButton(g, "" + connectedRooms[1], new Rectangle(400, 125, 20, 20), new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                	gameLocations.movePlayer(connectedRooms[1]);
+                	repaint();
+                }
+            });
+        }
+        
+        //Room 3
+        if(connectedRooms.length >= 2 && connectedRooms[2] != 0) {
+            drawButton(g, "" + connectedRooms[2], new Rectangle(525, 225, 20, 20), new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                	gameLocations.movePlayer(connectedRooms[2]);
+                	repaint();
+                }
+            });
+        }
+        
         // Draw another simple button
-        drawButton(g, "Buy Arrow", new Rectangle(100, 200, 100, 50), new ActionListener() {
+        drawButton(g, "Buy Arrow", new Rectangle(50, 250, 100, 50), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	gameControl.getTrivia().startTrivia(1, 1);
             	repaint();

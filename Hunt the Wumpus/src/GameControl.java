@@ -170,6 +170,10 @@ public class GameControl{
 		gameOver = isOver;
 	}
 	
+	public void move(int room, Room playerRoom) {
+		gameLocations.movePlayer(room);
+	}
+	
 	public void takeAction(String input, Room playerRoom) {
 		if(input.equals("1")) {
 			System.out.println("Which room would you like to move to?");
