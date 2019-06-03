@@ -389,9 +389,7 @@ public void paintNameChooser(Graphics g) {
     	g.setColor(Color.WHITE);
     	g.fillRect(300, 150, 200, 200);
     	
-    	Player player = gameControl.getPlayer();
-    	GameLocations gameLocations = gameControl.getGameLocations();
-    	int playerRoomValue = gameLocations.trackPlayer();
+    	int playerRoomValue = gameControl.getGameLocations().trackPlayer();
     	Room playerRoom = gameControl.getCave().getRoom(playerRoomValue);
     	int[] connectedRooms = playerRoom.getConnectedRooms();
     	
@@ -407,21 +405,22 @@ public void paintNameChooser(Graphics g) {
     	// Draw some white text information
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 20));
-        g.drawString("Score: " + player.computeScore(), 10, 20);
-        g.drawString("Arrows: " + player.getArrows(), 10, 50);
+        g.drawString("Score: " + gameControl.getPlayer().computeScore(), 10, 20);
+        g.drawString("Arrows: " + gameControl.getPlayer().getArrows(), 10, 50);
         g.drawString("Room: " + playerRoomValue, 10, 80);
         g.drawString("Coins: " + gameControl.getPlayer().getGoldCoins(), 10, 110);
-        g.drawString("Near Hazard Check: " + gameLocations.nearHazard(playerRoom), 10, 410);
-        System.out.println(gameLocations.nearHazard(playerRoom));
+        g.drawString("Near Hazard Check: " + gameControl.getGameLocations().nearHazard(playerRoom), 10, 410);
+        System.out.println(gameControl.getGameLocations().nearHazard(playerRoom));
         System.out.println(playerRoom.getHazard());
-        for (int i : gameLocations.getHazards()) {
+        for (int i : gameControl.getGameLocations().getHazards()) {
         	System.out.print(" " + i + " ");
         }
         
         //Room 1
         drawButton(g, "" + connectedRooms[0], new Rectangle(275, 225, 20, 20), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	gameLocations.movePlayer(connectedRooms[0]);
+            	gameControl.getGameLocations().movePlayer(connectedRooms[0]);
+            	gameControl.getPlayer().incrementGoldCoins(1);
             	repaint();
             }
         });
@@ -430,7 +429,8 @@ public void paintNameChooser(Graphics g) {
         if(connectedRooms.length >= 1 && connectedRooms[1] != 0) {
             drawButton(g, "" + connectedRooms[1], new Rectangle(400, 125, 20, 20), new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                	gameLocations.movePlayer(connectedRooms[1]);
+                	gameControl.getGameLocations().movePlayer(connectedRooms[1]);
+                	gameControl.getPlayer().incrementGoldCoins(1);
                 	repaint();
                 }
             });
@@ -440,19 +440,25 @@ public void paintNameChooser(Graphics g) {
         if(connectedRooms.length >= 2 && connectedRooms[2] != 0) {
             drawButton(g, "" + connectedRooms[2], new Rectangle(525, 225, 20, 20), new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                	gameLocations.movePlayer(connectedRooms[2]);
+                	gameControl.getGameLocations().movePlayer(connectedRooms[2]);
+                	gameControl.getPlayer().incrementGoldCoins(1);
                 	repaint();
                 }
             });
         }
         
+        /*
         // Draw another simple button
         drawButton(g, "Buy Arrow", new Rectangle(50, 250, 100, 50), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	gameControl.getTrivia().startTrivia(1, 1);
+            	if(gameControl.getTrivia().startTrivia(1, 1)) {
+            		gameControl.getPlayer().purchaseArrows();
+            	}
             	repaint();
             }
         });
+        */
+        
     }
     	
     private void drawButton(Graphics g, String text, Font font, Rectangle rect, ActionListener listener)
