@@ -32,7 +32,7 @@ public class Room {
 	//Sets the hazard type, checks to make sure it is between 0 and 2
 	public void setHazard(int hazardType) {
 		System.out.println("Set hazard type");
-		this.hazardType = hazardType;
+		this.hazardType = hazardType; 
 	}
 		
 	//Returns the type of hazard the room has, or 0 if none

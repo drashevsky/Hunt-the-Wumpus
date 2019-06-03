@@ -6,6 +6,13 @@ import javax.swing.*;
 import java.io.*;
 import java.util.HashMap;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 public class GraphicalInterfaceBackup extends JPanel
 {	
 	private static JFrame frame;
@@ -24,6 +31,8 @@ public class GraphicalInterfaceBackup extends JPanel
     private boolean showingHazard = false;
     
     private String playerName;
+    
+    private static Clip gongClip;
     
     private HighScore highScore;
     
@@ -54,6 +63,21 @@ public class GraphicalInterfaceBackup extends JPanel
             	showMenu();
             }
         });
+        
+        // ok just make sure you declare static Clip clip near ur other private instance variables
+        //but yeah all u have to change is the file name and it should work
+         /*try {
+                AudioInputStream ais = AudioSystem.getAudioInputStream(new File("res/gong.wav").toURI().toURL());
+                gongClip = AudioSystem.getClip();
+                gongClip.open(ais);
+        }catch (IOException | LineUnavailableException | UnsupportedAudioFileException e){
+                System.out.print("Error");
+        }
+        FloatControl gainControl = (FloatControl) gongClip.getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl.setValue(0.0f);
+        // 0     asdasdasdamakes it so it doesn't loop at all, 1 would make it so it ran and then ran again
+        gongClip.loop(0);;
+        */
 	}
 
 	public GraphicalInterfaceBackup(GameControl gameControl)
@@ -293,6 +317,15 @@ public class GraphicalInterfaceBackup extends JPanel
             }
         });
     	
+    	
+    	drawCenteredButton(g, "Random Generator", buttonFont, new Rectangle(400, 350, 280, 30), new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	gameControl.setCave(new Cave(""));
+            	gameControl.getGameLocations().setHazardTypes(gameControl.getCave());
+            	showNameChooser();
+            	repaint();
+            }
+        });
     }
     
 public void paintNameChooser(Graphics g) {
