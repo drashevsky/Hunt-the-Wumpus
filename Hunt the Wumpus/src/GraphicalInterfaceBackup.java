@@ -12,6 +12,7 @@ public class GraphicalInterfaceBackup extends JPanel
     private Image caveImage;
     private Image batImage;
     private Image pitImage;
+    private Image wumpusImage;
     
     private boolean showCave = false;
     private boolean showMenu = false;
@@ -64,6 +65,7 @@ public class GraphicalInterfaceBackup extends JPanel
 			caveImage = ImageIO.read(new File("res/cave.jpg"));
 			batImage = ImageIO.read(new File("res/bats.png"));
 			pitImage = ImageIO.read(new File("res/pit.png"));
+			wumpusImage = ImageIO.read(new File("res/wumpus.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -386,6 +388,8 @@ public void paintNameChooser(Graphics g) {
     public void paintCave(Graphics g)
     {
     	
+    	boolean foundWumpus = gameControl.getGameLocations().trackWumpus() == gameControl.getGameLocations().trackPlayer();
+    	
     	if(showingHazard) {
     		try {
 				Thread.sleep(2000);
@@ -419,6 +423,10 @@ public void paintNameChooser(Graphics g) {
     		g.drawImage(pitImage, 300, 150, 200, 200, null);
     	}
     	
+    	if(foundWumpus) {
+    		g.drawImage(wumpusImage, 350, 200, 100, 100, null);
+    	}
+    	
     	// Draw some white text information
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 20));
@@ -427,8 +435,8 @@ public void paintNameChooser(Graphics g) {
         g.drawString("Room: " + playerRoomValue, 10, 80);
         g.drawString("Coins: " + gameControl.getPlayer().getGoldCoins(), 10, 110);
         
-        if(playerRoom.getHazard() == 0 && !showingHazard) {
-        	g.drawString("Near Hazard Check: " + gameControl.getGameLocations().nearHazard(playerRoom), 10, 410);
+        if(playerRoom.getHazard() == 0 && !showingHazard && !foundWumpus) {
+        			g.drawString("Near Hazard Check: " + gameControl.getGameLocations().nearHazard(playerRoom), 10, 410);
         } else if(playerRoom.getHazard() == 1 && !showingHazard){
         	g.drawString("You have fallen into a pit! Moving to start...", 10, 410);
         	showingHazard = true;
@@ -437,9 +445,12 @@ public void paintNameChooser(Graphics g) {
         	g.drawString("You have encountered Super Bats! Moving to a random room...", 10, 410);
         	showingHazard = true;
         	repaint();
+        } else if(playerRoom.getHazard() == 0 && !showingHazard && foundWumpus) {
+        			g.drawString("You found the Wumpus! Game Over.", 10, 410);
+        			repaint();
         }
         	
-        g.drawString(currentTip, 10, 430);
+        g.drawString(currentTip, 10, 440);
         
         System.out.println(gameControl.getGameLocations().nearHazard(playerRoom));
         System.out.println(playerRoom.getHazard());
@@ -448,7 +459,7 @@ public void paintNameChooser(Graphics g) {
         }
         
         //Room 1
-        if(playerRoom.getHazard() == 0) {
+        if(playerRoom.getHazard() == 0 && !foundWumpus) {
 	        drawButton(g, "" + connectedRooms[0], new Rectangle(275, 225, 20, 20), new ActionListener() {
 	            public void actionPerformed(ActionEvent e) {
 	            	gameControl.getGameLocations().movePlayer(connectedRooms[0]);
@@ -460,7 +471,7 @@ public void paintNameChooser(Graphics g) {
         }
         
         //Room 2
-        if(connectedRooms.length >= 1 && connectedRooms[1] != 0 && playerRoom.getHazard() == 0) {
+        if(connectedRooms.length >= 1 && connectedRooms[1] != 0 && playerRoom.getHazard() == 0 && !foundWumpus) {
             drawButton(g, "" + connectedRooms[1], new Rectangle(400, 125, 20, 20), new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                 	gameControl.getGameLocations().movePlayer(connectedRooms[1]);
@@ -472,7 +483,7 @@ public void paintNameChooser(Graphics g) {
         }
         
         //Room 3
-        if(connectedRooms.length >= 2 && connectedRooms[2] != 0 && playerRoom.getHazard() == 0) {
+        if(connectedRooms.length >= 2 && connectedRooms[2] != 0 && playerRoom.getHazard() == 0 && !foundWumpus) {
             drawButton(g, "" + connectedRooms[2], new Rectangle(525, 225, 20, 20), new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                 	gameControl.getGameLocations().movePlayer(connectedRooms[2]);
@@ -484,20 +495,24 @@ public void paintNameChooser(Graphics g) {
         }
         
         // Draw another simple button
-        drawButton(g, "Buy Arrow", new Rectangle(50, 200, 100, 50), new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	gameControl.getPlayer().purchaseArrows();
-            	repaint();
-            }
-        });
+        if(!foundWumpus) {
+	        drawButton(g, "Buy Arrow", new Rectangle(50, 200, 100, 50), new ActionListener() {
+	            public void actionPerformed(ActionEvent e) {
+	            	gameControl.getPlayer().purchaseArrows();
+	            	repaint();
+	            }
+	        });
+        }
         
-        drawButton(g, "Buy Secret", new Rectangle(50, 300, 100, 50), new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	gameControl.getPlayer().purchaseSecrets();
-            	currentTip = "Secret: " + gameControl.getTrivia().getSecret();
-            	repaint();
-            }
-        });
+        if(!foundWumpus) {
+        	drawButton(g, "Buy Secret", new Rectangle(50, 300, 100, 50), new ActionListener() {
+        		public void actionPerformed(ActionEvent e) {
+	            	gameControl.getPlayer().purchaseSecrets();
+	            	currentTip = "Secret: " + gameControl.getTrivia().getSecret();
+	            	repaint();
+	            }
+	        });
+        }
         
     }
     	

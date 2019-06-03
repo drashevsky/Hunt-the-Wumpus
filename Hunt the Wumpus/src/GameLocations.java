@@ -112,7 +112,7 @@ public class GameLocations {
 	
 	public void movePlayer(int d)
 	{
-		int[] possible = c.getRoom(player).getConnectedRooms();
+		/*int[] possible = c.getRoom(player).getConnectedRooms();
 		for(int x = 0; x < possible.length; x++) {
 			if (d == possible[x]) {
 				player = d;
@@ -120,7 +120,10 @@ public class GameLocations {
 				actualPlayer.incrementGoldCoins(1);
 				break;
 			}
-		}
+		}*/
+		player = d;
+		turns++;
+		actualPlayer.incrementGoldCoins(1);
 	}
 	
 	public void moveWumpus() {
