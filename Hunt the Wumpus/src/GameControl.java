@@ -49,12 +49,12 @@ public class GameControl{
 		wumpus = new Wumpus(cave, gameLocations);
 		player = new Player(gameLocations, "temp_name", cave, wumpus);
 		trivia = new Trivia(gameLocations, this);
-		textUI = new TextUI(4);
+		textUI = new TextUI(4); // Creates a textUI with a scale factor
 		gui = new GraphicalInterface("GUI");
 		guiBackup = new GraphicalInterfaceBackup(this);
 	}
 	
-	public int getRandRoom() {
+	public int getRandRoom() { //Accesses a random room;
 		return (int)(Math.random()*30);
 	}
 	
@@ -63,6 +63,10 @@ public class GameControl{
 		gameControl = new GameControl();
 		gameControl.start();
 	}
+	
+//====================================================================
+//=== Accessor Land ==================================================
+//====================================================================
 	
 	public void setCave(Cave cave) {
 		this.cave = cave;
@@ -120,7 +124,10 @@ public class GameControl{
 		return guiBackup;
 	}
 	
-	public void start()
+//====================================================================
+//=== Method Land ====================================================
+//====================================================================
+	public void start() // Starts the game based off either TextUI or GUI
 	{
 
 		if(!GUIMODE) {
@@ -134,20 +141,15 @@ public class GameControl{
 			}
 		}
 	}
+	
 	public void newGameButtonClicked() {
 		// Reset the cave
 		// Reset game locations...
 		int currentRoom = gameLocations.trackPlayer();
 		Room surroundingRooms = cave.getRoom(currentRoom);
-		
-		if (GUIMODE){
-			//gui.showRoom(firstRoom);
-		} else {
-			//textUI.showRoom(currentRoom, surroundingRooms);
-		}
 	}
 	
-	public String getMap() {
+	public String getMap() { //Gets a map for the TextUI
 		if(!GUIMODE) {
 			System.out.println("Type a number between 1-5 for a map.");
 			String input = scan.nextLine();
@@ -162,7 +164,7 @@ public class GameControl{
 		return "";
 	}
 	
-	public void gameOver(boolean isOver) {
+	public void gameOver(boolean isOver) { //Checks the end game state whether a win or loss
 		if(isOver && player.wumpusState())
 			System.out.println("You've killed the Wumpus! You win the game.");
 		else if(isOver && !player.wumpusState())
@@ -170,11 +172,13 @@ public class GameControl{
 		gameOver = isOver;
 	}
 	
-	public void move(int room, Room playerRoom) {
+	public void move(int room, Room playerRoom) { //GameControl method to move player
 		gameLocations.movePlayer(room);
 	}
 	
+	//An input detector for the player to choose in the TextUI
 	public void takeAction(String input, Room playerRoom) {
+		//Typing "1" will load a prompt for you to move rooms
 		if(input.equals("1")) {
 			System.out.println("Which room would you like to move to?");
 			// Print out room numbers:
@@ -206,6 +210,7 @@ public class GameControl{
 			//gameControl.getGameLocations().moveWumpus();
 			System.out.println("---[The wumpus is in room: " + gameControl.getGameLocations().trackWumpus() + "]---");
 			//textUI.showRoom(gameLocations.trackPlayer(), cave.getRoom(gameLocations.trackPlayer()));
+		//Typing "2" will shoot an arrow in a specified room
 		} else if(input.equals("2")) {
 			System.out.println("Which room would you like to shoot an arrow in?");
 			System.out.println("You have " + player.getArrows() + " arrows left.");
@@ -217,8 +222,7 @@ public class GameControl{
 				System.out.println();
 			}
 			
-			// Check to see if room number is valid first before moving player
-			// Change to a while loop
+			// Check to see if room number is valid first before shooting
 			boolean validRoomNumber = false;
 			int x;
 			while(!validRoomNumber) {
@@ -239,6 +243,8 @@ public class GameControl{
 			if(player.wumpusState()) {
 				gameOver(true);
 			}
+		//Typing "3" will load a prompt for trivia and answering trivia will give you
+		//arrows and decrease your current coins
 		} else if (input.equals("3")) {			
 			if(trivia.startTrivia(2, 3)) {
 				player.purchaseArrows();
@@ -246,6 +252,7 @@ public class GameControl{
 			} else {
 				System.out.println("You failed to purchase arrows");
 			}
+		//Typing "4" loads trivia prompts and will give you answers to trivia questions
 		} else if (input.equals("4")) {
 			if(trivia.startTrivia(2, 3)) {
 				System.out.println("You obtained a secret!");
