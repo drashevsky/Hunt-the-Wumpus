@@ -39,7 +39,7 @@ public class GameControl{
 	private TextUI textUI;
 	private Room currentRoom;
 	private Scanner scan;
-
+	
 	public GameControl() {
 		scan = new Scanner(System.in);
 		highScore = new HighScore();

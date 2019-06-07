@@ -82,6 +82,10 @@ public class Player {
 		this.name = name;
 	}
 	
+	public void setCoins(int num) {
+		goldCoins = num;
+	}
+	
 	public int getArrows() {
 		return arrows;
 	}

@@ -27,6 +27,7 @@ public class GraphicalInterfaceBackup extends JPanel
     private boolean showCaveChooser = false;
     private boolean showTrivia = false;
     private boolean showNameChooser = false;
+    private boolean showTriviaOutcome = false;
     
     private boolean showingHazard = false;
     private boolean showingWumpus = false;
@@ -48,6 +49,14 @@ public class GraphicalInterfaceBackup extends JPanel
     private String currentTip = "";
     
     private String caveName;
+    
+    /*
+     * 1 = purchasing arrows
+     * 2 = purchasing secrets
+     * 3 = bottomless pit
+     * 4 = escaping wumpus
+     */
+    private int queuedAction = -1;
     
     public void startMainMenu()
     {
@@ -122,12 +131,6 @@ public class GraphicalInterfaceBackup extends JPanel
 		});
 	}
     
-	public int getTriviaResult() {
-		
-		return 1;
-		
-	}
-	
 	public void showNameChooser() {
 		showNameChooser = true;
 		showCave = false;
@@ -135,6 +138,7 @@ public class GraphicalInterfaceBackup extends JPanel
 		showHighScore = false;
 		showCaveChooser = false;
 		showTrivia = false;
+		showTriviaOutcome = false;
 		playerName = "";
 	}
 	
@@ -145,7 +149,7 @@ public class GraphicalInterfaceBackup extends JPanel
 		showHighScore = false;
 		showCaveChooser = false;
 		showNameChooser = false;
-		repaint();
+		showTriviaOutcome = false;
 	}
 	
 	// Tells paintComponent method that it should draw the cave
@@ -157,6 +161,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	showCaveChooser = false;
     	showTrivia = false;
     	showNameChooser = false;
+    	showTriviaOutcome = false;
     	repaint();
     }
     
@@ -167,6 +172,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	showCaveChooser = false;
     	showTrivia = false;
     	showNameChooser = false;
+    	showTriviaOutcome = false;
     	repaint();
     }
     
@@ -177,6 +183,7 @@ public class GraphicalInterfaceBackup extends JPanel
     	showCaveChooser = false;
     	showTrivia = false;
     	showNameChooser = false;
+    	showTriviaOutcome = false;
     	repaint();
     }
     
@@ -187,7 +194,26 @@ public class GraphicalInterfaceBackup extends JPanel
     	showHighScore = false;
     	showTrivia = false;
     	showNameChooser = false;
+    	showTriviaOutcome = false;
     	repaint();
+    }
+    
+    public void showTriviaOutcome() {
+    	showTriviaOutcome = true;
+    	showCaveChooser = false;
+    	showCave = false;
+    	showMenu = false;
+    	showHighScore = false;
+    	showTrivia = false;
+    	showNameChooser = false;
+    	repaint();
+    }
+    
+    public void startTrivia(int correctAnswersToPass, int questionsTotal, int action) {
+    	queuedAction = action;
+    	gameControl.getTrivia().startGUITrivia(correctAnswersToPass, questionsTotal);
+    	gameControl.getTrivia().nextQuestion();
+    	showTrivia();
     }
     
     public void gameOver() {
@@ -220,6 +246,8 @@ public class GraphicalInterfaceBackup extends JPanel
     		paintTrivia(g);
     	} else if (showNameChooser) {
     		paintNameChooser(g);
+    	} else if (showTriviaOutcome) {
+    		paintTriviaOutcome(g);
     	}
     }
     
@@ -254,6 +282,11 @@ public class GraphicalInterfaceBackup extends JPanel
     
     public void paintTrivia(Graphics g) {
     	
+    	if(!gameControl.getTrivia().isActive()) {
+    		showTriviaOutcome();
+    		repaint();
+    	}
+    	
     	g.setColor(Color.LIGHT_GRAY);
     	g.fillRect(0, 0, 800, 500);
     	
@@ -261,21 +294,131 @@ public class GraphicalInterfaceBackup extends JPanel
     	
     	g.setColor(Color.BLACK);
     	
-    	drawCenteredString(g, "Question", new Rectangle(0, 0, 800, 100), new Font("Arial", Font.BOLD, 40));
+    	drawCenteredString(g, gameControl.getTrivia().getCurrentTrivia()[0], new Rectangle(0, 0, 800, 100), new Font("Arial", Font.BOLD, 30));
     	
-    	drawCenteredButton(g, "0", buttonFont, new Rectangle(400, 150, 200, 50), new ActionListener() {
+    	drawCenteredButton(g, gameControl.getTrivia().getCurrentTrivia()[1], buttonFont, new Rectangle(400, 150, 600, 50), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	
+            	gameControl.getTrivia().answerQuestion(0);
             	repaint();
             }
         });
     	
-    	drawCenteredButton(g, "1", buttonFont, new Rectangle(400, 225, 200, 50), new ActionListener() {
+    	drawCenteredButton(g, gameControl.getTrivia().getCurrentTrivia()[2], buttonFont, new Rectangle(400, 225, 600, 50), new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	
+            	gameControl.getTrivia().answerQuestion(1);
             	repaint();
             }
         }); 	
+    	
+    	drawCenteredButton(g, gameControl.getTrivia().getCurrentTrivia()[3], buttonFont, new Rectangle(400, 300, 600, 50), new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	gameControl.getTrivia().answerQuestion(2);
+            	repaint();
+            }
+        }); 	
+    	
+    }
+    
+    public void paintTriviaOutcome(Graphics g) {
+    	
+    	String outcome = "";
+    	
+    	if(gameControl.getGameLocations().getPlayer().getGoldCoins() < 0) {
+    		outcome = "You ran out of gold coins and died";
+    		
+    	} else if(queuedAction == 1) {
+    		
+    		if(gameControl.getTrivia().passedPreviousTrivia()) {	
+    			outcome = "You purchased two more arrows";
+    		} else {
+    			outcome = "You failed to purchase arrows";
+    		}    		
+    	} else if(queuedAction == 2) {
+    		
+    		if(gameControl.getTrivia().passedPreviousTrivia()) {
+    			outcome = "You purchased a secret";
+    		} else {
+    			outcome = "You failed to purchase a secret";
+    		}
+    		
+    	} else if(queuedAction == 3) {
+    		
+    		if(gameControl.getTrivia().passedPreviousTrivia()) {
+    			outcome = "You climbed out of the pit to your start location";
+    		} else {
+    			outcome = "You fell into the pit";
+    		}
+    		
+    	} else if(queuedAction == 4) {
+    		
+    		if(gameControl.getTrivia().passedPreviousTrivia()) {
+    			outcome = "The Wumpus ran away";
+    		} else {
+    			outcome = "You have been eaten by the Wumpus";
+    		}
+    		
+    	}
+    	
+    	g.setColor(Color.LIGHT_GRAY);
+    	g.fillRect(0, 0, 800, 500);
+    	
+    	Font buttonFont = new Font("Arial", Font.BOLD, 30);
+    	
+    	g.setColor(Color.BLACK);
+    	
+    	drawCenteredString(g, outcome, new Rectangle(0, 0, 800, 100), new Font("Arial", Font.BOLD, 30));
+    	
+    	drawCenteredButton(g, "Continue", buttonFont, new Rectangle(400, 225, 200, 50), new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	
+            	if(gameControl.getGameLocations().getPlayer().getGoldCoins() < 0) {
+            		
+            		gameControl.getGameLocations().getPlayer().setCoins(0);
+            		gameOver();
+            		showCave = false;
+                	frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+            		
+            	} else if(queuedAction == 1) {
+            		
+            		if(gameControl.getTrivia().passedPreviousTrivia()) {	
+            			gameControl.getGameLocations().getPlayer().purchaseArrows();
+            		}
+            		
+            	} else if(queuedAction == 2) {
+            		
+            		if(gameControl.getTrivia().passedPreviousTrivia()) {
+            			currentTip = "Secret: " + gameControl.getTrivia().getSecret();
+            			gameControl.getGameLocations().getPlayer().purchaseSecrets();
+            		}
+            		
+            	} else if(queuedAction == 3) {
+            		
+            		if(gameControl.getTrivia().passedPreviousTrivia()) {
+            			gameControl.getGameLocations().handleHazard();
+            		} else {
+            			gameOver();
+            			showCave = false;
+                    	frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+            		}
+            		
+            	} else if(queuedAction == 4) {
+            		
+            		if(gameControl.getTrivia().passedPreviousTrivia()) {
+            			gameControl.getGameLocations().getWumpus().move();
+            			gameControl.getGameLocations().getWumpus().move();
+            			gameControl.getGameLocations().getWumpus().move();
+            		} else {
+            			gameOver();
+            			showCave = false;
+                    	frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+            		}
+            		
+            	}
+            	
+            	showCave();
+            	repaint();
+            }
+        }); 		
     	
     }
     
@@ -448,28 +591,38 @@ public void paintNameChooser(Graphics g) {
     	boolean foundWumpus = gameControl.getGameLocations().trackWumpus() == gameControl.getGameLocations().trackPlayer();
     	
     	if(showingHazard) {
+    		showingHazard = false;
     		try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        	gameControl.getGameLocations().handleHazard();
-        	showingHazard = false;
+    		if(gameControl.getCave().getRoom(gameControl.getGameLocations().trackPlayer()).getHazard() == 2) {
+	        	gameControl.getGameLocations().handleHazard();
+    		} else if(gameControl.getCave().getRoom(gameControl.getGameLocations().trackPlayer()).getHazard() == 1){
+    			startTrivia(2, 3, 3);
+    		}
         	repaint();
     	}
     	
     	if(showingWumpus) {
-    		gameOver();
+    		showingWumpus = false;
     		try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        	showCave = false;
-        	frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+    		if(gameControl.getGameLocations().trackWumpus() == gameControl.getGameLocations().trackPlayer()) {
+    			startTrivia(3, 5, 4);
+    		}
+        	repaint();
     	}
+    	
+    	int playerRoomValue = gameControl.getGameLocations().trackPlayer();
+    	Room playerRoom = gameControl.getCave().getRoom(playerRoomValue);
+    	int[] connectedRooms = playerRoom.getConnectedRooms();
     	
     	// Draw background image
     	//g.drawImage(caveImage, 0, 0, getSize().width, getSize().height, null);
@@ -478,10 +631,6 @@ public void paintNameChooser(Graphics g) {
     	
     	g.setColor(Color.WHITE);
     	g.fillRect(300, 150, 200, 200);
-    	
-    	int playerRoomValue = gameControl.getGameLocations().trackPlayer();
-    	Room playerRoom = gameControl.getCave().getRoom(playerRoomValue);
-    	int[] connectedRooms = playerRoom.getConnectedRooms();
     	
     	//Display Bats
     	if(playerRoom.getHazard() == 2) {
@@ -522,7 +671,7 @@ public void paintNameChooser(Graphics g) {
         g.drawString("Score: " + gameControl.getPlayer().computeScore(), 10, 20);
         g.drawString("Arrows: " + gameControl.getGameLocations().getPlayer().getArrows(), 10, 50);
         g.drawString("Room: " + playerRoomValue, 10, 80);
-        g.drawString("Coins: " + gameControl.getPlayer().getGoldCoins(), 10, 110);
+        g.drawString("Coins: " + gameControl.getGameLocations().getPlayer().getGoldCoins(), 10, 110);
         
         if(gameControl.getGameLocations().getPlayer().killedWumpus) {
         	g.drawString("The Wumpus has been vanquished!", 10, 410);
@@ -531,7 +680,7 @@ public void paintNameChooser(Graphics g) {
         else if(playerRoom.getHazard() == 0 && !showingHazard && !foundWumpus) {
         	g.drawString("Near Hazard Check: " + gameControl.getGameLocations().nearHazard(playerRoom), 10, 410);
         } else if(playerRoom.getHazard() == 1 && !showingHazard){
-        	g.drawString("You have fallen into a pit! Moving to start...", 10, 410);
+        	g.drawString("You have stumbled upon a bottomless pit...", 10, 410);
         	showingHazard = true;
         	repaint();
         	repaint();
@@ -540,7 +689,7 @@ public void paintNameChooser(Graphics g) {
         	showingHazard = true;
         	repaint();
         } else if(playerRoom.getHazard() == 0 && !showingHazard && foundWumpus) {
-        			g.drawString("You found the Wumpus! Game Over.", 10, 410);
+        			g.drawString("You found the Wumpus...", 10, 410);
         			showingWumpus = true;
         			repaint();
         }
@@ -656,7 +805,7 @@ public void paintNameChooser(Graphics g) {
         if(!foundWumpus) {
 	        drawButton(g, "Buy Arrow", new Rectangle(50, 200, 100, 50), new ActionListener() {
 	            public void actionPerformed(ActionEvent e) {
-	            	gameControl.getPlayer().purchaseArrows();
+	            	startTrivia(2, 3, 1);
 	            	repaint();
 	            }
 	        });
@@ -665,9 +814,8 @@ public void paintNameChooser(Graphics g) {
         if(!foundWumpus) {
         	drawButton(g, "Buy Secret", new Rectangle(50, 300, 100, 50), new ActionListener() {
         		public void actionPerformed(ActionEvent e) {
-	            	gameControl.getPlayer().purchaseSecrets();
-	            	currentTip = "Secret: " + gameControl.getTrivia().getSecret();
-	            	gameControl.getGameLocations().incrementTurns(1);
+        			startTrivia(2, 3, 2);
+        			gameControl.getGameLocations().incrementTurns(1);
 	            	repaint();
 	            }
 	        });

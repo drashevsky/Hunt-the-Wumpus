@@ -19,6 +19,13 @@ public class Trivia {
 	
 	private GameLocations gameLocations;
 	
+	private int correctAnswersNeeded = 0;
+	private int numberOfQuestions = 0;
+	private int questionsAsked = 0;
+	private int correctAnswers = 0;
+	private boolean triviaActive = false;
+	private boolean passedPreviousTrivia = false;
+	
 	//Generates object using questions and answers from the question file
 	public Trivia(GameLocations gameLocations, GameControl gameControl) {
 		
@@ -30,6 +37,10 @@ public class Trivia {
 		
 		this.gameLocations = gameLocations;
 		
+	}
+	
+	public boolean passedPreviousTrivia() {
+		return passedPreviousTrivia;
 	}
 	
 	//Retrieves trivia questions from file and stores them in "trivia"
@@ -67,6 +78,88 @@ public class Trivia {
 		}
 		
 		reader.close();
+		
+	}
+	
+	//Starts a round of GUI Trivia
+	//First parameter represents number of questions needed to be answered correctly to pass
+	//Second parameter is the total number of questions that can asked before the player loses
+	public void startGUITrivia(int correctAnswersToPass, int questionsTotal) {
+		correctAnswersNeeded = correctAnswersToPass;
+		numberOfQuestions = questionsTotal;
+		questionsAsked = 0;
+		correctAnswers = 0;
+		triviaActive = true;
+	}
+	
+	public void nextQuestion() {
+		
+		if(triviaActive && questionsAsked < numberOfQuestions && correctAnswers < correctAnswersNeeded) {
+			
+			if(trivia.size() <= 0) {
+				retrieveTrivia();
+			}
+			
+			getTrivia();
+			
+			displayedAnswers = new String[3];
+			
+			for(int i = 0; i < displayedAnswers.length; i++) {
+				displayedAnswers[i] = currentTrivia[i+1];
+			}
+			
+			shuffle(displayedAnswers);
+			
+		} else {
+			triviaActive = false;
+			
+				if(correctAnswers >= correctAnswersNeeded) {
+					
+					passedPreviousTrivia = true;
+					
+				} else {
+					
+					passedPreviousTrivia = false;
+					
+				}
+			
+		}
+		
+	}
+	
+	//Returns true if trivia is currently active (applies to GUI only)
+	public boolean isActive() {
+		return triviaActive;
+	}
+	
+	//Answers a question in GUI Trivia with an integer 0-2 representing the answer selected
+	public boolean answerQuestion(int answer) {
+		boolean isCorrect = isAnswerCorrect(answer);
+		
+		gameControl.getGameLocations().getPlayer().incrementGoldCoins(-1);
+		
+		questionsAsked++;
+		
+		if(isCorrect) {
+			correctAnswers++;
+		}
+		
+		nextQuestion();
+		
+		return isCorrect;
+	}
+	
+	//Returns an array representing the question and answers being asked
+	public String[] getCurrentTrivia() {
+		
+		String[] arr = new String[4];
+		
+		arr[0] = currentTrivia[0];
+		arr[1] = displayedAnswers[0];
+		arr[2] = displayedAnswers[1];
+		arr[3] = displayedAnswers[2];
+		
+		return arr;
 		
 	}
 	
