@@ -1,0 +1,19 @@
+Looking at Trello, looks like some items are late for May 2 goals:
+ - Display rooms/buttons
+ - Display trivia
+ - View high score (or current score?)
+ 
+ We should focus on getting a working game ASAP -- something that can be played. So in addition to the above, we need to add:
+ - Ability for player to move from room to room
+ - Ability for player to purchase and shoot arrows
+ - Stuff happens when hazards are hit
+ - Ability for player to read/answer trivia
+ - A way to win/lose the game (maybe just print "YOU WIN!" when the wumpus is klled and go back to main menu)
+ - Don't worry about visuals -- printing to the console is fine for now, but it needs to be a GAME.
+
+
+I went through the commits since 4/17:
+
+Player - score calculation - looks good to me.
+Cave - random map generators - Looks cool, but on quick read don't understand the algorithms. Add some comments. Let me know if you need help figuring these out.
+Room - would read much better using an enum instead of just ints to represent hazards. Example: if (x.getConnectedRooms()[a] == Hazard.Bats) ...
